@@ -6,7 +6,7 @@
       "firebase.json",
       "**/.*"
     ],
-    "cleanUrls": true,
+    "cleanUrls": false,
     "trailingSlash": false,
     "headers": [
       {
