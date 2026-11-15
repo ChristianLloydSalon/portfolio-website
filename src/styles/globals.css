@@ -118,6 +118,37 @@
   .section-pad { padding-block: clamp(5rem, 12vw, 10rem); }
 }
 
+/* ---------- Scrollbar: slim pill in the logo gradient ----------
+   Chrome, Edge and Safari get the full design. Chrome ignores ::-webkit-scrollbar as soon
+   as the standard scrollbar-color is set, so the standard properties are applied only
+   where ::-webkit-scrollbar is unsupported (Firefox: colors and thin width only). */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: color-mix(in srgb, var(--text) 5%, var(--bg)); }
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--logo-2), var(--logo-3) 50%, var(--logo-4)) padding-box;
+}
+/* Hover/drag: brighter and wider (thinner inset), like a highlighted menu item. */
+::-webkit-scrollbar-thumb:hover {
+  border-width: 1px;
+  background: linear-gradient(180deg, var(--logo-1), var(--logo-2) 35%, var(--logo-3) 70%, var(--logo-4)) padding-box;
+}
+::-webkit-scrollbar-thumb:active {
+  border-width: 1px;
+  background: linear-gradient(180deg, var(--logo-3), var(--logo-4)) padding-box;
+}
+::-webkit-scrollbar-corner { background: transparent; }
+
+@supports not selector(::-webkit-scrollbar) {
+  html,
+  .menu-overlay,
+  .project-overlay__scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--logo-3) color-mix(in srgb, var(--text) 5%, var(--bg));
+  }
+}
+
 /* Film grain: a static SVG noise layer (cheap; no per-frame repaint). */
 .grain {
   position: fixed;
