@@ -102,7 +102,11 @@
 .tile__name { margin: 0; font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; }
 .tile__desc { margin: 0; color: var(--text-2); font-size: 0.93rem; line-height: 1.5; }
 .tile__stack { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; margin: auto 0 0; padding: 0; }
-.tile__link { position: absolute; top: 1.25rem; right: 1.25rem; display: none; }
+/* Linked tiles only: an arrow beside the name tells visitors the tile opens somewhere. */
+.tile__name { display: flex; align-items: center; gap: 0.4rem; }
+.tile__link { flex: none; color: var(--accent-ink); transition: transform var(--dur-med) var(--ease-out); }
+a.tile__inner:hover .tile__link,
+a.tile__inner:focus-visible .tile__link { transform: translate(3px, -3px); }
 
 .tile--locked .tile__inner {
   align-items: center;

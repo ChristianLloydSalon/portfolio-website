@@ -64,6 +64,7 @@ export const inventory: InventoryItem[] = [
     status: 'Active',
     description: 'A cinematic portfolio built with React and GSAP, with two themes and a hand-tuned scroll story.',
     stack: ['React', 'TypeScript', 'GSAP'],
+    href: 'https://github.com/ChristianLloydSalon/portfolio-website',
   },
 ];
 

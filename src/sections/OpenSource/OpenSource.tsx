@@ -109,7 +109,10 @@ export function OpenSource() {
               <div className="tile__icon" aria-hidden="true">
                 <Icon size={34} strokeWidth={1.5} />
               </div>
-              <h3 className="tile__name">{item.name}</h3>
+              <h3 className="tile__name">
+                {item.name}
+                {item.href && <ArrowUpRight className="tile__link" size={18} aria-hidden="true" />}
+              </h3>
               <p className="tile__desc">{item.description}</p>
               <ul className="tile__stack" aria-label="Built with">
                 {item.stack.map((s) => (
@@ -118,7 +121,6 @@ export function OpenSource() {
                   </li>
                 ))}
               </ul>
-              {item.href && <ArrowUpRight className="tile__link" size={20} aria-hidden="true" />}
             </>
           );
           return (
