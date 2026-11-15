@@ -1,0 +1,161 @@
+/*
+ * Theme system: Sunrise (default) and Dusk.
+ * Colors are registered with @property so they interpolate smoothly when
+ * data-theme changes (when the View Transitions API is unavailable).
+ */
+@property --bg { syntax: '<color>'; inherits: true; initial-value: #e8f2f3; }
+@property --bg-2 { syntax: '<color>'; inherits: true; initial-value: #dcebee; }
+@property --surface { syntax: '<color>'; inherits: true; initial-value: #f6f3e6; }
+@property --surface-2 { syntax: '<color>'; inherits: true; initial-value: #fbfaf2; }
+@property --text { syntax: '<color>'; inherits: true; initial-value: #18233b; }
+@property --text-2 { syntax: '<color>'; inherits: true; initial-value: #45506a; }
+@property --accent { syntax: '<color>'; inherits: true; initial-value: #0b7a80; }
+@property --accent-2 { syntax: '<color>'; inherits: true; initial-value: #e9825a; }
+@property --accent-3 { syntax: '<color>'; inherits: true; initial-value: #7c72bd; }
+@property --line { syntax: '<color>'; inherits: true; initial-value: #18233b24; }
+@property --sky-1 { syntax: '<color>'; inherits: true; initial-value: #4f86b8; }
+@property --sky-2 { syntax: '<color>'; inherits: true; initial-value: #86c0d4; }
+@property --sky-3 { syntax: '<color>'; inherits: true; initial-value: #cfe8d9; }
+@property --horizon { syntax: '<color>'; inherits: true; initial-value: #f6edbb; }
+@property --sun-1 { syntax: '<color>'; inherits: true; initial-value: #fff8da; }
+@property --sun-2 { syntax: '<color>'; inherits: true; initial-value: #f4a774; }
+@property --far { syntax: '<color>'; inherits: true; initial-value: #a49bcf; }
+@property --mid { syntax: '<color>'; inherits: true; initial-value: #8c82c2; }
+@property --near { syntax: '<color>'; inherits: true; initial-value: #6f66aa; }
+@property --fg { syntax: '<color>'; inherits: true; initial-value: #4a4487; }
+@property --water-1 { syntax: '<color>'; inherits: true; initial-value: #8fd3d0; }
+@property --water-2 { syntax: '<color>'; inherits: true; initial-value: #3d8aa3; }
+@property --lights { syntax: '<color>'; inherits: true; initial-value: #ffe9b0; }
+
+:root,
+[data-theme='sunrise'] {
+  /* Sunrise: clear morning sky, aqua water, lavender silhouettes; warmth only as accents. */
+  --bg: #e8f2f3;
+  --bg-2: #dcebee;
+  --surface: #f6f3e6;
+  --surface-2: #fbfaf2;
+  --text: #18233b;
+  --text-2: #45506a;
+  --accent: #0b7a80;
+  --accent-2: #e9825a;
+  --accent-3: #7c72bd;
+  --accent-ink: #0a6b70; /* accent safe for text on light surfaces */
+  --on-accent: #ffffff;
+  --line: #18233b24;
+
+  --sky-1: #4f86b8;
+  --sky-2: #86c0d4;
+  --sky-3: #cfe8d9;
+  --horizon: #f6edbb;
+  --sun-1: #fff8da;
+  --sun-2: #f4a774;
+  --far: #a49bcf;
+  --mid: #8c82c2;
+  --near: #6f66aa;
+  --fg: #4a4487;
+  --water-1: #8fd3d0;
+  --water-2: #3d8aa3;
+  --lights: #ffe9b0;
+
+  /* CS logo: dawn gradient (cream, amber, coral into teal and sky blue), navy outline */
+  --logo-1: #fff4cf;
+  --logo-2: #ffc872;
+  --logo-3: #f28a5e;
+  --logo-4: #2b9ea6;
+  --logo-5: #2d6aa0;
+  --logo-ink: #18233b;
+  --intro-bg: #0f2236;
+
+  --sun-opacity: 1;
+  --moon-opacity: 0;
+  --stars-opacity: 0;
+  --lights-opacity: 0.18;
+  --grain-opacity: 0.07;
+  --grain-blend: multiply;
+  --overlay-tint: linear-gradient(180deg, #4f86b814, #f6edbb1f);
+  --glass: color-mix(in srgb, var(--surface-2) 72%, transparent);
+  --shadow: 0 30px 80px -30px #18233b55;
+  color-scheme: light;
+}
+
+[data-theme='dusk'] {
+  --bg: #10182b;
+  --bg-2: #192641;
+  --surface: #202d49;
+  --surface-2: #283757;
+  --text: #f8f7ff;
+  --text-2: #b8b8d0;
+  --accent: #a78bfa;
+  --accent-2: #6b9ceb;
+  --accent-3: #e58db9;
+  --accent-ink: #c4b2ff;
+  --on-accent: #10182b;
+  --line: #f8f7ff1f;
+
+  --sky-1: #070c1c;
+  --sky-2: #1e2a58;
+  --sky-3: #5d4f9c;
+  --horizon: #e58db9;
+  --sun-1: #f6f1ff;
+  --sun-2: #b9a6ff;
+  --far: #2c3767;
+  --mid: #1b2549;
+  --near: #121a36;
+  --fg: #060a17;
+  --water-1: #2c3a70;
+  --water-2: #0b1230;
+  --lights: #ffd68f;
+
+  /* CS logo: moonlit body, near-black navy outline */
+  --logo-1: #ffffff;
+  --logo-2: #e4dcff;
+  --logo-3: #a78bfa;
+  --logo-4: #e58db9;
+  --logo-5: #6b9ceb;
+  --logo-ink: #0a0f1f;
+  --intro-bg: #070b17;
+
+  --sun-opacity: 0;
+  --moon-opacity: 1;
+  --stars-opacity: 1;
+  --lights-opacity: 1;
+  --grain-opacity: 0.12;
+  --grain-blend: overlay;
+  --overlay-tint: linear-gradient(180deg, #6b9ceb14, #a78bfa1f);
+  --glass: color-mix(in srgb, var(--surface) 70%, transparent);
+  --shadow: 0 30px 80px -30px #00000099;
+  color-scheme: dark;
+}
+
+/* Smooth color interpolation between themes (fallback path). */
+html.theme-animating,
+html.theme-animating * {
+  transition:
+    --bg var(--dur-theme) var(--ease-in-out), --bg-2 var(--dur-theme) var(--ease-in-out),
+    --surface var(--dur-theme) var(--ease-in-out), --surface-2 var(--dur-theme) var(--ease-in-out),
+    --text var(--dur-theme) var(--ease-in-out), --text-2 var(--dur-theme) var(--ease-in-out),
+    --accent var(--dur-theme) var(--ease-in-out), --accent-2 var(--dur-theme) var(--ease-in-out),
+    --accent-3 var(--dur-theme) var(--ease-in-out), --line var(--dur-theme) var(--ease-in-out),
+    --sky-1 var(--dur-theme) var(--ease-in-out), --sky-2 var(--dur-theme) var(--ease-in-out),
+    --sky-3 var(--dur-theme) var(--ease-in-out), --horizon var(--dur-theme) var(--ease-in-out),
+    --sun-1 var(--dur-theme) var(--ease-in-out), --sun-2 var(--dur-theme) var(--ease-in-out),
+    --far var(--dur-theme) var(--ease-in-out), --mid var(--dur-theme) var(--ease-in-out),
+    --near var(--dur-theme) var(--ease-in-out), --fg var(--dur-theme) var(--ease-in-out),
+    --water-1 var(--dur-theme) var(--ease-in-out), --water-2 var(--dur-theme) var(--ease-in-out),
+    --lights var(--dur-theme) var(--ease-in-out),
+    opacity var(--dur-theme) var(--ease-in-out) !important;
+}
+
+/* View Transitions circular reveal from the toggle button. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-reveal 900ms var(--ease-in-out) both;
+}
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at var(--vt-x, 90%) var(--vt-y, 5%)); }
+  to { clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 90%) var(--vt-y, 5%)); }
+}

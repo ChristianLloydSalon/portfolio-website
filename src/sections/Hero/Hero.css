@@ -1,0 +1,188 @@
+.hero {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: hidden;
+  color: #fff;
+  isolation: isolate;
+}
+.hero__stage { position: absolute; inset: 0; transform-origin: 50% 60%; will-change: transform; }
+.hero__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 50% 35%, transparent 55%, #0000004d 100%),
+    linear-gradient(180deg, #00000040 0%, transparent 22%, transparent 70%, #00000059 100%);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  height: 100%;
+  grid-template-rows: 1fr auto;
+  padding-top: calc(var(--nav-h) + 1rem);
+  padding-bottom: 6.5rem;
+  justify-items: center;
+  text-align: center;
+}
+.hero__lockup { align-self: center; display: grid; justify-items: center; margin-top: -4vh; }
+/* CS mark: sized by height (and width on narrow screens); glow lifts it off busy art. */
+.hero__mark {
+  height: min(36vh, 20rem, 60vw);
+  filter: drop-shadow(0 18px 44px color-mix(in srgb, var(--accent) 45%, transparent)) drop-shadow(0 4px 10px #0006);
+}
+
+.hero__copy { display: grid; justify-items: center; gap: 0.85rem; max-width: 52rem; }
+.hero__name {
+  font-size: clamp(2.3rem, 6.4vw, 5.25rem);
+  text-shadow: 0 4px 30px #0005;
+  line-height: 0.95;
+}
+.hero__role {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  letter-spacing: 0.5em;
+  margin-right: -0.5em;
+  text-transform: uppercase;
+}
+.hero__tagline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+.hero__tagline li + li::before { content: '/'; margin: 0 0.9em; opacity: 0.6; }
+.hero__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 0.75rem; }
+.hero .btn-primary { background: #fff; color: #1b1226; }
+.hero .btn-ghost { color: #fff; }
+.hero .btn-ghost:hover { background: #ffffff1f; }
+
+.hero__footer {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.hero__location { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; }
+.hero__coords { opacity: 0.6; margin-left: 0.75rem; }
+@media (max-width: 639px) { .hero__coords { display: none; } }
+.hero__scroll {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  font-size: 0.65rem;
+}
+.hero__scroll-line {
+  position: relative;
+  width: 1px;
+  height: 3.25rem;
+  background: color-mix(in srgb, currentColor 30%, transparent);
+  overflow: hidden;
+}
+.hero__scroll-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  animation: scroll-cue 2.2s var(--ease-in-out) infinite;
+}
+@keyframes scroll-cue {
+  0% { transform: translateY(-100%); }
+  60%, 100% { transform: translateY(100%); }
+}
+
+.hero__fade {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--bg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Mobile: the logo sits higher, copy anchors to the bottom over the shoreline. */
+@media (max-width: 767px) {
+  .hero__content { padding-bottom: 5.5rem; }
+  .hero__lockup { align-self: start; margin-top: 6vh; }
+  .hero__mark { height: min(24vh, 44vw); }
+  .hero__actions .btn { min-height: 3rem; padding: 0 1.2rem; font-size: 0.72rem; }
+  .hero__copy { gap: 0.65rem; }
+}
+
+
+/* ---------- With a character cut-out ---------- */
+/* Desktop: editorial left column, character owns the right side. */
+@media (min-width: 1024px) {
+  .hero--character .hero__content { justify-items: start; text-align: left; }
+  .hero--character .hero__lockup { justify-items: start; margin-top: -2vh; }
+  .hero--character .hero__copy { justify-items: start; max-width: min(48rem, 58vw); gap: 0.7rem; }
+  /* Size by height too, so short laptop screens keep the copy above the fold. */
+  .hero--character .hero__name { font-size: clamp(2.3rem, min(5.4vw, 9vh), 5.25rem); white-space: nowrap; }
+  .hero--character .hero__content { padding-bottom: clamp(4.5rem, 11vh, 6.5rem); }
+  .hero--character .hero__role { margin-right: 0; }
+  .hero--character .hero__tagline,
+  .hero--character .hero__actions { justify-content: flex-start; }
+  .hero--character .hero__vignette {
+    background:
+      radial-gradient(70% 75% at 0% 100%, #00000073 0%, transparent 70%),
+      linear-gradient(90deg, #0000004d 0%, transparent 45%),
+      linear-gradient(180deg, #00000040 0%, transparent 22%, transparent 70%, #00000059 100%);
+  }
+}
+/* Phones and tablets: character centered; a deeper bottom shade keeps the copy legible over the shirt. */
+@media (max-width: 1023px) {
+  .hero--character .hero__vignette {
+    background: linear-gradient(180deg, #00000040 0%, transparent 25%, transparent 48%, #000000a6 78%, #000000cc 100%);
+  }
+}
+
+/* Small text needs more separation from detailed painted backdrops. */
+.hero__role,
+.hero__tagline,
+.hero__location { text-shadow: 0 1px 2px #0009, 0 2px 14px #0007; }
+
+/* ---------- Sunrise: light painting, so dark text ---------- */
+/* The morning sky and pastel buildings are too light for white text. Navy text sits on a
+   pale haze instead of the dark shading used at Dusk. */
+[data-theme='sunrise'] .hero { color: var(--text); }
+[data-theme='sunrise'] .hero__name {
+  text-shadow: 0 0 2px #fffc, 0 0 28px #ffffffb3;
+}
+[data-theme='sunrise'] .hero__role,
+[data-theme='sunrise'] .hero__tagline,
+[data-theme='sunrise'] .hero__location,
+[data-theme='sunrise'] .hero__scroll {
+  text-shadow: 0 0 2px #ffffffe6, 0 0 12px #ffffffcc;
+}
+[data-theme='sunrise'] .hero__tagline { opacity: 1; }
+[data-theme='sunrise'] .hero .btn-primary { background: var(--text); color: #fff; }
+[data-theme='sunrise'] .hero .btn-ghost { color: var(--text); background: #ffffff8c; }
+[data-theme='sunrise'] .hero .btn-ghost:hover { background: #ffffffd9; }
+[data-theme='sunrise'] .hero__vignette,
+[data-theme='sunrise'] .hero--character .hero__vignette {
+  background:
+    radial-gradient(75% 80% at 0% 85%, #eef6f7e6 0%, #eef6f78c 45%, transparent 75%),
+    linear-gradient(180deg, transparent 55%, #eef6f7a6 100%);
+}
+@media (max-width: 1023px) {
+  [data-theme='sunrise'] .hero--character .hero__vignette {
+    background: linear-gradient(180deg, transparent 0%, transparent 45%, #eef6f7cc 68%, #eef6f7f2 100%);
+  }
+}

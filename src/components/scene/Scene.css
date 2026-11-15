@@ -1,0 +1,112 @@
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--sky-1);
+  contain: strict;
+}
+.scene__layer {
+  position: absolute;
+  inset: -4%;
+  will-change: transform;
+  transform-origin: 50% 70%;
+}
+.scene__layer > svg,
+.scene__img {
+  width: 100%;
+  height: 100%;
+}
+.scene__img { object-fit: cover; object-position: 50% 60%; }
+/* Theme pair: stacked and crossfaded, so switching never waits on a download. */
+.scene__img--sunrise,
+.scene__img--dusk { position: absolute; inset: 0; transition: opacity var(--dur-theme) var(--ease-in-out); }
+[data-theme='dusk'] .scene__img--sunrise,
+[data-theme='sunrise'] .scene__img--dusk { opacity: 0; }
+.scene__character {
+  position: absolute;
+  /* The layer overhangs the viewport by 4%, so bottom: 0 hides the waist cut. */
+  bottom: 0;
+  right: max(1vw, calc(50% - 47rem));
+  height: min(90%, 64vw);
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 0 40px color-mix(in srgb, var(--horizon) 35%, transparent));
+}
+/* Cool the warm-lit artwork at dusk so it sits in the night scene. */
+[data-theme='dusk'] .scene__character {
+  filter: brightness(0.86) saturate(0.88) contrast(1.04) drop-shadow(0 0 40px color-mix(in srgb, var(--accent) 35%, transparent));
+}
+@media (max-width: 1023px) {
+  .scene__character { right: 50%; transform: translateX(50%); height: 74%; }
+}
+@media (max-width: 767px) {
+  .scene__character { height: 66%; }
+}
+
+/* ---------- Palm silhouettes (image = shape, theme = colour) ---------- */
+.scene__palm {
+  position: absolute;
+  /* The layer overhangs the viewport by 4%, so bottom: 0 roots the trunks off-screen. */
+  bottom: 0;
+  background: var(--fg);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+/* Left cluster frames the top-left corner: crown above the logo, trunk up the edge.
+   (Smaller and further in, its crown hid behind the VI and barely read as a palm.) */
+.scene__palm--left {
+  left: -14%;
+  height: 100%;
+  aspect-ratio: 1094 / 1800;
+  -webkit-mask-position: left bottom;
+  mask-position: left bottom;
+}
+/* Right cluster stands behind the character; its crowns peek around him. */
+.scene__palm--right {
+  right: -2%;
+  height: 94%;
+  aspect-ratio: 1105 / 1800;
+  -webkit-mask-position: right bottom;
+  mask-position: right bottom;
+}
+@media (max-width: 1023px) {
+  .scene__palm--left { left: -14%; height: 70%; }
+  .scene__palm--right { right: -14%; height: 80%; }
+}
+@media (max-width: 767px) {
+  .scene__palm--left { left: -42%; height: 62%; }
+  .scene__palm--right { right: -40%; height: 70%; }
+}
+
+.scene__stars { fill: #fff; opacity: var(--stars-opacity); transition: opacity var(--dur-theme); }
+.scene__stars .twinkle { animation: twinkle 3.6s ease-in-out infinite; }
+@keyframes twinkle { 50% { opacity: 0.25; } }
+
+.scene__sun { opacity: var(--sun-opacity); transition: opacity var(--dur-theme); }
+.scene__moon { opacity: var(--moon-opacity); transition: opacity var(--dur-theme); }
+.scene__clouds rect { fill: var(--horizon); opacity: 0.35; }
+[data-theme='dusk'] .scene__clouds rect { fill: var(--sky-3); opacity: 0.4; }
+
+.scene__lights rect { fill: var(--lights); opacity: var(--lights-opacity); transition: opacity var(--dur-theme); }
+
+.scene__reflect--sun rect { fill: var(--horizon); opacity: calc(var(--sun-opacity) * 0.75); transition: opacity var(--dur-theme); }
+.scene__reflect--moon rect { fill: var(--sun-1); opacity: calc(var(--moon-opacity) * 0.6); transition: opacity var(--dur-theme); }
+.scene__reflect--city rect { fill: var(--lights); opacity: calc(var(--lights-opacity) * 0.35); }
+
+.scene__rim {
+  fill: none;
+  stroke: var(--horizon);
+  stroke-width: 2;
+  opacity: 0.55;
+}
+
+.scene__tint {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-tint);
+  pointer-events: none;
+}

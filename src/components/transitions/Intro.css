@@ -1,0 +1,47 @@
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-intro);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+}
+/* Plain, solid background: the logo is the only thing on screen. */
+.intro__bg {
+  position: absolute;
+  inset: 0;
+  background: var(--intro-bg);
+}
+.intro__glow,
+.intro__mark { grid-area: 1 / 1; position: relative; }
+
+.intro__glow {
+  width: min(44rem, 90vw);
+  aspect-ratio: 1;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 30%, transparent), transparent);
+  pointer-events: none;
+}
+.intro__mark {
+  height: clamp(8rem, 30vh, 15rem);
+  will-change: transform, opacity, filter;
+}
+/* Same glow as the hero mark, so the hand-off at landing is seamless. */
+.intro__mark svg {
+  filter: drop-shadow(0 18px 44px color-mix(in srgb, var(--accent) 45%, transparent)) drop-shadow(0 4px 10px #0006);
+}
+
+.intro__hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}

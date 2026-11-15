@@ -1,0 +1,132 @@
+.about { position: relative; background: var(--bg); }
+
+.about__statement {
+  margin: clamp(3rem, 8vw, 6rem) 0 0;
+  max-width: 22ch;
+  font-size: clamp(2.2rem, 6.2vw, 6rem);
+  line-height: 0.98;
+  text-transform: none;
+}
+@media (min-width: 1024px) { .about__statement { margin-left: 18%; } }
+
+.about__file {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  margin-top: clamp(4rem, 10vw, 8rem);
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .about__file { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+}
+
+/* Portrait */
+.portrait {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--surface);
+}
+@media (min-width: 900px) { .portrait { position: sticky; top: calc(var(--nav-h) + 2rem); } }
+.portrait__art { position: absolute; inset: -6% 0; will-change: transform; }
+.portrait__art svg,
+.portrait__art img { width: 100%; height: 100%; object-fit: cover; }
+/* Photos get less overscan so the edges (tarsier, hills) stay in frame. */
+.portrait--photo .portrait__art { inset: -3% 0; }
+.portrait--photo .portrait__art img { object-position: 58% 40%; }
+/* Theme pair: stacked and crossfaded with the theme. */
+.portrait__img { position: absolute; inset: 0; transition: opacity var(--dur-theme) var(--ease-in-out); }
+[data-theme='dusk'] .portrait__img--sunrise,
+[data-theme='sunrise'] .portrait__img--dusk { opacity: 0; }
+/* Lighter caption shade: the artwork already carries the mood. */
+.portrait--photo .portrait__caption { background: linear-gradient(180deg, transparent, #0000006b); }
+.portrait__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  gap: 0.35rem;
+  padding: 4rem 1.5rem 1.5rem;
+  color: #fff;
+  background: linear-gradient(180deg, transparent, #0000008c);
+}
+.portrait__name { font-size: clamp(2.5rem, 5vw, 4rem); }
+.portrait__badge {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: #0000004d;
+  color: #fff;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* Dossier */
+.about__details { display: grid; gap: 2.5rem; }
+.about__dossier { padding: clamp(1.25rem, 3vw, 2rem); }
+.about__dossier-head { display: flex; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+.about__rows { margin: 0; }
+.about__row {
+  display: grid;
+  grid-template-columns: minmax(7rem, 38%) 1fr;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px dashed var(--line);
+}
+.about__row:last-child { border-bottom: 0; padding-bottom: 0; }
+.about__row dt { color: var(--text-2); align-self: center; font-size: 0.68rem; }
+.about__row dd { margin: 0; font-weight: 600; }
+.about__bio { font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--text-2); max-width: 40rem; margin: 0; }
+
+.about__stats {
+  display: grid;
+  /* One equal column per stat, however many there are. */
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 1.5rem 0 0;
+  border-top: 1px solid var(--line);
+}
+.about__stats li { display: grid; gap: 0.5rem; }
+.about__stats .eyebrow { font-size: 0.62rem; color: var(--text-2); }
+.about__stat-value { font-size: clamp(2.6rem, 6vw, 4.5rem); color: var(--accent-ink); }
+
+/* Principles */
+.about__principles { margin-top: clamp(5rem, 12vw, 9rem); }
+.about__principle-list {
+  display: grid;
+  gap: 1px;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  background: var(--line);
+  border-block: 1px solid var(--line);
+}
+@media (min-width: 900px) { .about__principle-list { grid-template-columns: repeat(3, 1fr); } }
+.about__principle {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: 2.25rem clamp(1rem, 2.5vw, 2rem) 2.5rem;
+  background: var(--bg);
+  transition: background-color var(--dur-med);
+}
+.about__principle:hover { background: var(--surface); }
+.about__principle-num {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  font-size: 4.5rem;
+  opacity: 0.12;
+}
+.about__principle-icon { color: var(--accent-ink); }
+.about__principle-title { font-size: clamp(1.8rem, 2.6vw, 2.4rem); }
+.about__principle p { margin: 0; }

@@ -1,0 +1,14 @@
+{
+  "name": "Christian Lloyd Salon | Software Engineer",
+  "short_name": "C. Salon",
+  "description": "Portfolio of Christian Lloyd Salon, software engineer: Flutter, React, NestJS and AWS.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#10182B",
+  "theme_color": "#10182B",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}

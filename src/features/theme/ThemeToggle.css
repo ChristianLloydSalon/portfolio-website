@@ -1,0 +1,61 @@
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.3rem;
+  min-height: 2.75rem;
+  background: none;
+  border: 0;
+  border-radius: 999px;
+}
+.theme-toggle__track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 4.1rem;
+  height: 2.1rem;
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  background: color-mix(in srgb, var(--surface) 40%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.theme-toggle__icon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  transition: color var(--dur-med), transform var(--dur-med) var(--ease-out);
+}
+.theme-toggle__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(2.1rem - 9px);
+  height: calc(2.1rem - 9px);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+  box-shadow: 0 0 18px -2px var(--accent);
+  transition: transform 520ms var(--ease-out);
+}
+.theme-toggle[data-theme-state='dusk'] .theme-toggle__thumb {
+  transform: translateX(calc(4.1rem - 2.1rem));
+}
+.theme-toggle[data-theme-state='sunrise'] .theme-toggle__icon--sun,
+.theme-toggle[data-theme-state='dusk'] .theme-toggle__icon--moon {
+  color: #fff;
+  transform: rotate(0deg) scale(1);
+}
+.theme-toggle[data-theme-state='sunrise'] .theme-toggle__icon--moon { transform: rotate(-30deg) scale(0.85); opacity: 0.7; }
+.theme-toggle[data-theme-state='dusk'] .theme-toggle__icon--sun { transform: rotate(45deg) scale(0.85); opacity: 0.7; }
+.theme-toggle:hover .theme-toggle__thumb { box-shadow: 0 0 26px 0 var(--accent); }
+.theme-toggle__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  min-width: 4.5em;
+  text-align: left;
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<!--
+  Open Graph share card (1200x630), composed from the live site art.
+  Regenerate public/og-image.jpg after changing the hero art:
+    npm run og-image   (logo-mark.svg = public/favicon.svg without its background rect)
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@500;700&display=block" rel="stylesheet" />
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: #10182b; }
+  .card { position: relative; width: 1200px; height: 630px; overflow: hidden; color: #fff; }
+  .sky {
+    position: absolute; inset: 0;
+    background: url('../../src/assets/hero/dusk-hero.webp') center 62% / cover no-repeat;
+  }
+  /* Left-side scrim so the type reads over the skyline. */
+  .scrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, #0b1030e6 0%, #0b103099 34%, #0b103000 62%),
+      linear-gradient(0deg, #080c22cc 0%, #080c2200 38%);
+  }
+  .palm {
+    position: absolute; bottom: -10px; background: #060a17;
+    -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat;
+  }
+  .palm--left { left: -150px; width: 380px; height: 640px;
+    -webkit-mask-image: url('../../src/assets/palms/palms-left-mask.webp'); -webkit-mask-position: left bottom; }
+  .palm--right { right: -150px; width: 400px; height: 700px;
+    -webkit-mask-image: url('../../src/assets/palms/palms-right-mask.webp'); -webkit-mask-position: right bottom; }
+  .character {
+    position: absolute; right: 40px; bottom: -40px; height: 640px;
+    filter: drop-shadow(0 20px 40px #0008);
+  }
+  .logo { position: absolute; left: 40px; top: 36px; width: 210px; height: 210px; filter: drop-shadow(0 10px 30px #0007); }
+  .copy { position: absolute; left: 64px; bottom: 64px; }
+  .name {
+    font-family: 'Anton', sans-serif; font-weight: 400; text-transform: uppercase;
+    font-size: 64px; line-height: 1; letter-spacing: 0.01em; text-shadow: 0 4px 30px #0007;
+  }
+  .role {
+    margin-top: 22px; font-family: 'JetBrains Mono', monospace; font-weight: 700;
+    font-size: 19px; letter-spacing: 0.5em; text-transform: uppercase;
+  }
+  .tag {
+    margin-top: 16px; font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    font-size: 15px; letter-spacing: 0.18em; text-transform: uppercase; color: #ffffffbf;
+  }
+  .stack {
+    margin-top: 26px; display: flex; gap: 10px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 14px; letter-spacing: 0.06em;
+  }
+  .stack span { padding: 7px 12px; border: 1px solid #ffffff40; border-radius: 999px; background: #ffffff14; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="sky"></div>
+    <div class="scrim"></div>
+    <div class="palm palm--left"></div>
+    <div class="palm palm--right"></div>
+    <img class="character" src="../../src/assets/portraits/hero-character.webp" alt="" />
+    <img class="logo" src="logo-mark.svg" alt="" />
+    <div class="copy">
+      <h1 class="name">Christian Lloyd Salon</h1>
+      <p class="role">Software Engineer</p>
+      <p class="tag">Builder / Creator / Problem Solver</p>
+      <div class="stack"><span>Flutter</span><span>React</span><span>NestJS</span><span>AWS</span></div>
+    </div>
+  </div>
+</body>
+</html>

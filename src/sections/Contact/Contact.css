@@ -1,0 +1,106 @@
+.contact {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #fff;
+  isolation: isolate;
+}
+.contact__scene { position: absolute; inset: 0; z-index: -2; }
+.contact__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 0%, transparent) 26%, #00000026 60%, #0000008c 100%);
+}
+
+/* Sunrise's sky is pale, so white text needs a deeper wash: navy, like early-morning blue. */
+[data-theme='sunrise'] .contact__shade {
+  background: linear-gradient(
+    180deg,
+    var(--bg) 0%,
+    color-mix(in srgb, var(--text) 66%, transparent) 7%,
+    color-mix(in srgb, var(--text) 62%, transparent) 50%,
+    color-mix(in srgb, var(--text) 85%, transparent) 100%
+  );
+}
+
+.contact__content {
+  flex: 1;
+  display: grid;
+  align-content: center;
+  gap: 1.75rem;
+  padding-top: clamp(8rem, 18vw, 12rem);
+  padding-bottom: 4rem;
+}
+.contact__kicker { display: flex; align-items: center; gap: 0.75rem; }
+.contact__title { font-size: clamp(3.2rem, 10.5vw, 10rem); text-shadow: 0 10px 50px #0004; }
+.contact__line { display: block; overflow: hidden; padding-bottom: 0.04em; }
+.contact__line > span { display: block; }
+.contact__lede { max-width: 36rem; margin: 0; font-size: clamp(1.05rem, 1.6vw, 1.3rem); text-shadow: 0 2px 16px #0005; }
+
+.contact__email { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+.contact .btn-primary { background: #fff; color: #1b1226; }
+.contact__email-btn { min-height: 3.75rem; font-size: clamp(0.72rem, 1.5vw, 0.9rem); letter-spacing: 0.06em; text-transform: none; }
+.contact__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3.75rem;
+  padding: 0 1.25rem;
+  border: 1.5px solid #fff;
+  border-radius: 999px;
+  background: #ffffff14;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.contact__copy:hover { background: #ffffff2b; }
+
+.contact__links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.75rem;
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+.contact__link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 4.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid #ffffff40;
+  background: #1a102833;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  text-decoration: none;
+  transition: background-color var(--dur-fast), transform var(--dur-med) var(--ease-out);
+}
+.contact__link:hover { background: #ffffff26; transform: translateY(-4px); }
+.contact__link-text { display: grid; flex: 1; }
+.contact__link-label { font-weight: 700; }
+.contact__link-handle { font-family: var(--font-mono); font-size: 0.75rem; opacity: 0.8; }
+.contact__link-arrow { transition: transform var(--dur-med) var(--ease-out); }
+.contact__link:hover .contact__link-arrow { transform: translate(3px, -3px); }
+
+.contact__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid #ffffff33;
+  background: #00000033;
+}
+.contact__footer .eyebrow { font-size: 0.65rem; }
+.contact__top { display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; min-height: 2.75rem; }
