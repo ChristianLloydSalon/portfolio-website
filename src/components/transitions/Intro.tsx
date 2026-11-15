@@ -16,20 +16,24 @@ function shouldPlay() {
  * background dissolves into the hero (a shared-element hand-off).
  * Any key, click or tap skips to the exit.
  *
- * onDone(handoff): handoff is true when the logo flies into the hero mark.
+ * onDone(handoff): the hero may start building (handoff = the logo flies into its mark).
+ * onSettled(): the logo has landed and page scrolling is unlocked; safe to scroll.
  */
-export function Intro({ onDone }: { onDone: (handoff: boolean) => void }) {
+export function Intro({ onDone, onSettled }: { onDone: (handoff: boolean) => void; onSettled: () => void }) {
   const [play] = useState(shouldPlay);
   const [gone, setGone] = useState(!play);
   const ref = useRef<HTMLDivElement>(null);
   const doneRef = useRef(onDone);
   doneRef.current = onDone;
+  const settledRef = useRef(onSettled);
+  settledRef.current = onSettled;
 
   // Layout effect: initial states are set before first paint, and ctx.revert()
   // fully resets them under StrictMode.
   useLayoutEffect(() => {
     if (!play) {
       doneRef.current(false);
+      settledRef.current();
       return;
     }
     const el = ref.current!;
@@ -66,7 +70,14 @@ export function Intro({ onDone }: { onDone: (handoff: boolean) => void }) {
     // Locked synchronously here, before anything paints; smooth scrolling honours it when it starts.
     window.scrollTo(0, 0);
     lockScroll('intro', true);
-    const unlock = () => lockScroll('intro', false);
+    let settled = false;
+    const unlock = () => {
+      lockScroll('intro', false);
+      if (!settled) {
+        settled = true;
+        settledRef.current();
+      }
+    };
 
     let tl: gsap.core.Timeline;
     const ctx = gsap.context(() => {

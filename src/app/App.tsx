@@ -14,12 +14,14 @@ import { Contact } from '@/sections/Contact/Contact';
 import { navigation } from '@/data/navigation';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { ScrollTrigger } from '@/animations/gsap';
-import { scrollToSection, startSmoothScroll, stopSmoothScroll } from '@/animations/scroll';
+import { isProgrammaticScroll, scrollToSection, startSmoothScroll, stopSmoothScroll, syncUrlToSection } from '@/animations/scroll';
 
 const SECTION_IDS = navigation.map((n) => n.id);
 
 export function App() {
   const [introDone, setIntroDone] = useState(false);
+  // Loading screen fully gone and scrolling unlocked: only then can we scroll the page.
+  const [introSettled, setIntroSettled] = useState(false);
   // True when the loading-screen logo flies into the hero mark (so the hero skips its own mark entrance).
   const [logoHandoff, setLogoHandoff] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,17 +40,33 @@ export function App() {
     };
   }, []);
 
-  // Deep links (#projects etc.) after the layout settles.
+  // Deep links (#projects etc.) after the layout settles. URL syncing waits until the
+  // link has been handled, so the hero (visible during the intro) can't overwrite it.
+  const urlSyncReady = useRef(false);
   useEffect(() => {
-    if (!introDone) return;
+    if (!introSettled) return;
     const id = location.hash.slice(1);
-    if (id && SECTION_IDS.includes(id)) window.setTimeout(() => scrollToSection(id), 100);
-  }, [introDone]);
+    if (id && SECTION_IDS.includes(id)) {
+      window.setTimeout(() => {
+        scrollToSection(id);
+        urlSyncReady.current = true;
+      }, 100);
+    } else {
+      urlSyncReady.current = true;
+    }
+  }, [introSettled]);
+
+  // Keep the address bar on the section being read (manual scrolling only).
+  useEffect(() => {
+    if (!introSettled || !urlSyncReady.current || isProgrammaticScroll()) return;
+    syncUrlToSection(active);
+  }, [active, introSettled]);
 
   const handleIntroDone = useCallback((handoff: boolean) => {
     setLogoHandoff(handoff);
     setIntroDone(true);
   }, []);
+  const handleIntroSettled = useCallback(() => setIntroSettled(true), []);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   return (
@@ -56,7 +74,7 @@ export function App() {
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      <Intro onDone={handleIntroDone} />
+      <Intro onDone={handleIntroDone} onSettled={handleIntroSettled} />
       <Navbar active={active} menuOpen={menuOpen} onMenuToggle={() => setMenuOpen((o) => !o)} menuButtonRef={menuButtonRef} />
       <MenuOverlay open={menuOpen} active={active} onClose={closeMenu} returnFocusRef={menuButtonRef} />
       <SectionIndicator active={active} />
