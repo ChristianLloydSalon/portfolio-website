@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "public/404.html"
+        ],
+        "createdAt": "2026-11-15T14:38:50.260Z",
+        "reason": "Claude: 404 page deliberately matches the site-wide body font (--font-body: Inter in src/styles/tokens.css) for consistency; a site-wide font change is the owner's call"
+      }
+    ]
+  }
+}
