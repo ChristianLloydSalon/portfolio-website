@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from '@/animations/gsap';
 import { LogoMark, SHINE_TRAVEL } from '@/components/brand/Logo';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
@@ -11,7 +11,8 @@ function shouldPlay() {
 }
 
 /**
- * Loading screen, on every visit: a plain background, the CS mark comes into focus,
+ * Loading screen, on every visit: five stars fill one by one, drop beneath the centre
+ * while the CS mark comes into focus above them,
  * a shine sweeps across it, then the mark flies to the hero's CS mark while the
  * background dissolves into the hero (a shared-element hand-off).
  * Any key, click or tap skips to the exit.
@@ -79,21 +80,43 @@ export function Intro({ onDone, onSettled }: { onDone: (handoff: boolean) => voi
       }
     };
 
+    // Where the star row settles: just under the mark (measured, so it holds at any size).
+    const starsDrop = () => mark.offsetHeight / 2 + Math.max(28, mark.offsetHeight * 0.18);
+
     let tl: gsap.core.Timeline;
     const ctx = gsap.context(() => {
-      tl = gsap.timeline({ onComplete: () => setGone(true) });
+      // Paused until the first frame is on screen (see below), so a heavy first render
+      // can't swallow the opening beat of a sequence this short.
+      tl = gsap.timeline({ paused: true, onComplete: () => setGone(true) });
+      const stars = gsap.utils.toArray<SVGElement>('[data-intro-star]');
+      const fills = gsap.utils.toArray<SVGElement>('[data-intro-star-fill]');
+
+      // Whole sequence lands on the hero at ~2s. Beats overlap so it stays punchy.
+      // Beat 1 (0–0.7s): five empty stars snap in and fill one after another, left to right.
+      tl.fromTo(stars, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(2.5)', stagger: 0.03 }, 0);
+      fills.forEach((fill, i) => {
+        const at = 0.18 + i * 0.1;
+        tl.fromTo(fill, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: 'back.out(3)' }, at)
+          .fromTo(stars[i], { scale: 1.4 }, { scale: 1, duration: 0.26, ease: 'power3.out', immediateRender: false }, at);
+      });
+      const full = 0.72;
+      // All five lit: a quick flash across the row as it drops under the incoming mark.
+      tl.to(stars, { scale: 1.15, duration: 0.08, ease: 'power2.out', yoyo: true, repeat: 1, stagger: 0.015 }, full)
+        .to('[data-intro-stars]', { y: starsDrop, scale: 0.62, duration: 0.4, ease: 'power3.out' }, full);
+
+      // Beat 2 (0.72–1.35s): the mark punches into focus above the stars; one shine.
       tl.fromTo(
         '[data-intro-mark]',
-        { opacity: 0, scale: 0.86, filter: 'blur(12px)' },
-        { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.0, ease: 'expo.out' },
-        0.2,
+        { opacity: 0, scale: 0.8, filter: 'blur(10px)' },
+        { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.5, ease: 'expo.out' },
+        full,
       )
-        .fromTo('[data-intro-glow]', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out' }, 0.5)
-        // The shine: one clean sweep across the letters.
-        .fromTo('[data-logo-shine]', { x: 0 }, { x: SHINE_TRAVEL, duration: 1.1, ease: 'power2.inOut' }, 0.95)
-        .to('[data-intro-mark]', { scale: 1.03, duration: 0.5, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 1.2)
+        .fromTo('[data-intro-glow]', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }, full + 0.05)
+        .fromTo('[data-logo-shine]', { x: 0 }, { x: SHINE_TRAVEL, duration: 0.5, ease: 'power2.inOut' }, full + 0.15)
 
-        .addLabel('exit', 2.6)
+        // Beat 3 (1.35–2s): hand-off to the hero.
+        .addLabel('exit', 1.35)
+        .to('[data-intro-stars]', { opacity: 0, y: () => starsDrop() + 16, duration: 0.2, ease: 'power2.in' }, 'exit')
         .add(() => {
           // Start the hero now so it builds up behind the dissolving background,
           // and hide its real mark until the flying logo lands on it.
@@ -102,11 +125,11 @@ export function Intro({ onDone, onSettled }: { onDone: (handoff: boolean) => voi
           const t = target();
           if (t) gsap.set(t, { opacity: 0 });
         }, 'exit')
-        .to('[data-intro-hint]', { opacity: 0, duration: 0.3 }, 'exit')
-        .to('[data-intro-glow]', { opacity: 0, duration: 0.5 }, 'exit')
-        .to('[data-intro-bg]', { opacity: 0, duration: 1.0, ease: 'power2.inOut' }, 'exit+=0.15')
+        .to('[data-intro-hint]', { opacity: 0, duration: 0.2 }, 'exit')
+        .to('[data-intro-glow]', { opacity: 0, duration: 0.3 }, 'exit')
+        .to('[data-intro-bg]', { opacity: 0, duration: 0.6, ease: 'power2.inOut' }, 'exit+=0.05')
         // Function values are read when this tween starts, i.e. after `path` is measured.
-        .to(mark, { x: () => path.x, y: () => path.y, scale: () => path.scale, duration: 1.15, ease: 'power3.inOut' }, 'exit+=0.05')
+        .to(mark, { x: () => path.x, y: () => path.y, scale: () => path.scale, duration: 0.62, ease: 'power3.inOut' }, 'exit+=0.03')
         .add(() => {
           // Landed: swap to the hero's own mark (same size, same place).
           const t = target();
@@ -116,6 +139,11 @@ export function Intro({ onDone, onSettled }: { onDone: (handoff: boolean) => voi
         });
     }, el);
 
+    // Two rAFs: the first fires before the first paint, the second after it.
+    let raf = requestAnimationFrame(() => {
+      raf = requestAnimationFrame(() => tl.play());
+    });
+
     const SCROLL_KEYS = new Set([' ', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End']);
     const skip = (e?: Event) => {
       // Skipping with Space/arrows must not also scroll the page.
@@ -123,12 +151,15 @@ export function Intro({ onDone, onSettled }: { onDone: (handoff: boolean) => voi
       // Land just before the exit so the playhead crosses it and fires the hand-off
       // callback (seek() suppresses callbacks at the position it jumps to).
       if (tl.time() < tl.labels.exit) tl.seek(tl.labels.exit - 0.01);
+      tl.play(); // in case the skip lands before the first frame started it
+
     };
     window.addEventListener('keydown', skip, { once: true });
     el.addEventListener('pointerdown', skip, { once: true });
     return () => {
       window.removeEventListener('keydown', skip);
       el.removeEventListener('pointerdown', skip);
+      cancelAnimationFrame(raf);
       ctx.revert();
       unlock();
     };
@@ -143,9 +174,45 @@ export function Intro({ onDone, onSettled }: { onDone: (handoff: boolean) => voi
       <div className="intro__mark" data-intro-mark>
         <LogoMark />
       </div>
+      <IntroStars />
+
+      {/* Visual only: the whole screen is the skip target (any key, click or tap). */}
       <p className="intro__hint" data-intro-hint>
-        Press any key to skip
+        <span className="intro__hint--keys">
+          Press <b>any key</b> to skip
+        </span>
+        <span className="intro__hint--touch">
+          <b>Tap</b> anywhere to skip
+        </span>
       </p>
+    </div>
+  );
+}
+
+/** Rounded five-point star, 24×24 box. */
+const STAR = 'M12 2.6l2.85 5.78 6.38.93-4.62 4.5 1.09 6.35L12 17.16l-5.7 3 1.09-6.35-4.62-4.5 6.38-.93z';
+
+/** Five stars that fill with the logo gradient, one after another. */
+function IntroStars() {
+  const id = useId().replace(/:/g, '');
+  return (
+    <div className="intro__stars" data-intro-stars>
+      <svg width="0" height="0" className="intro__defs" aria-hidden="true">
+        <defs>
+          <linearGradient id={`${id}-star`} x1="0" y1="0" x2="0.2" y2="1">
+            <stop offset="0" style={{ stopColor: 'var(--logo-1)' }} />
+            <stop offset="0.35" style={{ stopColor: 'var(--logo-2)' }} />
+            <stop offset="0.7" style={{ stopColor: 'var(--logo-3)' }} />
+            <stop offset="1" style={{ stopColor: 'var(--logo-4)' }} />
+          </linearGradient>
+        </defs>
+      </svg>
+      {Array.from({ length: 5 }, (_, i) => (
+        <svg key={i} className="intro__star" viewBox="0 0 24 24" data-intro-star>
+          <path className="intro__star-empty" d={STAR} />
+          <path className="intro__star-fill" d={STAR} fill={`url(#${id}-star)`} data-intro-star-fill />
+        </svg>
+      ))}
     </div>
   );
 }

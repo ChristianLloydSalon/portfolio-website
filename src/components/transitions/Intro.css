@@ -32,16 +32,80 @@
   filter: drop-shadow(0 18px 44px color-mix(in srgb, var(--accent) 45%, transparent)) drop-shadow(0 4px 10px #0006);
 }
 
+/* Skip hint: one quiet line in the navbar's "01 —— HOME" style, with the key word lit
+   in the logo colour and a slow breathe so the eye finds it. */
 .intro__hint {
   position: absolute;
-  bottom: 2rem;
+  bottom: max(2rem, calc(env(safe-area-inset-bottom) + 1rem));
   left: 0;
   right: 0;
   margin: 0;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  opacity: 0.45;
+  white-space: nowrap;
+  color: color-mix(in srgb, #fff 72%, transparent);
+}
+.intro__hint::before,
+.intro__hint::after {
+  content: '';
+  width: clamp(1.25rem, 6vw, 2.75rem);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--logo-3) 70%, transparent));
+}
+.intro__hint::after { scale: -1 1; }
+.intro__hint b {
+  color: var(--logo-3);
+  font-weight: 700;
+  text-shadow: 0 0 12px color-mix(in srgb, var(--logo-3) 65%, transparent);
+}
+/* Animated on the inner text: GSAP owns the outer element's opacity for the exit fade. */
+.intro__hint > span { animation: intro-hint-breathe 1.4s ease-in-out infinite alternate; }
+@keyframes intro-hint-breathe {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+/* Touch devices have no keyboard: tell them to tap instead. */
+.intro__hint--touch { display: none; }
+@media (hover: none) and (pointer: coarse) {
+  .intro__hint--keys { display: none; }
+  .intro__hint--touch { display: inline; }
+}
+
+/* Five stars: empty outlines that fill with the logo gradient. */
+.intro__stars {
+  grid-area: 1 / 1;
+  position: relative;
+  display: flex;
+  gap: clamp(0.4rem, 1.6vw, 0.9rem);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.intro__defs { position: absolute; }
+.intro__star {
+  width: clamp(2.6rem, 9vw, 4.25rem);
+  height: auto;
+  overflow: visible;
+  opacity: 0;
+}
+.intro__star-empty {
+  fill: color-mix(in srgb, #fff 6%, transparent);
+  stroke: color-mix(in srgb, #fff 38%, transparent);
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+}
+.intro__star-fill {
+  stroke: var(--logo-ink);
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--logo-2) 70%, transparent));
 }
