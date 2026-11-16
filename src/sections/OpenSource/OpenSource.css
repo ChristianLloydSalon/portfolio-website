@@ -87,13 +87,29 @@
 .tone-c { background: color-mix(in srgb, var(--accent-3) 30%, transparent); }
 .tone-d { background: color-mix(in srgb, var(--horizon) 45%, transparent); }
 .tone-e { background: color-mix(in srgb, var(--text) 14%, transparent); }
+.tile__meta { display: flex; align-items: center; gap: 1rem; margin-block: 0.5rem; }
+.tile__state { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; min-width: 0; }
+.tile__tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
 .tile__status { font-size: 0.6rem; color: var(--text-2); }
 .tile__icon {
   display: grid;
   place-items: center;
   width: 4.5rem;
   height: 4.5rem;
-  margin-block: 0.5rem;
+  flex: none;
   border-radius: 1rem;
   color: var(--accent-ink);
   background: color-mix(in srgb, var(--bg) 60%, transparent);
@@ -117,3 +133,43 @@ a.tile__inner:focus-visible .tile__link { transform: translate(3px, -3px); }
   color: var(--text-2);
 }
 .tile--locked:hover .tile__inner { transform: none; box-shadow: none; border-color: var(--line); }
+
+/* Item states. Unlocked items are ready to use; the rest read as work in the forge. */
+.tile--unlocked .tile__inner { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.tile--unlocked .tile__icon {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: transparent;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent), 0 12px 30px -12px var(--accent);
+}
+.tile--unlocked .tile__tier { color: var(--on-accent); background: var(--accent); border-color: transparent; }
+
+.tile--progress .tile__inner { border-style: dashed; }
+.tile--progress .tile__tier {
+  color: var(--text);
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--accent-2) 30%, transparent) 0 6px,
+    color-mix(in srgb, var(--accent-2) 12%, transparent) 6px 12px
+  );
+  background-size: 17px 17px;
+  border-color: color-mix(in srgb, var(--accent-2) 55%, transparent);
+  animation: tile-progress 1.2s linear infinite;
+}
+.tile--progress .tile__icon { color: var(--text-2); border-style: dashed; }
+
+.tile--prototype .tile__inner { border-style: dashed; }
+.tile--prototype .tile__tier {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent-3) 22%, transparent);
+  border-color: color-mix(in srgb, var(--accent-3) 55%, transparent);
+}
+.tile--prototype .tile__icon { color: var(--text-2); border-style: dashed; }
+
+.tile--completed .tile__icon { color: var(--text-2); filter: grayscale(1); }
+.tile--completed .tile__tier { color: var(--text); background: color-mix(in srgb, var(--text) 10%, transparent); }
+
+@keyframes tile-progress { to { background-position: 17px 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .tile--progress .tile__tier { animation: none; }
+}

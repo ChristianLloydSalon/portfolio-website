@@ -1,7 +1,19 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { ArrowUpRight, FlaskConical, GitPullRequest, Lock, Package, Sparkles, Wrench, type LucideIcon } from 'lucide-react';
+import {
+  ArrowUpRight,
+  CheckCircle2,
+  FlaskConical,
+  GitPullRequest,
+  Hammer,
+  Lock,
+  LockOpen,
+  Package,
+  Sparkles,
+  Wrench,
+  type LucideIcon,
+} from 'lucide-react';
 import { INVENTORY_SLOTS, inventory } from '@/data/inventory';
-import type { InventoryKind } from '@/types';
+import type { InventoryItem, InventoryKind } from '@/types';
 import { SectionHeading } from '@/components/typography/SectionHeading';
 import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -23,6 +35,25 @@ const KIND_TONE: Record<InventoryKind, string> = {
   Tool: 'tone-c',
   Experiment: 'tone-d',
   'Side Project': 'tone-e',
+};
+
+/** How far along an item is, shown as a game-style item state. */
+type Tier = 'unlocked' | 'progress' | 'prototype' | 'completed';
+
+const STATUS_TIER: Record<InventoryItem['status'], Tier> = {
+  Published: 'unlocked',
+  Live: 'unlocked',
+  Active: 'progress',
+  'In Development': 'progress',
+  Prototype: 'prototype',
+  Archived: 'completed',
+};
+
+const TIER_META: Record<Tier, { label: string; icon: LucideIcon }> = {
+  unlocked: { label: 'Unlocked', icon: LockOpen },
+  progress: { label: 'In progress', icon: Hammer },
+  prototype: { label: 'Prototype', icon: FlaskConical },
+  completed: { label: 'Completed', icon: CheckCircle2 },
 };
 
 type Filter = 'All' | InventoryKind;
@@ -97,6 +128,8 @@ export function OpenSource() {
       <ul ref={gridRef} className="inventory__grid" data-reveal>
         {items.map((item) => {
           const Icon = KIND_ICON[item.kind];
+          const tier = STATUS_TIER[item.status];
+          const { label: tierLabel, icon: TierIcon } = TIER_META[tier];
           const body = (
             <>
               <span className="tile__corners" aria-hidden="true" />
@@ -104,10 +137,19 @@ export function OpenSource() {
                 <span className={`tile__kind ${KIND_TONE[item.kind]}`}>
                   <Icon size={14} aria-hidden="true" /> {item.kind}
                 </span>
-                <span className="tile__status eyebrow">{item.status}</span>
               </div>
-              <div className="tile__icon" aria-hidden="true">
-                <Icon size={34} strokeWidth={1.5} />
+              <div className="tile__meta">
+                <div className="tile__icon" aria-hidden="true">
+                  <Icon size={34} strokeWidth={1.5} />
+                </div>
+                <div className="tile__state">
+                  <span className="tile__tier">
+                    <TierIcon size={13} aria-hidden="true" /> {tierLabel}
+                  </span>
+                  {item.status.toLowerCase() !== tierLabel.toLowerCase() && (
+                    <span className="tile__status eyebrow">{item.status}</span>
+                  )}
+                </div>
               </div>
               <h3 className="tile__name">
                 {item.name}
@@ -124,7 +166,7 @@ export function OpenSource() {
             </>
           );
           return (
-            <li key={item.id} className="tile" data-tile>
+            <li key={item.id} className={`tile tile--${tier}`} data-tile>
               {item.href ? (
                 <a className="tile__inner" href={item.href} target="_blank" rel="noreferrer">
                   {body}
