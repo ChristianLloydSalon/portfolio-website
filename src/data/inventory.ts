@@ -45,7 +45,7 @@ export const inventory: InventoryItem[] = [
     id: 'souls-like',
     name: 'Souls-like Game Demo',
     kind: 'Experiment',
-    status: 'Prototype',
+    status: 'In Development',
     description: 'A souls-like 3D action RPG experiment built on Flutter Scene, the 3D engine on Flutter GPU.',
     stack: ['Flutter', 'Flutter Scene'],
   },
