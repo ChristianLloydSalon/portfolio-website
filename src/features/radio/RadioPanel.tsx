@@ -6,7 +6,7 @@ import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
 import { radioStore, useRadio } from './radioStore';
 import { stationById, type StationId } from './stations';
-import * as engine from './engine';
+import { tune, turnOff } from './controller';
 import './Radio.css';
 
 /**
@@ -57,7 +57,7 @@ function StationBadge({ id, icon: Icon }: { id: SlotId; icon: LucideIcon }) {
 }
 
 export default function RadioPanel() {
-  const { station, track, wheelOpen } = useRadio();
+  const { station, track, trackN, wheelOpen } = useRadio();
   const [mounted, setMounted] = useState(false);
   const [focus, setFocus] = useState(0);
   const [toast, setToast] = useState<{ id: StationId; title: string; n: number } | null>(null);
@@ -70,19 +70,21 @@ export default function RadioPanel() {
   const close = useCallback(() => radioStore.set({ wheelOpen: false }), []);
 
   const choose = useCallback((id: SlotId) => {
-    if (id === 'off') {
-      engine.stop();
-      radioStore.set({ station: null, track: null, wheelOpen: false });
-      return;
-    }
-    const already = radioStore.get().station === id;
-    radioStore.set({ station: id, wheelOpen: false });
+    const already = radioStore.get().station === (id === 'off' ? null : id);
+    radioStore.set({ wheelOpen: false });
     if (already) return; // re-picking the current station just closes the wheel
-    engine.play(id, (title) => {
-      radioStore.set({ track: title });
-      setToast((t) => ({ id, title, n: (t?.n ?? 0) + 1 }));
-    });
+    if (id === 'off') turnOff();
+    else tune(id);
   }, []);
+
+  // Now Playing toast on every track start, wherever it came from (wheel, phone, next track).
+  // Skipped while the phone is open: its player already shows it.
+  useEffect(() => {
+    // Read from the store, not a dependency: closing the phone must not re-announce the track.
+    const { station: id, track: title, quiet } = radioStore.get();
+    if (!trackN || !id || !title || quiet) return;
+    setToast({ id, title, n: trackN });
+  }, [trackN]);
 
   // Open: mount, start on the station that's playing (or the first one).
   useEffect(() => {

@@ -262,6 +262,10 @@ function motif(track: Track) {
 
 interface Playing {
   stop: () => void;
+  /** Jump to track `index` (wraps), from its intro. */
+  jump: (index: number) => void;
+  /** Track playing now and how far into it we are (seconds). */
+  info: () => { index: number; elapsed: number; duration: number };
 }
 
 /**
@@ -274,7 +278,7 @@ const MIX: Record<StationId, { tone: number; swing: number; crackle: number; wob
   deploy: { tone: 6000, swing: 0, crackle: 0.12, wobble: 3, level: 1.65 },
 };
 
-function station(ctx: AudioContext, out: AudioNode, id: StationId, onTrack: (title: string) => void): Playing {
+function station(ctx: AudioContext, out: AudioNode, id: StationId, onTrack: (title: string) => void, startTrack?: number): Playing {
   const tracks = TRACKS[id];
   const mix = MIX[id];
   const stops: (() => void)[] = [];
@@ -409,9 +413,10 @@ function station(ctx: AudioContext, out: AudioNode, id: StationId, onTrack: (tit
     }
   };
 
-  // Tune in mid-song on a random track, like a real station.
-  let ti = Math.floor(Math.random() * tracks.length);
-  let bar = 2 + Math.floor(Math.random() * 10);
+  // Tune in mid-song on a random track, like a real station (or from the top of a picked one).
+  const picked = startTrack !== undefined;
+  let ti = picked ? ((startTrack % tracks.length) + tracks.length) % tracks.length : Math.floor(Math.random() * tracks.length);
+  let bar = picked ? 0 : 2 + Math.floor(Math.random() * 10);
   let pos = 0;
   let melody = motif(tracks[ti]);
   const timers: number[] = [];
@@ -549,6 +554,24 @@ function station(ctx: AudioContext, out: AudioNode, id: StationId, onTrack: (tit
       timers.forEach((t) => window.clearTimeout(t));
       stops.forEach((s) => s());
     },
+    jump(index) {
+      // Drop a pending "next track" announcement; this jump announces its own.
+      timers.forEach((t) => window.clearTimeout(t));
+      timers.length = 0;
+      ti = ((index % tracks.length) + tracks.length) % tracks.length;
+      bar = 0;
+      pos = 0;
+      melody = motif(tracks[ti]);
+      glide?.g.gain.setTargetAtTime(0, ctx.currentTime, 0.03);
+      next = Math.max(next, ctx.currentTime + 0.08);
+      onTrack(tracks[ti].title);
+    },
+    info() {
+      const step = 60 / tracks[ti].bpm / 4;
+      // `next` runs up to 0.25s ahead of what's audible.
+      const elapsed = (bar * 16 + pos) * step - Math.max(0, next - ctx.currentTime);
+      return { index: ti, elapsed: Math.max(0, elapsed), duration: BARS * 16 * step };
+    },
   };
 }
 
@@ -556,6 +579,7 @@ function station(ctx: AudioContext, out: AudioNode, id: StationId, onTrack: (tit
 
 let ctx: AudioContext | null = null;
 let output: GainNode | null = null;
+let analyser: AnalyserNode | null = null;
 let current: { playing: Playing; gain: GainNode } | null = null;
 
 function ensureContext() {
@@ -565,6 +589,11 @@ function ensureContext() {
     output = ctx.createGain();
     output.gain.value = 0.55;
     output.connect(comp).connect(ctx.destination);
+    // A tap for the phone player's level meter (not in the signal path).
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 64;
+    analyser.smoothingTimeConstant = 0.75;
+    comp.connect(analyser);
     document.addEventListener('visibilitychange', onVisibility);
   }
   if (ctx.state === 'suspended' && !document.hidden) void ctx.resume();
@@ -606,8 +635,11 @@ function fadeOut(entry: NonNullable<typeof current>, c: AudioContext) {
   window.setTimeout(() => entry.gain.disconnect(), 400);
 }
 
-/** Tune to a station. onTrack fires with each track title as it starts. */
-export function play(id: StationId, onTrack: (title: string) => void) {
+/**
+ * Tune to a station. onTrack fires with each track title as it starts.
+ * Without `track`, it tunes in mid-song on a random track; with it, that track plays from the top.
+ */
+export function play(id: StationId, onTrack: (title: string) => void, track?: number) {
   const c = ensureContext();
   if (current) fadeOut(current, c);
   tuneStatic(c);
@@ -615,11 +647,36 @@ export function play(id: StationId, onTrack: (title: string) => void) {
   gain.gain.setValueAtTime(0, c.currentTime);
   gain.gain.linearRampToValueAtTime(1, c.currentTime + 0.4);
   gain.connect(output!);
-  current = { playing: station(c, gain, id, onTrack), gain };
+  current = { playing: station(c, gain, id, onTrack, track), gain };
 }
 
 export function stop() {
   if (!ctx || !current) return;
   fadeOut(current, ctx);
   current = null;
+}
+
+/** Track titles of a station, in play order. */
+export const trackTitles = (id: StationId) => TRACKS[id].map((t) => t.title);
+
+/** Jump to a track on the station playing now (wraps around). */
+export function jumpTo(index: number) {
+  current?.playing.jump(index);
+}
+
+/** Skip forward (1) or back (-1) on the station playing now. */
+export function skip(dir: 1 | -1) {
+  if (current) current.playing.jump(current.playing.info().index + dir);
+}
+
+/** Track index and position (seconds) on the station playing now; null when off. */
+export function progress() {
+  return current ? current.playing.info() : null;
+}
+
+/** Fills `out` with the current spectrum (0–255 per band). Returns false when nothing is playing. */
+export function levels(out: Uint8Array) {
+  if (!analyser || !current) return false;
+  analyser.getByteFrequencyData(out);
+  return true;
 }

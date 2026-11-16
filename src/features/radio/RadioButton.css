@@ -19,9 +19,12 @@
   transition: border-color var(--dur-med), box-shadow var(--dur-med);
 }
 .radio-btn:hover { border-color: currentColor; }
+/* Playing: a filled "on" button (logo gradient, dark ink bars), legible in both themes. */
 .radio-btn.is-playing {
-  border-color: var(--logo-3);
-  box-shadow: 0 0 18px -6px var(--logo-3);
+  color: var(--logo-ink);
+  border-color: var(--logo-ink);
+  background: linear-gradient(160deg, var(--logo-2), var(--logo-3));
+  box-shadow: 0 0 18px -4px var(--logo-3);
 }
 .radio-btn__icon {
   display: grid;
@@ -64,7 +67,7 @@
   width: 3px;
   height: 100%;
   border-radius: 1px;
-  background: var(--logo-3);
+  background: currentColor;
   transform-origin: bottom;
   animation: radio-eq 0.9s ease-in-out infinite alternate;
 }
@@ -78,8 +81,7 @@
   .radio-btn__eq span { animation: none; transform: scaleY(0.7); }
 }
 
-/* Small screens: icon only. */
-@media (max-width: 639px) {
-  .radio-btn { padding: 0; width: 2.75rem; justify-content: center; }
-  .radio-btn__label { display: none; }
-}
+/* Icon only, a circle matching the phone button: the station shows in its tooltip,
+   the equalizer shows that it's playing. */
+.radio-btn { padding: 0; width: 2.75rem; justify-content: center; }
+.radio-btn__label { display: none; }

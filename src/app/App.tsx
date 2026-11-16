@@ -13,6 +13,7 @@ import { OpenSource } from '@/sections/OpenSource/OpenSource';
 import { Contact } from '@/sections/Contact/Contact';
 import { navigation } from '@/data/navigation';
 import { RadioHost } from '@/features/radio/RadioHost';
+import { PhoneHost } from '@/features/phone/PhoneHost';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { ScrollTrigger } from '@/animations/gsap';
 import { isProgrammaticScroll, scrollToSection, startSmoothScroll, stopSmoothScroll, syncUrlToSection } from '@/animations/scroll';
@@ -91,6 +92,7 @@ export function App() {
       </main>
 
       <RadioHost />
+      <PhoneHost enabled={introSettled} />
       <div className="grain" aria-hidden="true" />
     </ThemeProvider>
   );

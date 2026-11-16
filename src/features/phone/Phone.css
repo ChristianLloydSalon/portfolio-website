@@ -1,0 +1,696 @@
+/*
+ * In-world phone. Its screen is always dark (a game phone, whatever the site theme);
+ * the accents follow the theme through the logo colours.
+ */
+
+/* ---------- Overlay + device ---------- */
+.phone-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  /* The page stays visible behind the handset, just dimmed. */
+  background: color-mix(in srgb, var(--bg) 28%, transparent);
+}
+
+.phone {
+  --ph-bg: #0c1020;
+  --ph-surface: #161b30;
+  --ph-surface-2: #20263f;
+  --ph-text: #f4f3ff;
+  --ph-text-2: #a7abc3;
+  --ph-line: #ffffff17;
+  --ph-hot: var(--logo-3);
+  --ph-hot-2: var(--logo-2);
+  --ph-on-hot: #0c1020;
+
+  position: absolute;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vh, 2rem);
+  width: 22rem;
+  height: min(46rem, calc(100dvh - 2rem));
+  padding: 0.55rem;
+  border-radius: 3.1rem;
+  background: linear-gradient(160deg, #2a3150, #0a0d18 45%, #1b2038);
+  box-shadow:
+    0 0 0 1.5px #ffffff22 inset,
+    0 0 0 1px #00000066,
+    0 40px 90px -30px #000000cc,
+    0 0 60px -25px var(--ph-hot);
+  color: var(--ph-text);
+  font-family: var(--font-body);
+  touch-action: manipulation;
+}
+/* Side buttons, purely decorative. */
+.phone::before,
+.phone::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  border-radius: 3px;
+  background: #2a3150;
+}
+.phone::before { left: -3px; top: 7rem; height: 2.4rem; box-shadow: 0 3.2rem 0 #2a3150; }
+.phone::after { right: -3px; top: 9rem; height: 4.2rem; }
+
+.phone__screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 2.6rem;
+  background: var(--ph-bg);
+  isolation: isolate;
+}
+
+/* Mobile: the real screen is the phone. No frame, full height of the visible viewport. */
+@media (max-width: 639px) {
+  .phone-overlay { background: var(--ph-bg, #0c1020); }
+  .phone {
+    inset: 0;
+    width: auto;
+    height: 100dvh;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .phone::before,
+  .phone::after { display: none; }
+  .phone__screen { border-radius: 0; }
+}
+
+/* ---------- Status bar ---------- */
+.phone__grab { position: relative; z-index: 3; flex: none; touch-action: none; }
+.phone-status {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 2.6rem;
+  padding: 0 1.6rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.phone-status__island {
+  width: 6.2rem;
+  height: 1.55rem;
+  border-radius: 999px;
+  background: #000;
+}
+.phone-status__icons { display: flex; gap: 0.3rem; justify-content: flex-end; align-items: center; }
+@media (max-width: 639px) {
+  .phone-status { padding-top: env(safe-area-inset-top); height: calc(2.6rem + env(safe-area-inset-top)); }
+  /* The real phone has its own notch and clock. */
+  .phone-status__island { visibility: hidden; }
+}
+
+/* Home indicator: tap it to go home (or close from the home screen). */
+.phone__homebar {
+  position: relative;
+  z-index: 3;
+  flex: none;
+  display: grid;
+  place-items: center;
+  height: 1.6rem;
+  padding: 0 0 max(0px, env(safe-area-inset-bottom));
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.phone__homebar span {
+  width: 8rem;
+  height: 0.3rem;
+  border-radius: 999px;
+  background: var(--ph-text);
+  opacity: 0.7;
+  transition: opacity var(--dur-fast), width var(--dur-fast) var(--ease-out);
+}
+.phone__homebar:hover span { opacity: 1; width: 9rem; }
+
+/* ---------- Shared bits ---------- */
+/* :where() keeps these resets at zero specificity, so component styles always win. */
+:where(.phone) :focus-visible { outline: 2px solid var(--ph-hot-2); outline-offset: 2px; }
+:where(.phone) button { font: inherit; color: inherit; }
+.phone-iconbtn {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.phone-iconbtn:hover { background: var(--ph-surface-2); }
+
+.phone-avatar {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex: none;
+  border-radius: 50%;
+  background: linear-gradient(150deg, var(--ph-hot-2), var(--ph-hot));
+  color: var(--ph-on-hot);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+.phone-avatar--lg { width: 5.5rem; height: 5.5rem; font-size: 2.2rem; }
+
+/* Three bouncing bars while the radio plays. */
+.phone-eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 0.85rem; }
+.phone-eq span {
+  width: 3px;
+  height: 100%;
+  border-radius: 1px;
+  background: var(--ph-hot);
+  transform-origin: bottom;
+  animation: phone-eq 0.9s ease-in-out infinite alternate;
+}
+.phone-eq span:nth-child(2) { animation-duration: 0.6s; animation-delay: -0.3s; }
+.phone-eq span:nth-child(3) { animation-duration: 0.75s; animation-delay: -0.5s; }
+@keyframes phone-eq {
+  from { transform: scaleY(0.25); }
+  to { transform: scaleY(1); }
+}
+
+/* Station artwork: our own sunset-and-grid scenes, one palette per station. */
+.phone-art--dusk { --art-a: #ffcf7a; --art-b: #f2637a; --art-c: #4a2275; }
+.phone-art--arch { --art-a: #9be8d8; --art-b: #2d8ab0; --art-c: #17204f; }
+.phone-art--deploy { --art-a: #ff9bd0; --art-b: #8a52ff; --art-c: #0d0f33; }
+.phone-art--dusk,
+.phone-art--arch,
+.phone-art--deploy { background: linear-gradient(170deg, var(--art-c) 0%, var(--art-b) 62%, var(--art-a) 100%); }
+
+/* ---------- Home screen ---------- */
+/* Wallpaper: a striped synthwave sun sinking behind a neon grid, in the theme's accents. */
+.phone__screen--home { background: linear-gradient(180deg, #0c1020 0%, #24194d 42%, color-mix(in srgb, var(--ph-hot) 55%, #24194d) 64%); }
+.phone-home__wall { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.phone-home__sun {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 62%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--ph-hot-2), var(--ph-hot) 75%);
+  -webkit-mask: linear-gradient(180deg, #000 50%, transparent 50% 54%, #000 54% 62%, transparent 62% 67%, #000 67% 74%, transparent 74% 80%, #000 80%);
+  mask: linear-gradient(180deg, #000 50%, transparent 50% 54%, #000 54% 62%, transparent 62% 67%, #000 67% 74%, transparent 74% 80%, #000 80%);
+  filter: drop-shadow(0 0 30px color-mix(in srgb, var(--ph-hot) 70%, transparent));
+}
+.phone-home__grid {
+  position: absolute;
+  inset: 64% -30% 0;
+  background:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--ph-hot) 55%, transparent) 0 1px, transparent 1px 10%),
+    repeating-linear-gradient(180deg, color-mix(in srgb, var(--ph-hot) 55%, transparent) 0 1px, transparent 1px 16%),
+    linear-gradient(180deg, #1a1238, #07091a);
+  transform: perspective(16rem) rotateX(60deg);
+  transform-origin: top;
+}
+.phone-home {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0.5rem 1.4rem 0.8rem;
+}
+.phone-home__close { position: absolute; top: 0.1rem; right: 0.8rem; background: #ffffff14; }
+.phone-home__clock { display: grid; justify-items: center; margin-top: 1.6rem; text-shadow: 0 2px 20px #0008; }
+.phone-home__date { font-size: 0.85rem; font-weight: 600; opacity: 0.85; }
+.phone-home__time {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.phone-widget {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+  padding: 0.6rem 0.9rem 0.6rem 0.6rem;
+  border: 1px solid var(--ph-line);
+  border-radius: 1.2rem;
+  background: color-mix(in srgb, var(--ph-bg) 60%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  text-align: left;
+  cursor: pointer;
+}
+.phone-widget__art { width: 2.6rem; height: 2.6rem; flex: none; border-radius: 0.6rem; }
+.phone-widget__text { display: grid; flex: 1; min-width: 0; }
+.phone-widget__eyebrow { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ph-hot-2); }
+.phone-widget__title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.phone-apps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem 0.5rem;
+  margin: auto 0 0;
+  padding: 0.9rem 0.6rem;
+  list-style: none;
+  border-radius: 1.8rem;
+  background: color-mix(in srgb, var(--ph-bg) 45%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.phone-app {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.2rem 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.phone-app__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 1.05rem;
+  color: #fff;
+  box-shadow: 0 8px 20px -8px #000a, inset 0 1px 0 #ffffff40;
+  transition: transform 220ms var(--ease-out);
+}
+.phone-app:hover .phone-app__icon { transform: translateY(-3px) scale(1.04); }
+.phone-app:active .phone-app__icon { transform: scale(0.94); }
+.phone-app__icon--messages { background: linear-gradient(160deg, #6ee7a8, #18a35b); }
+.phone-app__icon--radio { background: linear-gradient(160deg, var(--ph-hot-2), var(--ph-hot)); color: var(--ph-on-hot); }
+.phone-app__icon--contacts { background: linear-gradient(160deg, #8fb8ff, #3d5bd9); }
+.phone-app__badge {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.35rem;
+  display: grid;
+  place-items: center;
+  min-width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 999px;
+  background: #ff3b4e;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--ph-bg);
+}
+.phone-app__name { font-size: 0.75rem; font-weight: 600; text-shadow: 0 1px 6px #0009; }
+.phone-home__hint {
+  margin: 0.7rem 0 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.phone-home__hint b { color: var(--ph-hot-2); }
+@media (hover: none) and (pointer: coarse) {
+  .phone-home__hint { display: none; }
+}
+
+/* ---------- App frame ---------- */
+.phone-appview { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.phone-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1rem 0.5rem 0.5rem;
+  border-bottom: 1px solid var(--ph-line);
+}
+.phone-bar__title { flex: 1; min-width: 0; font-weight: 700; font-size: 1rem; text-align: center; }
+.phone-appview__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+
+.phone-contact { display: inline-flex; align-items: center; gap: 0.55rem; text-align: left; }
+.phone-contact__text { display: grid; line-height: 1.2; }
+.phone-contact__name { font-size: 0.95rem; }
+.phone-contact__status { font-size: 0.68rem; font-weight: 500; color: var(--ph-text-2); }
+
+/* ---------- Messages ---------- */
+.msg { display: flex; flex-direction: column; height: 100%; }
+.msg__thread {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 0;
+  margin: 0;
+  padding: 0.9rem 0.85rem 0.6rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+}
+.msg__note {
+  align-self: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.68rem;
+  color: var(--ph-text-2);
+}
+.msg__bubble {
+  max-width: 82%;
+  padding: 0.55rem 0.85rem;
+  border-radius: 1.15rem;
+  font-size: 0.9rem;
+  line-height: 1.38;
+  overflow-wrap: anywhere;
+  animation: msg-in 260ms var(--ease-out) both;
+}
+.msg__bubble--them { align-self: flex-start; background: var(--ph-surface-2); border-bottom-left-radius: 0.35rem; }
+.msg__bubble--me {
+  align-self: flex-end;
+  margin-top: 0.4rem;
+  background: linear-gradient(160deg, var(--ph-hot-2), var(--ph-hot));
+  color: var(--ph-on-hot);
+  font-weight: 500;
+  border-bottom-right-radius: 0.35rem;
+}
+.msg__bubble--me + .msg__bubble--them,
+.msg__bubble--me + .msg__typing { margin-top: 0.4rem; }
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+.msg__typing { display: inline-flex; gap: 0.25rem; padding: 0.75rem 0.9rem; }
+.msg__typing span {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--ph-text-2);
+  animation: msg-dot 1s ease-in-out infinite;
+}
+.msg__typing span:nth-child(2) { animation-delay: 0.15s; }
+.msg__typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes msg-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+.msg__actions { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.2rem 0 0.1rem; animation: msg-in 260ms var(--ease-out) both; }
+.msg__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--ph-hot-2) 55%, transparent);
+  border-radius: 999px;
+  background: none;
+  color: var(--ph-hot-2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.msg__link:hover { background: color-mix(in srgb, var(--ph-hot-2) 14%, transparent); }
+
+.msg__compose { flex: none; border-top: 1px solid var(--ph-line); background: var(--ph-bg); }
+.msg__chips {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.6rem 0.85rem 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.msg__chips::-webkit-scrollbar { display: none; }
+/* Mouse users can't swipe sideways (the wheel scrolls vertically), so wrap the chips
+   instead: at most five replies, two short rows. Touch keeps the swipeable row. */
+@media (hover: hover) and (pointer: fine) {
+  .msg__chips { flex-wrap: wrap; gap: 0.35rem; overflow-x: visible; }
+  .msg__chips .msg__chip { padding: 0.38rem 0.7rem; font-size: 0.76rem; }
+}
+.msg__chip {
+  flex: none;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--ph-line);
+  border-radius: 999px;
+  background: var(--ph-surface);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  animation: msg-in 260ms var(--ease-out) both;
+  transition: background var(--dur-fast), border-color var(--dur-fast);
+}
+.msg__chip:hover { background: var(--ph-surface-2); border-color: var(--ph-hot-2); }
+.msg__form { display: flex; gap: 0.45rem; padding: 0.6rem 0.85rem 0.7rem; }
+.msg__input {
+  flex: 1;
+  min-width: 0;
+  height: 2.4rem;
+  padding: 0 0.95rem;
+  border: 1px solid var(--ph-line);
+  border-radius: 999px;
+  background: var(--ph-surface);
+  color: var(--ph-text);
+  /* 16px stops iOS zooming in on focus. */
+  font: 400 16px/1 var(--font-body);
+}
+.msg__input::placeholder { color: var(--ph-text-2); }
+.msg__input:focus-visible { outline: 2px solid var(--ph-hot-2); outline-offset: 0; }
+.msg__send {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--ph-hot-2), var(--ph-hot));
+  color: var(--ph-on-hot);
+  cursor: pointer;
+  transition: opacity var(--dur-fast);
+}
+.msg__send:disabled { opacity: 0.35; cursor: default; }
+
+/* ---------- Radio player ---------- */
+.player { display: flex; flex-direction: column; gap: 1rem; padding: 0.9rem 1.1rem 1.2rem; }
+.player__stations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+.player__station {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.45rem 0.3rem;
+  border: 1px solid var(--ph-line);
+  border-radius: 0.8rem;
+  background: var(--ph-surface);
+  cursor: pointer;
+  transition: background var(--dur-fast), border-color var(--dur-fast);
+}
+.player__station:hover { border-color: color-mix(in srgb, var(--ph-hot-2) 50%, transparent); }
+.player__station.is-active { background: var(--ph-surface-2); border-color: var(--ph-hot-2); }
+.player__station-freq { font-family: var(--font-display); font-size: 1.15rem; line-height: 1; }
+.player__station.is-active .player__station-freq { color: var(--ph-hot-2); }
+.player__station-name { font-size: 0.62rem; color: var(--ph-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.player__art {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 1.2rem;
+  box-shadow: 0 24px 50px -24px #000;
+}
+.player__art-sun {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 52%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--art-a), var(--art-b));
+  /* Synthwave stripes cut through the lower half. */
+  -webkit-mask: linear-gradient(180deg, #000 52%, transparent 52% 57%, #000 57% 64%, transparent 64% 70%, #000 70% 78%, transparent 78% 85%, #000 85%);
+  mask: linear-gradient(180deg, #000 52%, transparent 52% 57%, #000 57% 64%, transparent 64% 70%, #000 70% 78%, transparent 78% 85%, #000 85%);
+  opacity: 0.9;
+}
+.player__art-grid {
+  position: absolute;
+  inset: 62% -20% 0;
+  background:
+    repeating-linear-gradient(90deg, #ffffff38 0 1px, transparent 1px 12%),
+    repeating-linear-gradient(180deg, #ffffff38 0 1px, transparent 1px 22%),
+    linear-gradient(180deg, var(--art-c), #000);
+  transform: perspective(14rem) rotateX(58deg);
+  transform-origin: top;
+}
+.player__art-badge {
+  position: absolute;
+  left: 0.9rem;
+  top: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 2px 12px #0006;
+}
+.player__meter {
+  position: absolute;
+  left: 0.9rem;
+  right: 0.9rem;
+  bottom: 0.9rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22%;
+}
+.player__meter span {
+  flex: 1;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #fff, color-mix(in srgb, #fff 40%, transparent));
+  transform: scaleY(0.1);
+  transform-origin: bottom;
+  opacity: 0.85;
+}
+
+.player__meta { display: grid; gap: 0.2rem; min-width: 0; }
+.player__eyebrow { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ph-text-2); }
+.player__art.is-on ~ .player__meta .player__eyebrow { color: var(--ph-hot-2); }
+.player__title {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.player__sub { font-size: 0.8rem; color: var(--ph-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.player__progress { display: grid; gap: 0.35rem; }
+.player__track { height: 4px; border-radius: 999px; background: var(--ph-surface-2); overflow: hidden; }
+.player__fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--ph-hot-2), var(--ph-hot));
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.player__times { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--ph-text-2); font-variant-numeric: tabular-nums; }
+
+.player__controls { display: flex; align-items: center; justify-content: center; gap: 1.6rem; margin-top: -0.3rem; }
+.player__ctl {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  transition: background var(--dur-fast), opacity var(--dur-fast);
+}
+.player__ctl:hover:not(:disabled) { background: var(--ph-surface-2); }
+.player__ctl:disabled { opacity: 0.3; cursor: default; }
+.player__play {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--ph-hot-2), var(--ph-hot));
+  color: var(--ph-on-hot);
+  box-shadow: 0 12px 30px -10px var(--ph-hot);
+  cursor: pointer;
+  transition: transform 180ms var(--ease-out);
+}
+.player__play:hover { transform: scale(1.05); }
+.player__play:active { transform: scale(0.95); }
+
+.player__list { display: grid; gap: 0.3rem; }
+.player__list-head { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ph-text-2); }
+.player__list ol { display: grid; gap: 0.1rem; margin: 0; padding: 0; list-style: none; }
+.player__item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 0.55rem 0.6rem;
+  border: 0;
+  border-radius: 0.7rem;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.player__item:hover { background: var(--ph-surface); }
+.player__item.is-current { background: var(--ph-surface-2); }
+.player__item.is-current .player__item-title { color: var(--ph-hot-2); }
+.player__item-n { display: grid; place-items: center; width: 1.4rem; font-size: 0.75rem; color: var(--ph-text-2); font-variant-numeric: tabular-nums; }
+.player__item-title { font-size: 0.9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.player__note { margin: 0.4rem 0 0; font-size: 0.7rem; color: var(--ph-text-2); text-align: center; }
+
+/* ---------- Contacts ---------- */
+.contacts { padding: 1.2rem 1.1rem; display: grid; gap: 1.2rem; }
+.contacts__card { display: grid; justify-items: center; gap: 0.25rem; text-align: center; }
+.contacts__card .phone-avatar { margin-bottom: 0.5rem; }
+.contacts__name { font-family: var(--font-display); font-size: 1.6rem; line-height: 1.05; }
+.contacts__role { font-size: 0.85rem; }
+.contacts__loc { font-size: 0.78rem; color: var(--ph-text-2); }
+.contacts__quick { display: flex; gap: 0.6rem; margin-top: 0.8rem; }
+.contacts__quickbtn {
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  min-width: 5.5rem;
+  padding: 0.6rem 0.8rem;
+  border: 0;
+  border-radius: 0.9rem;
+  background: var(--ph-surface-2);
+  color: var(--ph-hot-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.contacts__quickbtn:hover { background: color-mix(in srgb, var(--ph-hot-2) 18%, var(--ph-surface-2)); }
+.contacts__list { margin: 0; padding: 0.3rem; list-style: none; border-radius: 1rem; background: var(--ph-surface); }
+.contacts__row { display: flex; align-items: center; }
+.contacts__row + .contacts__row { border-top: 1px solid var(--ph-line); }
+.contacts__link {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 0.6rem;
+  border-radius: 0.7rem;
+  color: inherit;
+  text-decoration: none;
+}
+.contacts__link > svg { flex: none; color: var(--ph-hot-2); }
+.contacts__link > span { display: grid; min-width: 0; }
+.contacts__link:hover .contacts__value { text-decoration: underline; }
+.contacts__label { font-size: 0.7rem; color: var(--ph-text-2); }
+.contacts__value { font-size: 0.88rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .phone-eq span,
+  .msg__typing span { animation: none; }
+  .phone-eq span { transform: scaleY(0.7); }
+  .msg__bubble,
+  .msg__actions,
+  .msg__chip { animation: none; }
+  .phone-app__icon,
+  .player__play { transition: none; }
+}

@@ -9,7 +9,7 @@ let tick: ((time: number) => void) | null = null;
  * Scroll lock holders. The page stays locked while ANY holder is present, so one
  * component releasing its lock (e.g. a closed menu mounting) can't unlock another's.
  */
-export type ScrollLockOwner = 'intro' | 'menu' | 'project' | 'radio';
+export type ScrollLockOwner = 'intro' | 'menu' | 'project' | 'radio' | 'phone';
 const lockOwners = new Set<ScrollLockOwner>();
 
 function applyLock() {
