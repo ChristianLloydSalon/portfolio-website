@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Logo } from '@/components/brand/Logo';
 import { ThemeToggle } from '@/features/theme/ThemeToggle';
+import { RadioButton } from '@/features/radio/RadioButton';
 import { navigation } from '@/data/navigation';
 import { scrollToSection } from '@/animations/scroll';
 import './Navigation.css';
@@ -72,6 +73,7 @@ export function Navbar({ active, menuOpen, onMenuToggle, menuButtonRef }: Props)
         </p>
 
         <div className="navbar__actions">
+          <RadioButton />
           <ThemeToggle className="navbar__theme" />
           <button
             ref={menuButtonRef}

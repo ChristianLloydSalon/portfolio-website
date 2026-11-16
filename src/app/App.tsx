@@ -12,6 +12,7 @@ import { Arsenal } from '@/sections/Arsenal/Arsenal';
 import { OpenSource } from '@/sections/OpenSource/OpenSource';
 import { Contact } from '@/sections/Contact/Contact';
 import { navigation } from '@/data/navigation';
+import { RadioHost } from '@/features/radio/RadioHost';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { ScrollTrigger } from '@/animations/gsap';
 import { isProgrammaticScroll, scrollToSection, startSmoothScroll, stopSmoothScroll, syncUrlToSection } from '@/animations/scroll';
@@ -89,6 +90,7 @@ export function App() {
         <Contact />
       </main>
 
+      <RadioHost />
       <div className="grain" aria-hidden="true" />
     </ThemeProvider>
   );

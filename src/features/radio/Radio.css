@@ -1,0 +1,191 @@
+/* ---------- Station wheel ---------- */
+.radio-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  color: var(--text);
+  background: color-mix(in srgb, var(--bg) 62%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  backdrop-filter: blur(10px) saturate(1.2);
+}
+.radio-wheel {
+  position: relative;
+  width: min(30rem, 92vw);
+  aspect-ratio: 1;
+}
+.radio-wheel__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 24px 60px #0007);
+}
+.radio-wedge {
+  fill: color-mix(in srgb, var(--surface) 78%, transparent);
+  stroke: var(--line);
+  stroke-width: 0.6;
+  cursor: pointer;
+  transition: fill 160ms, stroke 160ms;
+}
+.radio-wedge.is-playing { stroke: var(--logo-3); stroke-width: 1; }
+.radio-wedge.is-focus {
+  fill: url(#radio-wedge);
+  stroke: var(--logo-ink);
+  stroke-width: 1.2;
+}
+
+.radio-slot {
+  position: absolute;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  width: 22%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.radio-slot:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* Station logo: frequency in the display face, icon above. Ours, not anyone's station art. */
+.radio-badge {
+  display: grid;
+  place-items: center;
+  gap: 0.1rem;
+  line-height: 1;
+  transition: transform 220ms var(--ease-out), color 160ms;
+}
+.radio-badge__freq {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 4.4vw, 1.6rem);
+  letter-spacing: 0.02em;
+}
+.radio-slot.is-focus .radio-badge {
+  color: var(--logo-ink);
+  transform: scale(1.12);
+}
+
+/* Centre hub: what the pointer is aiming at. */
+.radio-hub {
+  position: absolute;
+  inset: 28%;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.3rem;
+  border-radius: 50%;
+  text-align: center;
+  background: color-mix(in srgb, var(--surface-2) 92%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 0 30px -10px var(--logo-3);
+  pointer-events: none;
+}
+.radio-hub__eyebrow,
+.radio-hub__vibe {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.radio-hub__eyebrow { color: var(--accent-ink); font-weight: 700; min-height: 1em; }
+.radio-hub__freq {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 9vw, 3.2rem);
+  line-height: 0.9;
+  color: var(--accent-ink);
+}
+.radio-hub__name {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  max-width: 11em;
+}
+.radio-hub__vibe { max-width: 14em; letter-spacing: 0.14em; }
+
+.radio-overlay__hint {
+  position: absolute;
+  bottom: max(1.5rem, calc(env(safe-area-inset-bottom) + 1rem));
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.radio-overlay__hint b { color: var(--accent-ink); }
+.radio-overlay__hint--touch { display: none; }
+@media (hover: none) and (pointer: coarse) {
+  .radio-overlay__hint--keys { display: none; }
+  .radio-overlay__hint--touch { display: inline; }
+}
+
+/* ---------- Now Playing toast ---------- */
+.radio-toast {
+  position: fixed;
+  top: calc(var(--nav-h) + 0.75rem);
+  left: 50%;
+  translate: -50% 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.6rem 1.25rem 0.6rem 0.6rem;
+  border-radius: 999px;
+  color: var(--text);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  backdrop-filter: blur(14px) saturate(1.3);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  pointer-events: none;
+}
+.radio-toast .radio-badge {
+  width: 3.1rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  color: var(--logo-ink);
+  background: linear-gradient(160deg, var(--logo-2), var(--logo-3));
+  border: 1.5px solid var(--logo-ink);
+}
+.radio-toast .radio-badge svg { width: 22px; height: 22px; }
+/* The frequency is already in the title beside it. */
+.radio-toast .radio-badge__freq { display: none; }
+.radio-toast__text { display: grid; gap: 0.15rem; min-width: 0; }
+.radio-toast__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.radio-toast__eyebrow { color: var(--accent-ink); font-weight: 700; }
+.radio-toast__track {
+  font-size: 0.82rem;
+  color: var(--text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.radio-toast__name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  letter-spacing: 0.03em;
+  line-height: 1.05;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

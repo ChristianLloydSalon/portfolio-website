@@ -1,0 +1,85 @@
+/* Navbar radio button: same pill language as the Menu button, quieter. */
+.radio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0 0.95rem 0 0.75rem;
+  border: 1.5px solid color-mix(in srgb, currentColor 55%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 25%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: border-color var(--dur-med), box-shadow var(--dur-med);
+}
+.radio-btn:hover { border-color: currentColor; }
+.radio-btn.is-playing {
+  border-color: var(--logo-3);
+  box-shadow: 0 0 18px -6px var(--logo-3);
+}
+.radio-btn__icon {
+  display: grid;
+  place-items: center;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* Off: the radio icon, dimmed and struck through. */
+.radio-btn__off {
+  position: relative;
+  display: grid;
+  place-items: center;
+  opacity: 0.7;
+}
+.radio-btn__off::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 135%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  /* A gap in the navbar's colour either side of the line keeps it readable over the waves. */
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--surface) 60%, transparent);
+  translate: -50% -50%;
+  rotate: -45deg;
+}
+.radio-btn:hover .radio-btn__off { opacity: 1; }
+
+/* Three-bar equalizer while a station plays. */
+.radio-btn__eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 0.85rem;
+}
+.radio-btn__eq span {
+  width: 3px;
+  height: 100%;
+  border-radius: 1px;
+  background: var(--logo-3);
+  transform-origin: bottom;
+  animation: radio-eq 0.9s ease-in-out infinite alternate;
+}
+.radio-btn__eq span:nth-child(2) { animation-duration: 0.6s; animation-delay: -0.3s; }
+.radio-btn__eq span:nth-child(3) { animation-duration: 0.75s; animation-delay: -0.5s; }
+@keyframes radio-eq {
+  from { transform: scaleY(0.25); }
+  to { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .radio-btn__eq span { animation: none; transform: scaleY(0.7); }
+}
+
+/* Small screens: icon only. */
+@media (max-width: 639px) {
+  .radio-btn { padding: 0; width: 2.75rem; justify-content: center; }
+  .radio-btn__label { display: none; }
+}
