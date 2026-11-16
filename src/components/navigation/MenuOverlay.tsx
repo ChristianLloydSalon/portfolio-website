@@ -60,6 +60,7 @@ export function MenuOverlay({ open, active, onClose, returnFocusRef }: Props) {
       aria-modal="true"
       aria-label="Site menu"
       aria-hidden={!open}
+      data-lenis-prevent
       // inert keeps hidden menu links out of the tab order
       {...(!open ? { inert: '' } : {})}
     >
