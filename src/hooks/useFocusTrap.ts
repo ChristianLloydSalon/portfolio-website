@@ -28,7 +28,8 @@ export function useFocusTrap(
     if (!el) return;
     const previous = document.activeElement as HTMLElement | null;
 
-    const first = el.querySelector<HTMLElement>(FOCUSABLE);
+    // An element marked data-autofocus wins over the first focusable one.
+    const first = el.querySelector<HTMLElement>('[data-autofocus]') ?? el.querySelector<HTMLElement>(FOCUSABLE);
     // Defer so the element is visible before focusing.
     const t = window.setTimeout(() => first?.focus({ preventScroll: true }), 60);
 

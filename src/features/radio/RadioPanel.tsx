@@ -94,15 +94,8 @@ export default function RadioPanel() {
     }
   }, [wheelOpen]);
 
+  // Focuses the current slot (marked data-autofocus below), so the wheel opens on it directly.
   useFocusTrap(overlayRef, mounted && wheelOpen, close, returnTo);
-
-  // The trap focuses the first slot (98.5); land on the current one instead (Off when silent).
-  useEffect(() => {
-    if (!mounted || !wheelOpen) return;
-    const k = SLOTS.findIndex((s) => s.id === (radioStore.get().station ?? 'off'));
-    const t = window.setTimeout(() => btnRefs.current[k]?.focus({ preventScroll: true }), 80);
-    return () => window.clearTimeout(t);
-  }, [mounted, wheelOpen]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -209,6 +202,7 @@ export default function RadioPanel() {
                   style={{ left: `${50 + 35.5 * Math.cos(rad)}%`, top: `${50 + 35.5 * Math.sin(rad)}%` }}
                   aria-label={s.id === 'off' ? 'Turn radio off' : `${l.freq} ${l.name}, ${l.vibe}`}
                   aria-pressed={s.id === (station ?? 'off')}
+                  data-autofocus={s.id === (station ?? 'off') ? true : undefined}
                   onFocus={() => setFocus(k)}
                   onPointerEnter={() => setFocus(k)}
                   onClick={() => choose(s.id)}
