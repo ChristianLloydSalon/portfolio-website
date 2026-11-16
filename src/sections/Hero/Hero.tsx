@@ -158,6 +158,9 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
           <p className="hero__role" data-hero-in>
             {profile.role}
           </p>
+          <p className="hero__pitch" data-hero-in>
+            {profile.pitch}
+          </p>
           <ul className="hero__tagline" data-hero-in aria-label="Tagline">
             {profile.tagline.map((t) => (
               <li key={t}>{t}</li>

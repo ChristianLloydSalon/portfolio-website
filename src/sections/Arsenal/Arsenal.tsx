@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
-import { Boxes, Cloud, LayoutTemplate, Server, Smartphone, type LucideIcon } from 'lucide-react';
+import { Boxes, Cloud, Database, FlaskConical, LayoutTemplate, Server, Smartphone, Workflow, type LucideIcon } from 'lucide-react';
 import { skillCategories } from '@/data/skills';
-import type { SkillIcon } from '@/types';
+import type { SkillIcon, SkillTier } from '@/types';
 import { SectionHeading } from '@/components/typography/SectionHeading';
 import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -15,7 +15,21 @@ const ICONS: Record<SkillIcon, LucideIcon> = {
   server: Server,
   cloud: Cloud,
   boxes: Boxes,
+  database: Database,
+  workflow: Workflow,
+  flask: FlaskConical,
 };
+
+const TIER: Record<SkillTier, { label: string; rank: number; hint: string }> = {
+  production: { label: 'Production', rank: 3, hint: 'Shipped real products with it' },
+  working: { label: 'Working', rank: 2, hint: 'Used on real projects' },
+  familiar: { label: 'Familiar', rank: 1, hint: 'Learned and tried it' },
+};
+
+/** Legend lists only tiers that some skill actually uses. */
+const TIERS_IN_USE = (['production', 'working', 'familiar'] as const).filter((t) =>
+  skillCategories.some((c) => c.skills.some((s) => s.tier === t)),
+);
 
 const SIZE = 440;
 const C = SIZE / 2;
@@ -197,8 +211,18 @@ export function Arsenal() {
           <p className="loadout__desc" data-slot>
             {cat.description}
           </p>
+          <ul className="loadout__tiers" data-slot aria-label="Experience levels">
+            {TIERS_IN_USE.map((t) => (
+              <li key={t}>
+                <TierPips tier={t} />
+                <span>
+                  <strong>{TIER[t].label}</strong> {TIER[t].hint.toLowerCase()}
+                </span>
+              </li>
+            ))}
+          </ul>
           <ul className="loadout__slots">
-            {cat.skills.map((s, i) => (
+            {[...cat.skills].sort((a, b) => TIER[b.tier].rank - TIER[a.tier].rank).map((s) => (
               <li key={s.name} className="slot" data-slot>
                 <span className="slot__mono display" aria-hidden="true">
                   {s.mono}
@@ -207,8 +231,9 @@ export function Arsenal() {
                   <span className="slot__name">{s.name}</span>
                   <span className="slot__note">{s.note}</span>
                 </span>
-                <span className="slot__key eyebrow" aria-hidden="true">
-                  {i + 1}
+                <span className={`slot__tier is-${s.tier}`}>
+                  <TierPips tier={s.tier} />
+                  <span className="slot__tier-label">{TIER[s.tier].label}</span>
                 </span>
               </li>
             ))}
@@ -216,5 +241,16 @@ export function Arsenal() {
         </div>
       </div>
     </section>
+  );
+}
+
+/** Rank pips: filled count = tier rank (3 production, 2 working, 1 familiar). Decorative; the label carries the meaning. */
+function TierPips({ tier }: { tier: SkillTier }) {
+  return (
+    <span className="tier-pips" aria-hidden="true">
+      {[1, 2, 3].map((n) => (
+        <span key={n} className={n <= TIER[tier].rank ? 'is-on' : undefined} />
+      ))}
+    </span>
   );
 }

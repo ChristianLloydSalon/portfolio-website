@@ -98,6 +98,15 @@ export function Experience() {
                 <h3 id={`${m.id}-title`} className="display mission__title" data-reveal>
                   {m.position}
                 </h3>
+                {m.progression && m.progression.length > 1 && (
+                  <ol className="mission__progression" data-reveal aria-label="Career progression">
+                    {m.progression.map((t, k) => (
+                      <li key={t} className={k === m.progression!.length - 1 ? 'is-current' : undefined}>
+                        {t}
+                      </li>
+                    ))}
+                  </ol>
+                )}
                 <p className="mission__company" data-reveal>
                   {m.company}
                   {m.location && <span className="mission__location"> · {m.location}</span>}
@@ -106,6 +115,20 @@ export function Experience() {
                   {m.summary}
                 </p>
 
+                {m.groups?.length ? (
+                  <div className="mission__groups" data-reveal>
+                    {m.groups.map((g) => (
+                      <div key={g.title} className="mission__group">
+                        <h4 className="eyebrow mission__sub">{g.title}</h4>
+                        <ul className="mission__list">
+                          {g.items.map((r) => (
+                            <li key={r}>{r}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
                 <div className="mission__grid" data-reveal>
                   <div>
                     <h4 className="eyebrow mission__sub">Responsibilities</h4>
@@ -124,6 +147,7 @@ export function Experience() {
                     </ul>
                   </div>
                 </div>
+                )}
 
                 <ul className="mission__trophies" data-reveal aria-label="Achievements">
                   {m.achievements.map((a) => (

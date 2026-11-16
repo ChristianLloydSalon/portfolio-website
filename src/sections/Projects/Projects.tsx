@@ -118,7 +118,6 @@ export function Projects() {
                 className="project-card__hit"
                 onClick={(e) => open(i, e.currentTarget)}
                 aria-haspopup="dialog"
-                aria-label={`Open ${p.title} presentation`}
               >
                 <div className="project-card__media">
                   <div className="project-card__art" data-card-art>

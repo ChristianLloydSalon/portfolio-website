@@ -127,10 +127,12 @@ export function About() {
           </div>
 
           <p className="about__bio" data-reveal>
-            I&rsquo;m {profile.firstName}, a software engineer based in {profile.location}. For more than five years
-            I&rsquo;ve built and supported production iOS and Android apps in Flutter, along with the Angular
-            dashboards, NestJS services and AWS pipelines behind them. Before that I taught software development at
-            Bohol Island State University, where I earned my Computer Engineering degree as a DOST scholar.
+            I&rsquo;m {profile.firstName}, a software engineer based in {profile.location}. I build and ship
+            production mobile apps end to end: architecture, implementation, release and production monitoring. My
+            work spans Flutter, Angular, NestJS and AWS, so I can carry a feature across the whole stack, and
+            I&rsquo;ve led mobile development on a dealer app live in three app stores. Along the way I taught
+            software development at Bohol Island State University, where I earned my Computer Engineering degree
+            as a DOST scholar.
           </p>
 
           <ul className="about__stats" data-stats data-reveal>

@@ -15,6 +15,8 @@ export interface Profile {
   firstName: string;
   lastName: string;
   role: string;
+  /** One-line value proposition under the role in the hero. */
+  pitch: string;
   tagline: string[];
   location: string;
   email: string;
@@ -50,9 +52,23 @@ export interface Project {
   employer?: string;
   /** Extra public links, e.g. app store pages. */
   links?: { label: string; href: string }[];
+  /** Deeper write-up shown in the project presentation; every part is optional. */
+  caseStudy?: CaseStudy;
   /** Procedural artwork used when no image exists in src/assets/projects/<id>.* */
   motif: ProjectMotif;
   palette: Record<ThemeName, [string, string, string]>;
+}
+
+export interface CaseStudy {
+  /** Headline numbers. `source` is shown small, e.g. "Public Play Store listing". */
+  results?: { value: string; label: string; source?: string }[];
+  /** Demo clips/images: `asset` is an asset key, e.g. "projects/story-framework/demo-viewer". */
+  media?: { asset: string; alt: string; caption: string }[];
+  /** High-level architecture as left-to-right tiers. Keep company work generic. */
+  architecture?: { title: string; items: string[] }[];
+  architectureNote?: string;
+  challenges?: { title: string; problem: string; solution: string }[];
+  code?: { label: string; code: string }[];
 }
 
 export interface Mission {
@@ -62,19 +78,27 @@ export interface Mission {
   period: string;
   location?: string;
   status: 'active' | 'complete';
+  /** Official titles held at this company, earliest first. */
+  progression?: string[];
   summary: string;
+  /** Grouped work; when present it replaces the Responsibilities/Contributions columns. */
+  groups?: { title: string; items: string[] }[];
   responsibilities: string[];
   contributions: string[];
   achievements: string[];
   stack: string[];
 }
 
-export type SkillIcon = 'smartphone' | 'layout' | 'server' | 'cloud' | 'boxes';
+export type SkillIcon = 'smartphone' | 'layout' | 'server' | 'cloud' | 'boxes' | 'database' | 'workflow' | 'flask';
+
+/** production: shipped real products with it. working: real use, less depth. familiar: learned or tried. */
+export type SkillTier = 'production' | 'working' | 'familiar';
 
 export interface Skill {
   name: string;
   mono: string;
   note: string;
+  tier: SkillTier;
 }
 
 export interface SkillCategory {

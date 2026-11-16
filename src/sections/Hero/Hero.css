@@ -49,6 +49,17 @@
   margin-right: -0.5em;
   text-transform: uppercase;
 }
+.hero__pitch {
+  margin: 0;
+  max-width: 34rem;
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  line-height: 1.5;
+  text-shadow: 0 1px 2px #0009, 0 2px 14px #0007;
+}
+.hero--character .hero__pitch { max-width: min(34rem, 50vw); }
+[data-theme='sunrise'] .hero__pitch { text-shadow: 0 0 2px #ffffffe6, 0 0 12px #ffffffcc; }
+@media (max-width: 1023px) { .hero--character .hero__pitch { max-width: 34rem; } }
+
 .hero__tagline {
   display: flex;
   flex-wrap: wrap;

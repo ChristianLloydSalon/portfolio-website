@@ -110,13 +110,57 @@
 .slot__text { display: grid; gap: 0.15rem; }
 .slot__name { font-weight: 700; font-size: 1.05rem; }
 .slot__note { color: var(--text-2); font-size: 0.9rem; line-height: 1.4; }
-.slot__key {
-  display: grid;
-  place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
+/* ---------- Skill tiers ---------- */
+.tier-pips { display: inline-flex; gap: 3px; }
+.tier-pips > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  opacity: 0.45;
+}
+.tier-pips > span.is-on { background: currentColor; opacity: 1; }
+
+.slot__tier {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 5.6rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.5rem;
   border: 1px solid var(--line);
-  border-radius: 0.4rem;
-  font-size: 0.65rem;
   color: var(--text-2);
+}
+.slot__tier-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.slot__tier.is-production {
+  color: var(--accent-ink);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.slot__tier.is-working { color: var(--text); }
+
+.loadout__tiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--text-2);
+}
+.loadout__tiers li { display: inline-flex; align-items: center; gap: 0.5rem; }
+.loadout__tiers strong { color: var(--text); font-weight: 700; }
+
+@media (max-width: 479px) {
+  .slot { grid-template-columns: 3rem 1fr; }
+  .slot__mono { width: 3rem; height: 3rem; font-size: 1.3rem; }
+  .slot__tier { grid-column: 2; justify-self: start; flex-direction: row; min-width: 0; padding: 0.25rem 0.5rem; }
 }

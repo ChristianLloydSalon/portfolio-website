@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, ExternalLink, Github, Package, X } from 'lucide-
 import { projects } from '@/data/projects';
 import { ProjectArt } from './ProjectArt';
 import { STATUS_LABEL } from './projectStatus';
+import { CaseStudySections, CaseStudyResults } from './CaseStudy';
 import { useTheme } from '@/features/theme/useTheme';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
@@ -149,6 +150,8 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
             </div>
           </dl>
 
+          {p.caseStudy?.results && <CaseStudyResults results={p.caseStudy.results} />}
+
           <div className="project-overlay__grid">
             <div data-ov-in data-ov-swap>
               <h3 className="eyebrow text-ink-2">Briefing</h3>
@@ -191,7 +194,9 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
             </div>
 
             <div data-ov-in data-ov-swap>
-              <h3 className="eyebrow text-ink-2">{p.employer ? 'My contributions' : 'Objectives'}</h3>
+              <h3 className="eyebrow text-ink-2">
+                {p.employer ? 'My contributions' : p.status === 'in-development' ? 'Objectives' : 'Key features'}
+              </h3>
               <ol className="project-overlay__features">
                 {p.features.map((f, i) => (
                   <li key={f}>
@@ -210,6 +215,8 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
               </ul>
             </div>
           </div>
+
+          {p.caseStudy && <CaseStudySections study={p.caseStudy} />}
 
           <nav className="project-overlay__pager" aria-label="Other projects">
             <button type="button" className="project-overlay__pager-btn" onClick={() => onStep(-1)}>

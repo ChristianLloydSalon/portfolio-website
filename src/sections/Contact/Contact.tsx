@@ -82,8 +82,8 @@ export function Contact() {
           </span>
         </h2>
         <p className="contact__lede" data-reveal>
-          Open to new roles, freelance builds and interesting collaborations. Send a brief and I&rsquo;ll reply
-          within a couple of days.
+          Open to new opportunities and always happy to talk. Send a message anytime and I&rsquo;ll get back to
+          you.
         </p>
 
         <div className="contact__email" data-reveal>

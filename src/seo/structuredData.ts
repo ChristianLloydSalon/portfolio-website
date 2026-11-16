@@ -29,7 +29,7 @@ export function structuredData() {
     image: portrait ? abs(portrait) : site.image,
     address: { '@type': 'PostalAddress', addressRegion: 'Bohol', addressCountry: 'PH' },
     ...(current && { worksFor: { '@type': 'Organization', name: current.company } }),
-    ...(school && { alumniOf: { '@type': 'CollegeOrUniversity', name: school.company.replace(/\s+—.*$/, '') } }),
+    ...(school && { alumniOf: { '@type': 'CollegeOrUniversity', name: school.company.replace(/\s+[—–-]\s.*$/, '') } }),
     knowsAbout: skillCategories.flatMap((c) => c.skills.map((s) => s.name)),
     sameAs: profile.socials.filter((s) => /^https?:\/\//.test(s.href)).map((s) => s.href),
   };
