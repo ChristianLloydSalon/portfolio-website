@@ -27,6 +27,7 @@ export function pages() {
     ...projects.map((p) => ({
       path: projectPath(p.id),
       meta: {
+        projectId: p.id,
         title: `${p.title} | ${site.name}`,
         description: p.summary,
         url: `${SITE_URL}${projectPath(p.id)}`,

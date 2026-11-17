@@ -17,8 +17,7 @@ const template = await readFile(indexPath, 'utf8');
 if (!template.includes('<div id="root"></div>')) throw new Error('prerender: <div id="root"></div> not found in dist/index.html');
 
 // Escape "<" so the JSON can never close the script tag.
-const json = JSON.stringify(structuredData()).replace(/</g, '\\u003c');
-const shell = template.replace('</head>', () => `    <script type="application/ld+json">${json}</script>\n  </head>`);
+const jsonLd = (data) => `    <script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>\n  </head>`;
 
 const attr = (v) => v.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
@@ -55,7 +54,10 @@ const all = pages();
 for (const { path, meta } of all) {
   const appHtml = render(path);
   if (path === '/') homeKb = appHtml.length / 1024;
-  let html = shell.replace('<div id="root"></div>', () => `<div id="root">${appHtml}</div>`);
+  // Project pages describe the project; every other page carries the home page's graph.
+  let html = template
+    .replace('</head>', () => jsonLd(structuredData(meta?.projectId)))
+    .replace('<div id="root"></div>', () => `<div id="root">${appHtml}</div>`);
   // Section pages are the same one-page site, so they keep the home page's canonical URL.
   if (meta) html = withMeta(html, meta);
   const file = path === '/' ? indexPath : resolve(dist, `${path.slice(1)}.html`);
@@ -64,13 +66,14 @@ for (const { path, meta } of all) {
 }
 console.error = consoleError;
 
-const today = new Date().toISOString().slice(0, 10);
+// No <lastmod>: a build date changes on every deploy even when the content doesn't,
+// which teaches crawlers to ignore it. Add it back only from a real content-change date.
 await writeFile(
   resolve(dist, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${['/', ...all.filter((p) => p.meta).map((p) => p.path)]
-  .map((path) => `  <url>\n    <loc>${SITE_URL}${path}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`)
+  .map((path) => `  <url>\n    <loc>${SITE_URL}${path}</loc>\n  </url>`)
   .join('\n')}
 </urlset>
 `,

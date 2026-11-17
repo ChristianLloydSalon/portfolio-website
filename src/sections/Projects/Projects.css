@@ -246,6 +246,8 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: none;
+  color: inherit;
+  text-decoration: none;
   text-align: left;
   transition: background-color var(--dur-fast);
 }

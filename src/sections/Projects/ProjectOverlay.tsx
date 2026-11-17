@@ -19,6 +19,7 @@ import { prefersReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap } from '@/animations/gsap';
 import { lockScroll } from '@/animations/scroll';
 import { site } from '@/seo/site';
+import { projectPath, sectionPath } from '@/app/routes';
 
 interface Props {
   index: number | null;
@@ -27,10 +28,19 @@ interface Props {
   /** Move by a relative step (-1 / +1). Relative, so rapid presses each count. */
   onStep: (delta: number) => void;
   returnFocusRef: React.RefObject<HTMLElement>;
+  /**
+   * Build-time prerender of /projects/:id: the case study is the page's main content, so it
+   * gets the page's <h1> and plain links (back to the projects, to the other projects)
+   * that crawlers can follow. The browser always renders the overlay on top of the site.
+   */
+  asPage?: boolean;
 }
 
+/** Plain left clicks are handled in-app; modified clicks open the link's own URL. */
+const isPlainClick = (e: React.MouseEvent) => !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0);
+
 /** Full-screen project presentation. Expands from the clicked card. */
-export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef }: Props) {
+export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef, asPage = false }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   const open = index !== null;
@@ -110,6 +120,7 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
   const p = projects[index];
   const prev = (index - 1 + projects.length) % projects.length;
   const next = (index + 1) % projects.length;
+  const Title = asPage ? 'h1' : 'h2';
 
   const overlay = (
     <div
@@ -123,9 +134,15 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
         if (e.key === 'ArrowLeft') onStep(-1);
       }}
     >
-      <button type="button" className="project-overlay__close" onClick={close} aria-label="Close project">
-        <X size={22} aria-hidden="true" />
-      </button>
+      {asPage ? (
+        <a className="project-overlay__close" href={sectionPath('projects')} aria-label="Back to all projects">
+          <X size={22} aria-hidden="true" />
+        </a>
+      ) : (
+        <button type="button" className="project-overlay__close" onClick={close} aria-label="Close project">
+          <X size={22} aria-hidden="true" />
+        </button>
+      )}
       <div className="project-overlay__scroll" data-ov-scroll data-lenis-prevent>
         <div className="project-overlay__hero">
           <div className="project-overlay__art" data-ov-swap>
@@ -136,9 +153,9 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
             <p className="eyebrow" data-ov-in data-ov-swap>
               Mission {p.index} · {p.codename}
             </p>
-            <h2 id="project-overlay-title" className="display project-overlay__title" data-ov-in data-ov-swap>
+            <Title id="project-overlay-title" className="display project-overlay__title" data-ov-in data-ov-swap>
               {p.title}
-            </h2>
+            </Title>
           </div>
         </div>
 
@@ -272,20 +289,36 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
           {p.caseStudy?.disclaimer && <CaseStudyDisclaimer text={p.caseStudy.disclaimer} />}
 
           <nav className="project-overlay__pager" aria-label="Other projects">
-            <button type="button" className="project-overlay__pager-btn" onClick={() => onStep(-1)}>
+            <a
+              className="project-overlay__pager-btn"
+              href={projectPath(projects[prev].id)}
+              onClick={(e) => {
+                if (!isPlainClick(e)) return;
+                e.preventDefault();
+                onStep(-1);
+              }}
+            >
               <ArrowLeft size={18} aria-hidden="true" />
               <span>
                 <span className="eyebrow block opacity-70">Previous</span>
                 <span className="display text-2xl">{projects[prev].title}</span>
               </span>
-            </button>
-            <button type="button" className="project-overlay__pager-btn is-next" onClick={() => onStep(1)}>
+            </a>
+            <a
+              className="project-overlay__pager-btn is-next"
+              href={projectPath(projects[next].id)}
+              onClick={(e) => {
+                if (!isPlainClick(e)) return;
+                e.preventDefault();
+                onStep(1);
+              }}
+            >
               <span>
                 <span className="eyebrow block opacity-70">Next</span>
                 <span className="display text-2xl">{projects[next].title}</span>
               </span>
               <ArrowRight size={18} aria-hidden="true" />
-            </button>
+            </a>
           </nav>
         </div>
       </div>
