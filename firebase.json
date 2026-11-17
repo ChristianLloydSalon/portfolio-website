@@ -6,7 +6,7 @@
       "firebase.json",
       "**/.*"
     ],
-    "cleanUrls": false,
+    "cleanUrls": true,
     "trailingSlash": false,
     "headers": [
       {
@@ -37,7 +37,7 @@
         ]
       },
       {
-        "source": "/",
+        "regex": "^/[^.]*$",
         "headers": [
           {
             "key": "Cache-Control",

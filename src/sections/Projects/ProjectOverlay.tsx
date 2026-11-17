@@ -18,6 +18,7 @@ import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap } from '@/animations/gsap';
 import { lockScroll } from '@/animations/scroll';
+import { site } from '@/seo/site';
 
 interface Props {
   index: number | null;
@@ -67,6 +68,16 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
     };
   }, [open]);
 
+  // Each project route gets its own tab title.
+  useEffect(() => {
+    if (index === null) return;
+    document.title = `${projects[index].title} | ${site.name}`;
+    // Not the previous title: a deep-linked page loads with the project's title already.
+    return () => {
+      document.title = site.title;
+    };
+  }, [index]);
+
   // Expand from the card's rectangle.
   useLayoutEffect(() => {
     const el = ref.current;
@@ -100,7 +111,7 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
   const prev = (index - 1 + projects.length) % projects.length;
   const next = (index + 1) % projects.length;
 
-  return createPortal(
+  const overlay = (
     <div
       ref={ref}
       className="project-overlay"
@@ -279,7 +290,8 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
         </div>
       </div>
 
-    </div>,
-    document.body,
+    </div>
   );
+  // The build-time prerender has no document: render in place so the page's HTML carries the case study.
+  return import.meta.env.SSR ? overlay : createPortal(overlay, document.body);
 }

@@ -13,6 +13,7 @@ import { revealOnScroll } from '@/animations/transitions';
 import { scrollToSection } from '@/animations/scroll';
 import { copyEmail, gmailComposeUrl, mailtoUrl } from '@/lib/email';
 import './Contact.css';
+import { sectionPath } from '@/app/routes';
 
 const ICON: Record<SocialLink['kind'], LucideIcon> = {
   github: Github,
@@ -130,7 +131,7 @@ export function Contact() {
           © {new Date().getFullYear()} {profile.name} · {profile.location}
         </p>
         <a
-          href="#home"
+          href={sectionPath('home')}
           className="contact__top eyebrow"
           onClick={(e) => {
             e.preventDefault();

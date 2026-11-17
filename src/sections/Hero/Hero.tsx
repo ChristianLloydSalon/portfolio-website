@@ -13,6 +13,7 @@ import { scrollToSection } from '@/animations/scroll';
 import { asset } from '@/lib/assets';
 import type { ThemeName } from '@/types';
 import './Hero.css';
+import { sectionPath } from '@/app/routes';
 
 /** Title card shown while the pinned hero hands over to About (desktop, with motion). */
 const CARD_STACK = ['Flutter', 'Angular', 'NestJS', 'AWS'];
@@ -190,8 +191,8 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
           <div className="hero__actions" data-hero-in>
             <MagneticButton
               variant="primary"
-              href="#projects"
-              onClick={(e) => {
+              href={sectionPath('projects')}
+              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                 e.preventDefault();
                 scrollToSection('projects');
               }}
@@ -200,8 +201,8 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
             </MagneticButton>
             <MagneticButton
               variant="ghost"
-              href="#contact"
-              onClick={(e) => {
+              href={sectionPath('contact')}
+              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                 e.preventDefault();
                 scrollToSection('contact');
               }}
@@ -223,7 +224,7 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
           </span>
         </p>
         <a
-          href="#about"
+          href={sectionPath('about')}
           className="hero__scroll eyebrow"
           onClick={(e) => {
             e.preventDefault();

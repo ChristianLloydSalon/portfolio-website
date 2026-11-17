@@ -1,6 +1,7 @@
 import Lenis from 'lenis';
 import { gsap, ScrollTrigger } from './gsap';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
+import { isProjectPath, sectionPath } from '@/app/routes';
 
 let lenis: Lenis | null = null;
 let tick: ((time: number) => void) | null = null;
@@ -53,18 +54,36 @@ export function lockScroll(owner: ScrollLockOwner, locked: boolean) {
   applyLock();
 }
 
-/** URL for a section: the hero is the bare path, others are #id. Query string is kept. */
+/** URL for a section: the hero is the bare path, others are /id. Query string is kept. */
 function sectionUrl(id: string) {
-  return id === 'home' ? location.pathname + location.search : `${location.pathname}${location.search}#${id}`;
+  return sectionPath(id) + location.search;
 }
 
 /**
  * Mirrors the visible section in the address bar. Uses replaceState: no new history
- * entry per section (Back still leaves the site) and no jump (unlike setting location.hash).
+ * entry per section (Back still leaves the site). A project route stays put: the
+ * overlay owns the URL while it is open.
  */
 export function syncUrlToSection(id: string) {
+  if (isProjectPath(location.pathname)) return;
   const url = sectionUrl(id);
   if (url !== location.pathname + location.search + location.hash) history.replaceState(history.state, '', url);
+}
+
+/** Document offset of a section. Pinned sections are measured by their pin-spacer. */
+function sectionTop(el: HTMLElement, id: string) {
+  // After the pin ends the element itself is offset to the end of the pinned range.
+  const anchor = el.parentElement?.classList.contains('pin-spacer') ? el.parentElement : el;
+  return id === 'home' ? 0 : Math.max(0, anchor.getBoundingClientRect().top + window.scrollY);
+}
+
+/** Jumps to a section without animating (e.g. under a deep-linked project overlay). */
+export function jumpToSection(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = sectionTop(el, id);
+  if (lenis) lenis.scrollTo(top, { immediate: true, force: true });
+  else window.scrollTo({ top, behavior: 'auto' });
 }
 
 // True while a link-triggered scroll is gliding to its target. Sections passed on the
@@ -89,10 +108,7 @@ export function scrollToSection(id: string) {
     if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
     el.focus({ preventScroll: true });
   };
-  // Pinned sections sit inside a ScrollTrigger pin-spacer; after the pin ends the
-  // element itself is offset to the end of the pinned range, so measure the spacer.
-  const anchor = el.parentElement?.classList.contains('pin-spacer') ? el.parentElement : el;
-  const top = id === 'home' ? 0 : Math.max(0, anchor.getBoundingClientRect().top + window.scrollY);
+  const top = sectionTop(el, id);
   syncUrlToSection(id);
   if (lenis) {
     const duration = id === 'home' ? 1.8 : 1.4;

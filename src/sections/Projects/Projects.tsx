@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, Plus } from 'lucide-react';
+import { useLocation, useRoute } from 'wouter';
 import { projects } from '@/data/projects';
 import { SectionHeading } from '@/components/typography/SectionHeading';
 import { ProjectArt } from './ProjectArt';
@@ -14,38 +15,87 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap } from '@/animations/gsap';
 import { revealOnScroll } from '@/animations/transitions';
 import { scrollToSection } from '@/animations/scroll';
+import { PROJECT_ROUTE, isProjectPath, projectPath, resolvePath, sectionPath } from '@/app/routes';
 import './Projects.css';
 
-export function Projects() {
+interface Props {
+  /** False until deep links are handled; a /projects/:id URL opens the overlay only then. */
+  ready: boolean;
+}
+
+export function Projects({ ready }: Props) {
   const ref = useRef<HTMLElement>(null);
   const { theme } = useTheme();
   const reduced = useReducedMotion();
   const desktop = useMediaQuery(DESKTOP_QUERY);
   const horizontal = desktop && !reduced;
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [origin, setOrigin] = useState<DOMRect | null>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
   const barRef = useRef<HTMLSpanElement>(null);
   const hudIndexRef = useRef<HTMLSpanElement>(null);
   const hudNameRef = useRef<HTMLSpanElement>(null);
 
-  const open = useCallback((i: number, el: HTMLElement) => {
-    triggerRef.current = el;
-    setOrigin(el.getBoundingClientRect());
-    setOpenIndex(i);
-  }, []);
+  // The open project lives in the URL: /projects/:id.
+  const [, navigate] = useLocation();
+  const [match, params] = useRoute<{ id: string }>(PROJECT_ROUTE);
+  const routeIndex = match ? projects.findIndex((p) => p.id === params.id) : -1;
+  const openIndex = ready && routeIndex >= 0 ? routeIndex : null;
+  // True when the overlay was opened in-app, so closing can step Back instead of
+  // stacking another history entry. A deep link has nothing of ours to go back to.
+  const pushedRef = useRef(false);
+
+  const show = useCallback(
+    (i: number, trigger: HTMLElement | null, rect: DOMRect | null) => {
+      triggerRef.current = trigger;
+      setOrigin(rect);
+      const already = isProjectPath(window.location.pathname);
+      if (!already) pushedRef.current = true;
+      navigate(projectPath(projects[i].id), { replace: already });
+    },
+    [navigate],
+  );
+
+  const open = useCallback((i: number, el: HTMLElement) => show(i, el, el.getBoundingClientRect()), [show]);
+
+  const close = useCallback(() => {
+    setOrigin(null);
+    if (pushedRef.current) {
+      pushedRef.current = false;
+      history.back();
+    } else {
+      navigate(sectionPath('projects'), { replace: true });
+    }
+  }, [navigate]);
+
+  // Reads the live URL, not the last render, so rapid presses each count.
+  const step = useCallback(
+    (d: number) => {
+      const target = resolvePath(window.location.pathname);
+      const i = target.kind === 'project' ? projects.findIndex((p) => p.id === target.id) : -1;
+      if (i < 0) return;
+      navigate(projectPath(projects[(i + d + projects.length) % projects.length].id), { replace: true });
+    },
+    [navigate],
+  );
+
+  // Left via the browser's Back button: nothing of ours is on the stack any more.
+  useEffect(() => {
+    if (!match) pushedRef.current = false;
+  }, [match]);
+
+  // Unknown project id: fall back to the projects section.
+  useEffect(() => {
+    if (ready && match && routeIndex < 0) navigate(sectionPath('projects'), { replace: true });
+  }, [ready, match, routeIndex, navigate]);
 
   // "View case study" links elsewhere on the page open the presentation directly.
   useEffect(
     () =>
       onOpenProject((id, trigger) => {
         const i = projects.findIndex((p) => p.id === id);
-        if (i < 0) return;
-        triggerRef.current = trigger;
-        setOrigin(null);
-        setOpenIndex(i);
+        if (i >= 0) show(i, trigger, null);
       }),
-    [],
+    [show],
   );
 
   useGsap(
@@ -128,10 +178,15 @@ export function Projects() {
         <ol className="projects__track" data-track>
           {projects.map((p, i) => (
             <li key={p.id} className="project-card" data-card>
-              <button
-                type="button"
+              <a
+                href={projectPath(p.id)}
                 className="project-card__hit"
-                onClick={(e) => open(i, e.currentTarget)}
+                onClick={(e) => {
+                  // Modified clicks (new tab/window) go to the page's own URL.
+                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+                  e.preventDefault();
+                  open(i, e.currentTarget);
+                }}
                 aria-haspopup="dialog"
               >
                 <div className="project-card__media">
@@ -174,7 +229,7 @@ export function Projects() {
                     {p.caseStudy?.context ? 'View case study' : 'View project'} <ArrowRight size={14} />
                   </span>
                 </div>
-              </button>
+              </a>
             </li>
           ))}
           <li className="project-card project-card--end" aria-label="More work">
@@ -182,7 +237,7 @@ export function Projects() {
               <p className="eyebrow text-ink-2">More in the vault</p>
               <p className="display project-card__end-title">Side quests &amp; open source</p>
               <a
-                href="#inventory"
+                href={sectionPath('inventory')}
                 className="btn btn-primary self-start"
                 onClick={(e) => {
                   e.preventDefault();
@@ -213,8 +268,8 @@ export function Projects() {
       <ProjectOverlay
         index={openIndex}
         origin={origin}
-        onClose={() => setOpenIndex(null)}
-        onStep={(d) => setOpenIndex((i) => (i === null ? i : (i + d + projects.length) % projects.length))}
+        onClose={close}
+        onStep={step}
         returnFocusRef={triggerRef}
       />
     </section>

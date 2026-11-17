@@ -1,5 +1,6 @@
 import { navigation } from '@/data/navigation';
 import { scrollToSection } from '@/animations/scroll';
+import { sectionPath } from '@/app/routes';
 
 export function SectionIndicator({ active }: { active: string }) {
   return (
@@ -8,7 +9,7 @@ export function SectionIndicator({ active }: { active: string }) {
         {navigation.map((item, i) => (
           <li key={item.id}>
             <a
-              href={`#${item.id}`}
+              href={sectionPath(item.id)}
               className={active === item.id ? 'is-active' : ''}
               aria-current={active === item.id ? 'location' : undefined}
               onClick={(e) => {

@@ -18,7 +18,15 @@ import { RadioHost } from '@/features/radio/RadioHost';
 import { PhoneHost } from '@/features/phone/PhoneHost';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { ScrollTrigger } from '@/animations/gsap';
-import { isProgrammaticScroll, scrollToSection, startSmoothScroll, stopSmoothScroll, syncUrlToSection } from '@/animations/scroll';
+import {
+  isProgrammaticScroll,
+  jumpToSection,
+  scrollToSection,
+  startSmoothScroll,
+  stopSmoothScroll,
+  syncUrlToSection,
+} from '@/animations/scroll';
+import { resolvePath, sectionPath } from './routes';
 
 const SECTION_IDS = navigation.map((n) => n.id);
 
@@ -44,19 +52,34 @@ export function App() {
     };
   }, []);
 
-  // Deep links (#projects etc.) after the layout settles. URL syncing waits until the
-  // link has been handled, so the hero (visible during the intro) can't overwrite it.
+  // Deep links (/projects, /projects/:id …) after the layout settles. URL syncing waits
+  // until the link has been handled, so the hero (visible during the intro) can't
+  // overwrite it. A project overlay only opens once the page underneath is in place.
   const urlSyncReady = useRef(false);
+  const [routesReady, setRoutesReady] = useState(false);
   useEffect(() => {
     if (!introSettled) return;
-    const id = location.hash.slice(1);
-    if (id && SECTION_IDS.includes(id)) {
+    // Old #section links still work: rewrite them to the path form.
+    const legacy = location.hash.slice(1);
+    if (legacy && SECTION_IDS.includes(legacy)) history.replaceState(history.state, '', sectionPath(legacy) + location.search);
+    const target = resolvePath(location.pathname);
+    const finish = () => {
+      urlSyncReady.current = true;
+      setRoutesReady(true);
+    };
+    if (target.kind === 'project') {
+      // Sit on the projects section so closing the overlay lands somewhere sensible.
       window.setTimeout(() => {
-        scrollToSection(id);
-        urlSyncReady.current = true;
+        jumpToSection('projects');
+        finish();
+      }, 100);
+    } else if (target.kind === 'section' && target.id !== 'home') {
+      window.setTimeout(() => {
+        scrollToSection(target.id);
+        finish();
       }, 100);
     } else {
-      urlSyncReady.current = true;
+      finish();
     }
   }, [introSettled]);
 
@@ -75,7 +98,15 @@ export function App() {
 
   return (
     <ThemeProvider>
-      <a href="#main" className="skip-link">
+      <a
+        href="#main"
+        className="skip-link"
+        onClick={(e) => {
+          // Move focus without writing #main into the address bar.
+          e.preventDefault();
+          document.getElementById('main')?.focus();
+        }}
+      >
         Skip to content
       </a>
       <Intro onDone={handleIntroDone} onSettled={handleIntroSettled} />
@@ -87,7 +118,7 @@ export function App() {
         <Hero ready={introDone} logoHandoff={logoHandoff} />
         <About />
         <Impact />
-        <Projects />
+        <Projects ready={routesReady || import.meta.env.SSR} />
         <Build />
         <Experience />
         <Arsenal />

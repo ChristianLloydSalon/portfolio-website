@@ -9,6 +9,7 @@ import { revealOnScroll } from '@/animations/transitions';
 import { scrollToSection } from '@/animations/scroll';
 import { openProject } from '@/sections/Projects/openProject';
 import './Build.css';
+import { sectionPath } from '@/app/routes';
 
 const ICONS: Record<string, LucideIcon> = { products: Smartphone, automation: Cog, modernization: RefreshCcw, backend: Server };
 
@@ -80,7 +81,7 @@ export function Build() {
       <div className="build__cta" data-reveal>
         <p className="display build__cta-title">Have something in mind?</p>
         <a
-          href="#contact"
+          href={sectionPath('contact')}
           className="btn btn-primary"
           onClick={(e) => {
             e.preventDefault();

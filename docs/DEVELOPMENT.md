@@ -45,11 +45,12 @@ Project ids: `splurge-art`, `personal-collection`, `story-framework`, `ai-requir
 ## SEO
 
 - **Site URL**: set once in `.env` (`VITE_SITE_URL`). It feeds the canonical link, Open Graph/Twitter tags, JSON-LD, `robots.txt` and `sitemap.xml`.
-- **Prerendering**: `npm run build` also renders the app to static HTML (`src/entry-server.tsx` → `scripts/prerender.mjs`), so crawlers and link-preview bots get the full page content without running JavaScript. The browser then does a normal client render on top.
+- **Routing** ([wouter](https://github.com/molefrog/wouter), URL scheme in `src/app/routes.ts`): no `#` fragments. Sections live at `/about`, `/projects`… and the address bar follows the section being read (replaceState, no history entries). A project's case study lives at `/projects/:id`: opening one pushes a history entry, so browser Back closes the overlay; Prev/Next replace it. Old `/#section` links are rewritten on load.
+- **Prerendering**: `npm run build` also renders every route to static HTML (`src/entry-server.tsx` → `scripts/prerender.mjs`): `index.html`, one `<section>.html` per section (canonical stays `/`) and `projects/<id>.html` per project with its own title, description, canonical and Open Graph tags plus the case study in the HTML. Crawlers and link-preview bots get the full content without running JavaScript. The browser then does a normal client render on top.
 - **Structured data**: `src/seo/structuredData.ts` builds Person + WebSite + ProfilePage JSON-LD from `src/data/`, so it stays in sync with the content.
 - **Generated at build**: `dist/robots.txt` and `dist/sitemap.xml` (lastmod = build date).
 - **Share image**: `public/og-image.jpg` (1200×630), rendered from `assets-source/og/og-image.html` with the live hero art. After changing the hero, character or logo, run `npm run og-image` (needs Chrome or Edge and Python Pillow).
-- **Hosting**: `firebase.json` serves `dist/` with long-lived caching for hashed `/assets/**`.
+- **Hosting**: `firebase.json` serves `dist/` with long-lived caching for hashed `/assets/**`. `cleanUrls` maps `/about` → `about.html` and `/projects/x` → `projects/x.html`; unknown paths get `404.html`.
 - **Deploy (GitHub Actions)**: `.github/workflows/firebase-hosting.yml` builds and deploys to the live channel on every push to `main`, and to a 7-day preview channel (URL commented on the PR) for pull requests. Repo setup, once:
   - Firebase project and site come from `.firebaserc` (project `personal-portfolio-fb746`) and `firebase.json` (`"site": "christianlloydsalon"`).
   - Secret `FIREBASE_SERVICE_ACCOUNT`: run `npx firebase-tools init hosting:github` (creates it for you), or paste a service account JSON key with the *Firebase Hosting Admin* role.

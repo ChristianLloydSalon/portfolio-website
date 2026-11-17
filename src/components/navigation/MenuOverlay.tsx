@@ -7,6 +7,7 @@ import { gsap } from '@/animations/gsap';
 import { lockScroll, scrollToSection } from '@/animations/scroll';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { sectionPath } from '@/app/routes';
 
 interface Props {
   open: boolean;
@@ -71,7 +72,7 @@ export function MenuOverlay({ open, active, onClose, returnFocusRef }: Props) {
             {navigation.map((item, i) => (
               <li key={item.id} className="menu-list__row">
                 <a
-                  href={`#${item.id}`}
+                  href={sectionPath(item.id)}
                   data-menu-item
                   className={`menu-link ${active === item.id ? 'is-active' : ''}`}
                   aria-current={active === item.id ? 'location' : undefined}

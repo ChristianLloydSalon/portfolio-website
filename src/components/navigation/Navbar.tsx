@@ -6,6 +6,7 @@ import { PhoneButton } from '@/features/phone/PhoneButton';
 import { navigation } from '@/data/navigation';
 import { scrollToSection } from '@/animations/scroll';
 import './Navigation.css';
+import { sectionPath } from '@/app/routes';
 
 interface Props {
   active: string;
@@ -56,7 +57,7 @@ export function Navbar({ active, menuOpen, onMenuToggle, menuButtonRef }: Props)
     >
       <div className="navbar__inner container-x">
         <a
-          href="#home"
+          href={sectionPath('home')}
           className="navbar__brand"
           aria-label="Christian Lloyd Salon, back to top"
           onClick={(e) => {
