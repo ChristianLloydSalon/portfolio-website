@@ -1,8 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
-import { Boxes, Cloud, Database, FlaskConical, LayoutTemplate, Server, Smartphone, Workflow, type LucideIcon } from 'lucide-react';
+import { Boxes, Cloud, Database, FlaskConical, LayoutTemplate, Server, Smartphone, Workflow, Wrench, type LucideIcon } from 'lucide-react';
 import { skillCategories } from '@/data/skills';
 import type { SkillIcon, SkillTier } from '@/types';
 import { SectionHeading } from '@/components/typography/SectionHeading';
+import { chapter } from '@/data/navigation';
 import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap } from '@/animations/gsap';
@@ -18,12 +19,14 @@ const ICONS: Record<SkillIcon, LucideIcon> = {
   database: Database,
   workflow: Workflow,
   flask: FlaskConical,
+  wrench: Wrench,
 };
 
-const TIER: Record<SkillTier, { label: string; rank: number; hint: string }> = {
-  production: { label: 'Production', rank: 3, hint: 'Shipped real products with it' },
-  working: { label: 'Working', rank: 2, hint: 'Used on real projects' },
-  familiar: { label: 'Familiar', rank: 1, hint: 'Learned and tried it' },
+/** label: shown in the legend. short: fits the badge on each skill. */
+const TIER: Record<SkillTier, { label: string; short: string; rank: number; hint: string }> = {
+  production: { label: 'Production experience', short: 'Production', rank: 3, hint: 'Shipped and supported real products with it' },
+  working: { label: 'Working knowledge', short: 'Working', rank: 2, hint: 'Used on real projects, with less depth' },
+  familiar: { label: 'Familiar', short: 'Familiar', rank: 1, hint: 'Learned and tried it' },
 };
 
 /** Legend lists only tiers that some skill actually uses. */
@@ -87,7 +90,7 @@ export function Arsenal() {
   // Loadout swap animation.
   useLayoutEffect(() => {
     if (reduced || !panelRef.current) return;
-    const items = panelRef.current.querySelectorAll('[data-slot]');
+    const items = panelRef.current.querySelectorAll('.loadout.is-active [data-slot]');
     const tw = gsap.fromTo(items, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: 'expo.out' });
     return () => {
       tw.kill();
@@ -133,14 +136,14 @@ export function Arsenal() {
     <section ref={ref} id="arsenal" className="arsenal section-pad container-x" aria-labelledby="arsenal-title">
       <SectionHeading
         id="arsenal-title"
-        chapter="Chapter 04"
+        chapter={chapter('arsenal')}
         kicker="Technical loadout"
         title={
           <>
             Technical <span className="text-accent-ink">arsenal</span>
           </>
         }
-        intro="Pick a discipline from the wheel to see the loadout. Every tool here has been used to ship real work."
+        intro="The tools behind the work above, grouped by discipline. Pick one from the wheel. Levels are honest: production experience means shipped and supported, not just tried."
       />
 
       <div className="arsenal__layout">
@@ -195,49 +198,62 @@ export function Arsenal() {
           </div>
         </div>
 
+        {/* Every category is rendered in the same grid cell and only the selected one is
+            shown, so the panel is always as tall as the tallest category. Switching never
+            changes its height, so the wheel and the page below don't jump. */}
         <div
           ref={panelRef}
           id="arsenal-panel"
           role="tabpanel"
           aria-labelledby={`tab-${cat.id}`}
-          className="loadout"
+          className="loadout-stack"
         >
-          <p className="eyebrow text-ink-2" data-slot>
-            Class {String(active + 1).padStart(2, '0')} / {String(n).padStart(2, '0')}
-          </p>
-          <h3 className="display loadout__title" data-slot>
-            {cat.name}
-          </h3>
-          <p className="loadout__desc" data-slot>
-            {cat.description}
-          </p>
-          <ul className="loadout__tiers" data-slot aria-label="Experience levels">
-            {TIERS_IN_USE.map((t) => (
-              <li key={t}>
-                <TierPips tier={t} />
-                <span>
-                  <strong>{TIER[t].label}</strong> {TIER[t].hint.toLowerCase()}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <ul className="loadout__slots">
-            {[...cat.skills].sort((a, b) => TIER[b.tier].rank - TIER[a.tier].rank).map((s) => (
-              <li key={s.name} className="slot" data-slot>
-                <span className="slot__mono display" aria-hidden="true">
-                  {s.mono}
-                </span>
-                <span className="slot__text">
-                  <span className="slot__name">{s.name}</span>
-                  <span className="slot__note">{s.note}</span>
-                </span>
-                <span className={`slot__tier is-${s.tier}`}>
-                  <TierPips tier={s.tier} />
-                  <span className="slot__tier-label">{TIER[s.tier].label}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
+          {skillCategories.map((c, i) => {
+            const isActive = i === active;
+            // Hidden pages hold their space but can't be focused or read.
+            const hidden = isActive ? {} : ({ 'aria-hidden': true, inert: '' } as Record<string, unknown>);
+            return (
+              <div key={c.id} className={`loadout ${isActive ? 'is-active' : ''}`} {...hidden}>
+                <p className="eyebrow text-ink-2" data-slot>
+                  Class {String(i + 1).padStart(2, '0')} / {String(n).padStart(2, '0')}
+                </p>
+                <h3 className="display loadout__title" data-slot>
+                  {c.name}
+                </h3>
+                <p className="loadout__desc" data-slot>
+                  {c.description}
+                </p>
+                <ul className="loadout__tiers" data-slot aria-label="Experience levels">
+                  {TIERS_IN_USE.map((t) => (
+                    <li key={t}>
+                      <TierPips tier={t} />
+                      <span>
+                        <strong>{TIER[t].label}</strong>: {TIER[t].hint.toLowerCase()}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <ul className="loadout__slots">
+                  {[...c.skills].sort((x, y) => TIER[y.tier].rank - TIER[x.tier].rank).map((s) => (
+                    <li key={s.name} className="slot" data-slot>
+                      <span className="slot__mono display" aria-hidden="true">
+                        {s.mono}
+                      </span>
+                      <span className="slot__text">
+                        <span className="slot__name">{s.name}</span>
+                        <span className="slot__note">{s.note}</span>
+                      </span>
+                      <span className={`slot__tier is-${s.tier}`}>
+                        <TierPips tier={s.tier} />
+                        <span className="slot__tier-label" aria-hidden="true">{TIER[s.tier].short}</span>
+                        <span className="sr-only">{TIER[s.tier].label}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

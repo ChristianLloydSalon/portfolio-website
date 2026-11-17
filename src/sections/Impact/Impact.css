@@ -1,0 +1,52 @@
+.impact { position: relative; background: var(--bg); }
+.impact__title { font-size: clamp(2.8rem, 7.4vw, 7rem); max-width: 16ch; }
+
+/* Same ruled grid as the About principles: 1px gaps over the line color. */
+.impact__grid {
+  display: grid;
+  gap: 1px;
+  margin: clamp(3rem, 7vw, 5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  background: var(--line);
+  border-block: 1px solid var(--line);
+}
+@media (min-width: 760px) { .impact__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1200px) { .impact__grid { grid-template-columns: repeat(4, 1fr); } }
+
+.impact__card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 1rem;
+  padding: 2rem clamp(1rem, 2.2vw, 1.75rem) 2.25rem;
+  background: var(--bg);
+  transition: background-color var(--dur-med);
+}
+.impact__card:hover { background: var(--surface); }
+/* Line the cards' rows up across the grid, so every "Proof" starts at the same height. */
+@supports (grid-template-rows: subgrid) {
+  .impact__card { grid-row: span 4; grid-template-rows: subgrid; row-gap: 1rem; }
+}
+.impact__head { display: flex; align-items: center; justify-content: space-between; }
+.impact__num { font-size: 0.66rem; color: var(--text-2); }
+.impact__icon { color: var(--accent-ink); }
+.impact__card-title { margin: 0; font-size: clamp(1.9rem, 2.6vw, 2.5rem); line-height: 0.98; }
+.impact__body { margin: 0; color: var(--text-2); line-height: 1.55; }
+.impact__proof {
+  margin: 0;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--line);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.impact__proof-label { display: block; margin-bottom: 0.3rem; font-size: 0.62rem; font-weight: 700; color: var(--accent-ink); }
+
+.impact__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.impact__footer p { margin: 0; max-width: 34rem; }

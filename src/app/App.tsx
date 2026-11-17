@@ -6,7 +6,9 @@ import { SectionIndicator } from '@/components/navigation/SectionIndicator';
 import { Intro } from '@/components/transitions/Intro';
 import { Hero } from '@/sections/Hero/Hero';
 import { About } from '@/sections/About/About';
+import { Impact } from '@/sections/Impact/Impact';
 import { Projects } from '@/sections/Projects/Projects';
+import { Build } from '@/sections/Build/Build';
 import { Experience } from '@/sections/Experience/Experience';
 import { Arsenal } from '@/sections/Arsenal/Arsenal';
 import { OpenSource } from '@/sections/OpenSource/OpenSource';
@@ -84,7 +86,9 @@ export function App() {
       <main id="main" tabIndex={-1} className="outline-none">
         <Hero ready={introDone} logoHandoff={logoHandoff} />
         <About />
+        <Impact />
         <Projects />
+        <Build />
         <Experience />
         <Arsenal />
         <OpenSource />

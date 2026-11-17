@@ -1,10 +1,12 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, Plus } from 'lucide-react';
 import { projects } from '@/data/projects';
 import { SectionHeading } from '@/components/typography/SectionHeading';
 import { ProjectArt } from './ProjectArt';
 import { STATUS_LABEL } from './projectStatus';
 import { ProjectOverlay } from './ProjectOverlay';
+import { onOpenProject } from './openProject';
+import { chapter } from '@/data/navigation';
 import { useTheme } from '@/features/theme/useTheme';
 import { useGsap } from '@/hooks/useGsap';
 import { DESKTOP_QUERY, useMediaQuery } from '@/hooks/useMediaQuery';
@@ -32,6 +34,19 @@ export function Projects() {
     setOrigin(el.getBoundingClientRect());
     setOpenIndex(i);
   }, []);
+
+  // "View case study" links elsewhere on the page open the presentation directly.
+  useEffect(
+    () =>
+      onOpenProject((id, trigger) => {
+        const i = projects.findIndex((p) => p.id === id);
+        if (i < 0) return;
+        triggerRef.current = trigger;
+        setOrigin(null);
+        setOpenIndex(i);
+      }),
+    [],
+  );
 
   useGsap(
     () => {
@@ -97,15 +112,15 @@ export function Projects() {
       <div className="container-x section-pad pb-0!">
         <SectionHeading
           id="projects-title"
-          chapter="Chapter 02"
-          kicker="Featured builds"
+          chapter={chapter('projects')}
+          kicker="Case studies"
           title={
             <>
               Featured <br className="hidden md:block" />
               projects
             </>
           }
-          intro="Company products I’ve contributed to as part of a team, plus my own projects, where I find out how far a tool can be pushed."
+          intro="Each one starts with the problem it solves. Company products show what I personally owned within the team; every project is labelled with where it stands, from production to experiment."
         />
       </div>
 
@@ -132,9 +147,7 @@ export function Projects() {
                 </div>
                 <div className="project-card__body">
                   <p className="eyebrow project-card__meta" data-card-in>
-                    {p.status && (
-                      <span className={`status-badge is-${p.status}`}>{STATUS_LABEL[p.status]}</span>
-                    )}
+                    <span className={`status-badge is-${p.status}`}>{STATUS_LABEL[p.status]}</span>
                     {p.employer && <span className="company-badge">Company project</span>}
                     <span>{p.category}</span>
                     {p.year && (
@@ -158,7 +171,7 @@ export function Projects() {
                     ))}
                   </ul>
                   <span className="project-card__cta eyebrow" data-card-in aria-hidden="true">
-                    View mission <ArrowRight size={14} />
+                    {p.caseStudy?.context ? 'View case study' : 'View project'} <ArrowRight size={14} />
                   </span>
                 </div>
               </button>

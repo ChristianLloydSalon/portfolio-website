@@ -8,10 +8,12 @@ interface Props {
   intro?: ReactNode;
   align?: 'left' | 'center';
   className?: string;
+  /** Replaces the default title size, for long statement-style titles. */
+  titleClassName?: string;
 }
 
 /** Chapter-style heading: "CHAPTER 02 — FEATURED BUILDS" over a huge display title. */
-export function SectionHeading({ id, chapter, kicker, title, intro, align = 'left', className = '' }: Props) {
+export function SectionHeading({ id, chapter, kicker, title, intro, align = 'left', className = '', titleClassName }: Props) {
   const center = align === 'center';
   return (
     <header className={`${center ? 'text-center mx-auto' : ''} max-w-6xl ${className}`} data-reveal-group>
@@ -20,7 +22,7 @@ export function SectionHeading({ id, chapter, kicker, title, intro, align = 'lef
         <span aria-hidden="true" className="inline-block h-px w-10 bg-current opacity-50" />
         <span>{kicker}</span>
       </p>
-      <h2 id={id} className="display mt-5 text-[clamp(3.4rem,11vw,10rem)]" data-reveal>
+      <h2 id={id} className={`display mt-5 ${titleClassName ?? 'text-[clamp(3.4rem,11vw,10rem)]'}`} data-reveal>
         {title}
       </h2>
       {intro && (

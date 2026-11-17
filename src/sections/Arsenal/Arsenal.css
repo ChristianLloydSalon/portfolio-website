@@ -78,7 +78,9 @@
 .wheel__center-count { font-size: 0.62rem; color: var(--text-2); }
 
 /* ---------- Loadout ---------- */
-.loadout { display: grid; gap: 1rem; }
+.loadout-stack { display: grid; }
+.loadout { grid-area: 1 / 1; align-content: start; display: grid; gap: 1rem; }
+.loadout:not(.is-active) { visibility: hidden; }
 .loadout__title { font-size: clamp(2.6rem, 5vw, 4.5rem); }
 .loadout__desc { margin: 0; color: var(--text-2); font-size: 1.1rem; }
 .loadout__slots { display: grid; gap: 0.6rem; list-style: none; margin: 1rem 0 0; padding: 0; }

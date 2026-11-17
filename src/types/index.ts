@@ -24,6 +24,8 @@ export interface Profile {
   socials: SocialLink[];
 }
 
+export type ProjectStatus = 'production' | 'published' | 'in-development' | 'experimental' | 'discontinued';
+
 export type ProjectMotif = 'graph' | 'spec' | 'retail' | 'blade' | 'market';
 
 export interface Project {
@@ -43,8 +45,16 @@ export interface Project {
   demo?: string;
   /** Package registry page, e.g. pub.dev. */
   packageUrl?: string;
-  /** Omit for shipped, live work. */
-  status?: 'in-development' | 'discontinued';
+  /**
+   * Where the project stands, shown on every card so experiments never read as production software.
+   * production: live with real users. published: publicly released (package, live demo).
+   * in-development: being built. experimental: a learning experiment. discontinued: shut down.
+   */
+  status: ProjectStatus;
+  /** The problem the project addresses, in plain business terms. */
+  problem: string;
+  /** Engineering skills the project demonstrates. */
+  demonstrates: string[];
   /**
    * Set for company work: the product belongs to the employer/client, and I contributed
    * as one engineer on the team. Drives the "Company project" badge and contributor wording.
@@ -59,9 +69,31 @@ export interface Project {
   palette: Record<ThemeName, [string, string, string]>;
 }
 
+/**
+ * A measured or observed outcome. `basis` says where the number comes from, so production
+ * figures are never confused with load-test results.
+ */
+export interface Outcome {
+  value: string;
+  label: string;
+  basis: 'production' | 'load-test' | 'internal' | 'public';
+  /** Optional detail shown small, e.g. "Public Play Store listing". */
+  source?: string;
+}
+
 export interface CaseStudy {
-  /** Headline numbers. `source` is shown small, e.g. "Public Play Store listing". */
-  results?: { value: string; label: string; source?: string }[];
+  /** Business-case narrative. Each part is optional and renders only when present. */
+  context?: string;
+  problem?: string;
+  solution?: string;
+  /** What I personally owned, as distinct from what the wider team delivered. */
+  responsibilities?: string[];
+  /** Technical decisions and why they were made. */
+  decisions?: { title: string; why: string }[];
+  /** Operational impact. Never financial claims without measurements. */
+  impact?: { title: string; body: string; outcome?: Outcome }[];
+  /** Headline numbers, labelled by basis (production, load test, public listing). */
+  results?: Outcome[];
   /** Demo clips/images: `asset` is an asset key, e.g. "projects/story-framework/demo-viewer". */
   media?: { asset: string; alt: string; caption: string }[];
   /** High-level architecture as left-to-right tiers. Keep company work generic. */
@@ -89,7 +121,7 @@ export interface Mission {
   stack: string[];
 }
 
-export type SkillIcon = 'smartphone' | 'layout' | 'server' | 'cloud' | 'boxes' | 'database' | 'workflow' | 'flask';
+export type SkillIcon = 'smartphone' | 'layout' | 'server' | 'cloud' | 'boxes' | 'database' | 'workflow' | 'flask' | 'wrench';
 
 /** production: shipped real products with it. working: real use, less depth. familiar: learned or tried. */
 export type SkillTier = 'production' | 'working' | 'familiar';

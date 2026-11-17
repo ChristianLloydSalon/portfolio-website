@@ -129,6 +129,15 @@
   color: var(--text-2);
 }
 .status-badge.is-discontinued::before { background: var(--text-2); animation: none; }
+/* Published and in production: steady (it's done and out there). Experimental: dashed, provisional. */
+.status-badge.is-production::before,
+.status-badge.is-published::before { animation: none; }
+.status-badge.is-experimental {
+  border-style: dashed;
+  border-color: var(--line);
+  background: transparent;
+}
+.status-badge.is-experimental::before { background: transparent; border: 1.5px solid var(--text-2); animation: none; }
 /* Company work: outlined, so it reads as context rather than a state. */
 .company-badge {
   display: inline-flex;
@@ -221,6 +230,9 @@
   border-bottom: 1px solid var(--line);
 }
 .project-overlay__feature-num { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-ink); padding-top: 0.2rem; }
+.project-overlay__demonstrates { display: grid; gap: 0.5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.project-overlay__demonstrates li { position: relative; padding-left: 1.25rem; line-height: 1.45; }
+.project-overlay__demonstrates li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 0.5rem; height: 2px; background: var(--accent-ink); }
 .project-overlay__stack { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; margin: 1rem 0 0; padding: 0; }
 
 .project-overlay__pager { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid var(--line); padding-top: 2rem; }

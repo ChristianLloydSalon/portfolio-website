@@ -4,12 +4,14 @@ import { Scene } from '@/components/scene/Scene';
 import { Logo } from '@/components/brand/Logo';
 import { MagneticButton } from '@/components/buttons/MagneticButton';
 import { profile } from '@/data/profile';
+import { chapter } from '@/data/navigation';
 import type { SocialLink } from '@/types';
 import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap } from '@/animations/gsap';
 import { revealOnScroll } from '@/animations/transitions';
 import { scrollToSection } from '@/animations/scroll';
+import { copyEmail, gmailComposeUrl, mailtoUrl } from '@/lib/email';
 import './Contact.css';
 
 const ICON: Record<SocialLink['kind'], LucideIcon> = {
@@ -47,14 +49,12 @@ export function Contact() {
     [reduced],
   );
 
+  // Copying on every email click means the visitor has the address even when their
+  // machine has no mail app for mailto: to open.
   const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(profile.email);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      window.location.href = `mailto:${profile.email}`;
-    }
+    if (!(await copyEmail())) return;
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 4000);
   };
 
   return (
@@ -66,37 +66,42 @@ export function Contact() {
 
       <div className="contact__content container-x">
         <p className="eyebrow contact__kicker" data-reveal>
-          <span>Chapter 06</span>
+          <span>{chapter('contact')}</span>
           <span aria-hidden="true" className="inline-block h-px w-10 bg-current opacity-60" />
           <span>Final mission</span>
         </p>
         <h2 id="contact-title" className="display contact__title" data-contact-title>
           <span className="contact__line">
-            <span data-contact-line>Let&rsquo;s build</span>
+            <span data-contact-line>Have a problem</span>
           </span>
           <span className="contact__line">
-            <span data-contact-line>something worth</span>
+            <span data-contact-line>worth solving?</span>
           </span>
           <span className="contact__line">
-            <span data-contact-line>remembering.</span>
+            <span data-contact-line>Let&rsquo;s build something.</span>
           </span>
         </h2>
         <p className="contact__lede" data-reveal>
-          Looking for someone to build your next application, improve your engineering workflow, or bring an idea
-          to life? Let&rsquo;s talk.
+          Whether you&rsquo;re building a new product, improving an existing platform, or looking for an engineer
+          who can take ownership of complex technical work, I&rsquo;d be happy to talk. Email is the fastest way to
+          reach me.
         </p>
 
         <div className="contact__email" data-reveal>
-          <MagneticButton variant="primary" href={`mailto:${profile.email}`} strength={0.2} className="contact__email-btn">
+          <MagneticButton variant="primary" href={mailtoUrl()} onClick={copy} strength={0.2} className="contact__email-btn">
             <Mail size={18} aria-hidden="true" /> {profile.email}
           </MagneticButton>
           <button type="button" className="contact__copy" onClick={copy} aria-label={copied ? 'Email copied' : 'Copy email address'}>
             {copied ? <Check size={18} aria-hidden="true" /> : <Copy size={18} aria-hidden="true" />}
             <span>{copied ? 'Copied' : 'Copy'}</span>
           </button>
-          <span className="sr-only" aria-live="polite">
-            {copied ? 'Email address copied to clipboard' : ''}
-          </span>
+          <a className="contact__copy" href={gmailComposeUrl()} target="_blank" rel="noreferrer">
+            <ArrowUpRight size={18} aria-hidden="true" />
+            <span>Open in Gmail</span>
+          </a>
+          <p className="contact__hint" aria-live="polite">
+            {copied ? 'Address copied. If no email app opened, paste it into your email.' : ''}
+          </p>
         </div>
 
         <ul className="contact__links" data-reveal>

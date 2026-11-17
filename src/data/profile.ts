@@ -6,8 +6,9 @@ export const profile: Profile = {
   firstName: 'Christian Lloyd',
   lastName: 'Salon',
   role: 'Senior Flutter & Full-Stack Engineer',
-  pitch: 'Building production-ready mobile apps, scalable backend systems and developer tools with Flutter, TypeScript and AWS.',
-  tagline: ['Builder', 'Creator', 'Problem Solver'],
+  pitch:
+    'I turn business problems into production-ready software. From customer-facing mobile apps to backend systems and automation, I help teams launch faster, run more efficiently and build technology that scales.',
+  tagline: ['5+ years in production', 'Live on 3 app stores', 'Mobile to backend to cloud'],
   location: 'Bohol, PH',
   email: 'christianlloyd.b.salon@gmail.com',
   resumeUrl: '/resume.pdf',

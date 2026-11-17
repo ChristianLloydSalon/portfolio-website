@@ -1,10 +1,11 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowLeft, ArrowRight, ExternalLink, Github, Package, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ExternalLink, Github, Mail, Package, X } from 'lucide-react';
 import { projects } from '@/data/projects';
+import { copyEmail, mailtoUrl } from '@/lib/email';
 import { ProjectArt } from './ProjectArt';
 import { STATUS_LABEL } from './projectStatus';
-import { CaseStudySections, CaseStudyResults } from './CaseStudy';
+import { CaseStudyBrief, CaseStudyDecisions, CaseStudySections, CaseStudyResults } from './CaseStudy';
 import { useTheme } from '@/features/theme/useTheme';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
@@ -26,6 +27,9 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
   const { theme } = useTheme();
   const open = index !== null;
   const closingRef = useRef(false);
+  // "Ask about this project" also copies the address, for visitors without a mail app.
+  const [askCopied, setAskCopied] = useState(false);
+  useEffect(() => setAskCopied(false), [index]);
 
   const close = () => {
     const el = ref.current;
@@ -129,7 +133,7 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
             <div>
               <dt className="eyebrow">Status</dt>
               <dd>
-                {p.status ? <span className={`status-badge is-${p.status}`}>{STATUS_LABEL[p.status]}</span> : 'Shipped'}
+                <span className={`status-badge is-${p.status}`}>{STATUS_LABEL[p.status]}</span>
               </dd>
             </div>
             {p.employer && (
@@ -151,6 +155,8 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
           </dl>
 
           {p.caseStudy?.results && <CaseStudyResults results={p.caseStudy.results} />}
+
+          <CaseStudyBrief context={p.caseStudy?.context} problem={p.caseStudy?.problem ?? p.problem} solution={p.caseStudy?.solution} />
 
           <div className="project-overlay__grid">
             <div data-ov-in data-ov-swap>
@@ -178,15 +184,29 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
                     {l.label} <ExternalLink size={16} aria-hidden="true" />
                   </a>
                 ))}
+                <a
+                  className="btn btn-ghost"
+                  href={mailtoUrl(`About ${p.title}`)}
+                  onClick={async () => setAskCopied(await copyEmail())}
+                >
+                  <Mail size={16} aria-hidden="true" /> {askCopied ? 'Email address copied' : 'Ask about this project'}
+                </a>
+                <span className="sr-only" aria-live="polite">
+                  {askCopied ? 'Email address copied. If no email app opened, paste it into your email.' : ''}
+                </span>
                 {p.employer ? (
                   <p className="project-overlay__note">
-                    Company project, built by a team at {p.employer}. The product and its codebase belong to the
-                    company and stay private.
+                    Company project, built by a team at {p.employer}. What&rsquo;s listed under my role is my own
+                    work; the product and its codebase belong to the company and stay private.
                   </p>
                 ) : (
                   !p.github && !p.demo && !p.packageUrl && !p.links?.length && (
                     <p className="chip">
-                      {p.status === 'in-development' ? 'In development: links coming at launch' : 'Repository and demo available on request'}
+                      {p.status === 'in-development'
+                        ? 'In development: links coming at launch'
+                        : p.status === 'experimental'
+                          ? 'Experiment: no public build yet'
+                          : 'Repository and demo available on request'}
                     </p>
                   )
                 )}
@@ -195,7 +215,7 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
 
             <div data-ov-in data-ov-swap>
               <h3 className="eyebrow text-ink-2">
-                {p.employer ? 'My contributions' : p.status === 'in-development' ? 'Objectives' : 'Key features'}
+                {p.employer ? 'My role & responsibilities' : p.status === 'in-development' || p.status === 'experimental' ? 'Objectives' : 'Key features'}
               </h3>
               <ol className="project-overlay__features">
                 {p.features.map((f, i) => (
@@ -205,7 +225,13 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
                   </li>
                 ))}
               </ol>
-              <h3 className="eyebrow text-ink-2 mt-10">Loadout</h3>
+              <h3 className="eyebrow text-ink-2 mt-10">What it demonstrates</h3>
+              <ul className="project-overlay__demonstrates">
+                {p.demonstrates.map((d) => (
+                  <li key={d}>{d}</li>
+                ))}
+              </ul>
+              <h3 className="eyebrow text-ink-2 mt-10">Technologies used</h3>
               <ul className="project-overlay__stack">
                 {p.stack.map((s) => (
                   <li key={s} className="chip">
@@ -216,6 +242,7 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef 
             </div>
           </div>
 
+          {p.caseStudy && <CaseStudyDecisions study={p.caseStudy} />}
           {p.caseStudy && <CaseStudySections study={p.caseStudy} />}
 
           <nav className="project-overlay__pager" aria-label="Other projects">

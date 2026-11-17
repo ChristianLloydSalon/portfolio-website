@@ -254,8 +254,8 @@
 
 .phone-apps {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem 0.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem 0.35rem;
   margin: auto 0 0;
   padding: 0.9rem 0.6rem;
   list-style: none;
@@ -290,6 +290,7 @@
 .phone-app__icon--messages { background: linear-gradient(160deg, #6ee7a8, #18a35b); }
 .phone-app__icon--radio { background: linear-gradient(160deg, var(--ph-hot-2), var(--ph-hot)); color: var(--ph-on-hot); }
 .phone-app__icon--contacts { background: linear-gradient(160deg, #8fb8ff, #3d5bd9); }
+.phone-app__icon--browser { background: linear-gradient(160deg, #ffd29a, #e9825a); }
 .phone-app__badge {
   position: absolute;
   top: -0.35rem;
@@ -682,6 +683,26 @@
 .contacts__link:hover .contacts__value { text-decoration: underline; }
 .contacts__label { font-size: 0.7rem; color: var(--ph-text-2); }
 .contacts__value { font-size: 0.88rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------- Browser ---------- */
+.browser { gap: 0; }
+.browser__url {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin: 0 0 0.9rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  background: var(--ph-surface);
+  color: var(--ph-text-2);
+  font-size: 0.78rem;
+}
+.browser__heading { margin: 0 0 0.5rem 0.4rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ph-text-2); }
+.browser__link { width: 100%; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; }
+.browser__link:hover { background: var(--ph-surface-2); }
+.browser__link:hover .contacts__value { text-decoration: none; }
+.browser__link .browser__chev { margin-left: auto; color: var(--ph-text-2); }
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {

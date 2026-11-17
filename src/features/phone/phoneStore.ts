@@ -5,7 +5,7 @@ import { useSyncExternalStore } from 'react';
  * bundle and only touch this; the phone itself (apps, chat script, radio player) is a
  * lazy chunk, fetched on first intent.
  */
-export type PhoneApp = 'home' | 'messages' | 'radio' | 'contacts';
+export type PhoneApp = 'home' | 'messages' | 'radio' | 'contacts' | 'browser';
 
 interface PhoneState {
   open: boolean;

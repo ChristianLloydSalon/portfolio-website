@@ -133,3 +133,74 @@
   font-size: 0.85rem;
   line-height: 1.6;
 }
+
+/* ---------- Basis tag on a result: production vs load test vs internal ---------- */
+.cs-basis {
+  justify-self: start;
+  margin-top: 0.2rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.cs-basis.is-production { border-color: color-mix(in srgb, var(--accent) 55%, transparent); color: var(--text); }
+.cs-basis.is-load-test { border-style: dashed; }
+
+/* ---------- Business case: context / problem / solution ---------- */
+.cs-brief ol {
+  display: grid;
+  gap: 1px;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+@media (min-width: 900px) { .cs-brief ol { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); } }
+.cs-brief__part { display: grid; align-content: start; gap: 0.6rem; padding: 1.5rem 1.25rem; background: var(--bg); }
+.cs-brief__part p { margin: 0; line-height: 1.6; }
+.cs-brief__label { margin: 0; font-size: 0.66rem; font-weight: 700; color: var(--text-2); }
+.cs-brief__part.is-problem .cs-brief__label { color: var(--text); }
+.cs-brief__part.is-solution .cs-brief__label { color: var(--accent-ink); }
+
+/* ---------- Decisions & impact ---------- */
+.cs--lead { padding-bottom: clamp(3rem, 6vw, 4.5rem); }
+.cs-decisions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14.5rem), 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cs-decisions li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.cs-decisions__title { margin: 0; padding-right: 2rem; font-size: 1.05rem; font-weight: 700; }
+.cs-decisions p { margin: 0; color: var(--text-2); line-height: 1.55; }
+
+.cs-impact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1.5rem 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cs-impact li { display: grid; align-content: start; gap: 0.5rem; padding-left: 1rem; border-left: 2px solid var(--accent); }
+.cs-impact__title { margin: 0; font-size: clamp(1.5rem, 2.2vw, 1.9rem); line-height: 0.98; }
+.cs-impact p { margin: 0; color: var(--text-2); line-height: 1.55; }

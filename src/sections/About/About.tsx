@@ -3,6 +3,7 @@ import { BookOpen, Layers, Rocket } from 'lucide-react';
 import { SectionHeading } from '@/components/typography/SectionHeading';
 import { PortraitCard } from './PortraitCard';
 import { profile } from '@/data/profile';
+import { chapter } from '@/data/navigation';
 import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap } from '@/animations/gsap';
@@ -11,7 +12,7 @@ import { splitWords } from '@/animations/effects';
 import './About.css';
 
 const STATEMENT =
-  'I build mobile apps end to end. Flutter on the screen, NestJS and AWS behind it, shipped to every major app store, and the occasional game, just to prove it can be done.';
+  'I build software end to end. Flutter on the screen, NestJS and AWS behind it, pipelines that ship it to every major app store, and the occasional game, just to prove it can be done.';
 
 const principles = [
   {
@@ -37,8 +38,8 @@ const fileRows: [string, string][] = [
   ['Name', profile.name],
   ['Class', profile.role],
   ['Base', profile.location],
-  ['Guild', 'White Cloak Technologies'],
-  ['Specialization', 'Flutter & cross-platform mobile'],
+  ['Guild', 'White Cloak Technologies · since 2021'],
+  ['Specialization', 'Flutter, full-stack & cloud'],
   ['Main', 'Flutter · Dart · NestJS · AWS'],
   ['Training', 'BS Computer Engineering · DOST Scholar'],
 ];
@@ -50,6 +51,7 @@ export function About() {
   const stats = [
     { value: 5, suffix: '+', label: 'Years in production' },
     { value: 3, suffix: '', label: 'App stores shipped to' },
+    { value: 15, suffix: 'K+', label: 'Production users & devices reached' },
   ];
 
   useGsap(
@@ -88,11 +90,11 @@ export function About() {
     <section ref={ref} id="about" className="about section-pad container-x" aria-labelledby="about-title">
       <SectionHeading
         id="about-title"
-        chapter="Chapter 01"
-        kicker="The Developer"
+        chapter={chapter('about')}
+        kicker="The Engineer"
         title={
           <>
-            Meet the <span className="text-accent-ink">developer</span>
+            Meet the <span className="text-accent-ink">engineer</span>
           </>
         }
       />
@@ -128,11 +130,11 @@ export function About() {
 
           <p className="about__bio" data-reveal>
             I&rsquo;m {profile.firstName}, a software engineer based in {profile.location}. I build and ship
-            production mobile apps end to end: architecture, implementation, release and production monitoring. My
-            work spans Flutter, Angular, NestJS and AWS, so I can carry a feature across the whole stack, and
-            I&rsquo;ve led mobile development on a dealer app live in three app stores. Along the way I taught
-            software development at Bohol Island State University, where I earned my Computer Engineering degree
-            as a DOST scholar.
+            production software end to end: architecture, implementation, release and monitoring. In five years at
+            White Cloak Technologies I grew from junior engineer to mobile lead, carried features across Flutter,
+            Angular, NestJS and AWS, and stepped in as interim technical lead when the team needed one. Before
+            that, and alongside it, I taught software development at Bohol Island State University, where I earned
+            my Computer Engineering degree as a DOST scholar.
           </p>
 
           <ul className="about__stats" data-stats data-reveal>

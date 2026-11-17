@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { BatteryFull, ChevronLeft, Contact, MessageCircle, Radio, Signal, Wifi, X, type LucideIcon } from 'lucide-react';
+import { BatteryFull, ChevronLeft, Compass, Contact, MessageCircle, Radio, Signal, Wifi, X, type LucideIcon } from 'lucide-react';
 import { gsap } from '@/animations/gsap';
 import { lockScroll } from '@/animations/scroll';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
@@ -11,6 +11,7 @@ import { phoneStore, usePhone, type PhoneApp } from './phoneStore';
 import { MessagesApp } from './apps/MessagesApp';
 import { RadioApp } from './apps/RadioApp';
 import { ContactsApp } from './apps/ContactsApp';
+import { BrowserApp } from './apps/BrowserApp';
 import './Phone.css';
 
 /**
@@ -24,8 +25,9 @@ const APPS: { id: Exclude<PhoneApp, 'home'>; name: string; icon: LucideIcon }[] 
   { id: 'messages', name: 'Messages', icon: MessageCircle },
   { id: 'radio', name: 'Radio', icon: Radio },
   { id: 'contacts', name: 'Contacts', icon: Contact },
+  { id: 'browser', name: 'Browser', icon: Compass },
 ];
-const TITLES: Record<PhoneApp, string> = { home: 'Home', messages: 'Christian', radio: 'Radio', contacts: 'Contacts' };
+const TITLES: Record<PhoneApp, string> = { home: 'Home', messages: 'Christian', radio: 'Radio', contacts: 'Contacts', browser: 'Browser' };
 
 function useClock() {
   const [now, setNow] = useState(() => new Date());
@@ -265,6 +267,7 @@ export default function Phone() {
                 {app === 'messages' && <MessagesApp onNavigate={close} />}
                 {app === 'radio' && <RadioApp />}
                 {app === 'contacts' && <ContactsApp />}
+                {app === 'browser' && <BrowserApp onNavigate={close} />}
               </div>
             </div>
           )}

@@ -15,6 +15,7 @@ import {
 import { INVENTORY_SLOTS, inventory } from '@/data/inventory';
 import type { InventoryItem, InventoryKind } from '@/types';
 import { SectionHeading } from '@/components/typography/SectionHeading';
+import { chapter } from '@/data/navigation';
 import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap } from '@/animations/gsap';
@@ -96,7 +97,7 @@ export function OpenSource() {
     <section ref={ref} id="inventory" className="inventory section-pad container-x" aria-labelledby="inventory-title">
       <SectionHeading
         id="inventory-title"
-        chapter="Chapter 05"
+        chapter={chapter('inventory')}
         kicker="Open source & side quests"
         title={
           <>

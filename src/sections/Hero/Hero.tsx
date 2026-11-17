@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { ArrowDown, FileText, MapPin } from 'lucide-react';
+import { Fragment, useRef } from 'react';
+import { ArrowDown, FileText, MapPin, MessageSquare } from 'lucide-react';
 import { Scene } from '@/components/scene/Scene';
 import { LogoMark, SHINE_TRAVEL } from '@/components/brand/Logo';
 import { MagneticButton } from '@/components/buttons/MagneticButton';
@@ -13,6 +13,9 @@ import { scrollToSection } from '@/animations/scroll';
 import { asset } from '@/lib/assets';
 import type { ThemeName } from '@/types';
 import './Hero.css';
+
+/** Title card shown while the pinned hero hands over to About (desktop, with motion). */
+const CARD_STACK = ['Flutter', 'Angular', 'NestJS', 'AWS'];
 
 /** Parallax depth per scene layer: higher moves more. */
 const DEPTH: Record<string, number> = { sky: 0.15, far: 0.3, city: 0.45, water: 0.35, palms: 1.2, figure: 0.8 };
@@ -75,7 +78,8 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
       if (desktop) {
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
-          scrollTrigger: { trigger: ref.current, start: 'top top', end: '+=110%', scrub: 0.8, pin: true, anticipatePin: 1 },
+          // Longer pin than the camera push alone: the end holds the title card.
+          scrollTrigger: { trigger: ref.current, start: 'top top', end: '+=190%', scrub: 0.8, pin: true, anticipatePin: 1 },
         });
         // Only animate layers that exist (a painted backdrop replaces the drawn ones).
         const at = (name: string, vars: gsap.TweenVars) => {
@@ -91,6 +95,17 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
         at('figure', character ? { scale: 1.3, x: () => window.innerWidth * 0.24, y: 60 } : { scale: 1.6, y: 120, opacity: 0 });
         at('palms', { scale: 2.1, y: 160 });
         tl.to('[data-hero-content]', { y: -140, opacity: 0, duration: 0.6 }, 0).to('[data-hero-fade]', { opacity: 1, duration: 0.35 }, 0.65);
+
+        // Title card: letterbox bars close in and the lines rise one by one. The bars open
+        // again at the end, but the copy stays: when the pin releases it scrolls up with the
+        // hero while About arrives underneath, so there's never an empty screen.
+        tl.set('[data-hero-card]', { autoAlpha: 1 }, 0.7)
+          .fromTo('[data-hero-bar]', { scaleY: 0 }, { scaleY: 1, duration: 0.35, ease: 'power2.out' }, 0.7)
+          .fromTo('[data-card-kicker]', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.25 }, 0.9)
+          .fromTo('[data-card-line]', { yPercent: 110 }, { yPercent: 0, duration: 0.45, stagger: 0.15, ease: 'power3.out' }, 1.0)
+          .fromTo('[data-card-stack]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.3 }, 1.45)
+          .fromTo('[data-card-rule]', { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'power2.inOut' }, 1.1)
+          .to('[data-hero-bar]', { scaleY: 0, duration: 0.3, ease: 'power2.in' }, 2.0);
       } else {
         const st = { trigger: ref.current, start: 'top top', end: 'bottom top', scrub: true };
         const drift = (name: string, vars: gsap.TweenVars) => {
@@ -156,12 +171,18 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
             <span>{profile.firstName}</span> <span>{profile.lastName}</span>
           </h1>
           <p className="hero__role" data-hero-in>
-            {profile.role}
+            {/* Each word unbreakable, so "Full-Stack" never splits at its hyphen. */}
+            {profile.role.split(' ').map((w, i) => (
+              <Fragment key={i}>
+                {i > 0 && ' '}
+                <span className="whitespace-nowrap">{w}</span>
+              </Fragment>
+            ))}
           </p>
           <p className="hero__pitch" data-hero-in>
             {profile.pitch}
           </p>
-          <ul className="hero__tagline" data-hero-in aria-label="Tagline">
+          <ul className="hero__tagline" data-hero-in aria-label="Track record">
             {profile.tagline.map((t) => (
               <li key={t}>{t}</li>
             ))}
@@ -175,11 +196,21 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
                 scrollToSection('projects');
               }}
             >
-              Explore Portfolio <ArrowDown size={16} aria-hidden="true" />
+              Explore my work <ArrowDown size={16} aria-hidden="true" />
             </MagneticButton>
-            <MagneticButton variant="ghost" href={profile.resumeUrl} target="_blank" rel="noreferrer">
-              View Resume <FileText size={16} aria-hidden="true" />
+            <MagneticButton
+              variant="ghost"
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('contact');
+              }}
+            >
+              Let&rsquo;s talk <MessageSquare size={16} aria-hidden="true" />
             </MagneticButton>
+            <a className="hero__resume eyebrow" href={profile.resumeUrl} target="_blank" rel="noreferrer">
+              <FileText size={14} aria-hidden="true" /> Resume (PDF)
+            </a>
           </div>
         </div>
       </div>
@@ -205,6 +236,30 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
       </div>
 
       <div className="hero__fade" data-hero-fade aria-hidden="true" />
+
+      {/* Decorative: the same facts are in About, so screen readers skip this. */}
+      {desktop && !reduced && (
+        <div className="hero__card" data-hero-card aria-hidden="true">
+          <span className="hero__bar hero__bar--top" data-hero-bar />
+          <span className="hero__bar hero__bar--bottom" data-hero-bar />
+          <div className="hero__card-copy container-x" data-card-copy>
+            <p className="eyebrow hero__card-kicker" data-card-kicker>
+              <span>{profile.location}</span>
+              <span className="hero__card-rule" data-card-rule />
+              <span>9.85°N 124.14°E</span>
+            </p>
+            <p className="display hero__card-line">
+              <span data-card-line>Five years shipping</span>
+            </p>
+            <p className="display hero__card-line is-accent">
+              <span data-card-line>production software.</span>
+            </p>
+            <p className="eyebrow hero__card-stack" data-card-stack>
+              {CARD_STACK.join('  ·  ')}
+            </p>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

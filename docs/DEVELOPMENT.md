@@ -24,6 +24,10 @@ Content comes from the resume (Nov 2026). Remaining gaps:
 
 All content lives in `src/data/`. Sections render whatever is there, so adding a project, mission or skill is a data edit only.
 
+- `business.ts`: the Impact outcomes and the "What I can build" capabilities; each points at evidence (a project id or a section).
+- `projects.ts`: every project needs a `status` (production / published / in-development / experimental / discontinued), a `problem` and `demonstrates`. Case-study metrics carry a `basis` (production, load-test, internal, public) that is shown next to the number, so test results are never presented as production figures.
+- Chapter numbers follow `navigation.ts` order automatically.
+
 ## Adding your artwork
 
 Every image or video under `src/assets/` is picked up automatically. If a file exists, it replaces the drawn-in-code artwork; if not, the procedural art is used. Theme variants are optional: name a file `sunrise-<name>` / `dusk-<name>` (or `<name>-sunrise` / `<name>-dusk`).

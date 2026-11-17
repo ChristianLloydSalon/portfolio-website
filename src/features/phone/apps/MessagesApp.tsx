@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, SendHorizontal } from 'lucide-react';
 import { scrollToSection } from '@/animations/scroll';
+import { openProject } from '@/sections/Projects/openProject';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
 import { markRead, phoneStore } from '../phoneStore';
 import { matchKeywords, script, type Action, type NodeId } from '../script';
@@ -86,7 +87,10 @@ export function MessagesApp({ onNavigate }: { onNavigate: () => void }) {
 
   const doAction = (a: Action) => {
     if ('app' in a) phoneStore.set({ app: a.app });
-    else if ('section' in a) {
+    else if ('project' in a) {
+      onNavigate();
+      window.setTimeout(() => openProject(a.project), 450);
+    } else if ('section' in a) {
       onNavigate();
       // Let the phone slide away and unlock scrolling first.
       window.setTimeout(() => scrollToSection(a.section), 450);

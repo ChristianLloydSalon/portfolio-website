@@ -6,7 +6,7 @@ Hi, I'm Christian, a software engineer from Bohol, Philippines. This repo is the
 
 ## About me
 
-I've been building mobile apps with Flutter for over five years. Since 2021 I've worked at White Cloak Technologies. I started there as a junior engineer, and today I lead mobile development on the Personal Collection dealer app, which is live on the App Store, Google Play and Huawei AppGallery.
+I've been building production software with Flutter, TypeScript and AWS for over five years. Since 2021 I've worked at White Cloak Technologies, where I grew from junior engineer to mobile lead on the Personal Collection dealer app, which is live on the App Store, Google Play and Huawei AppGallery.
 
 Most of my work is on mobile, but I also work on the web dashboards and backend services that the apps rely on. I like working directly with clients to figure out what they actually need before I start building.
 

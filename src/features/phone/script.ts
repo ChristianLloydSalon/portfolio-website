@@ -15,6 +15,7 @@ import type { PhoneApp } from './phoneStore';
 export type Action =
   | { label: string; href: string }
   | { label: string; section: string }
+  | { label: string; project: string }
   | { label: string; app: PhoneApp };
 
 export interface Node {
@@ -35,12 +36,17 @@ export type NodeId =
   | 'side'
   | 'stack'
   | 'contact'
+  | 'help'
+  | 'cloud'
+  | 'different'
+  | 'availability'
   | 'phone'
   | 'thanks'
   | 'cheat'
   | 'fallback';
 
 const job = missions[0];
+const company = job.company.replace(/,? Inc\.?$/, '');
 const teaching = missions.find((m) => m.id === 'bisu-instructor');
 const degree = missions.find((m) => m.id === 'bisu-degree');
 const byId = (id: string) => projects.find((p) => p.id === id);
@@ -60,8 +66,8 @@ const stackLines = skillCategories
 
 const mainReplies: Node['replies'] = [
   { label: 'What do you do?', next: 'work' },
+  { label: 'How can you help us?', next: 'help' },
   { label: 'Show me your best work', next: 'projects' },
-  { label: 'Your tech stack?', next: 'stack' },
   { label: 'How do I reach you?', next: 'contact' },
 ];
 const more = { label: 'Something else', next: 'menu' as const };
@@ -75,7 +81,12 @@ export const script: Record<NodeId, Node> = {
   },
   menu: {
     says: ['Sure, what else?'],
-    replies: [...mainReplies, { label: "What's with the phone?", next: 'phone' }],
+    replies: [
+      ...mainReplies,
+      { label: 'Your tech stack?', next: 'stack' },
+      { label: 'What makes you different?', next: 'different' },
+      { label: "What's with the phone?", next: 'phone' },
+    ],
   },
   hello: {
     says: ['Hey hey 👋', 'Pick something below, or just type.'],
@@ -83,12 +94,13 @@ export const script: Record<NodeId, Node> = {
   },
   work: {
     says: [
-      `Right now I'm a ${job.position} at ${job.company.replace(/,? Inc\.?$/, '')} (${job.period}).`,
-      'Mostly production Flutter apps for iOS, Android and Huawei, plus the Angular admin tools, NestJS services and AWS behind them.',
-      ...(pc ? [`I'm also the mobile lead on ${pc.title}, and I was its interim tech lead for six months.`] : []),
+      `I'm a ${profile.role}. I've been at ${company} since ${job.period.split(' –')[0]}, where I'm a ${job.position}.`,
+      'Production Flutter apps for iOS, Android and Huawei, plus the Angular admin tools, NestJS services and AWS behind them.',
+      ...(pc ? [`On ${pc.title} I was the mobile lead, and its interim tech lead for six months.`] : []),
     ],
     replies: [
       { label: 'Tell me about that app', next: 'flagship' },
+      { label: 'Are you available?', next: 'availability' },
       { label: 'Before that?', next: 'history' },
       more,
     ],
@@ -113,13 +125,15 @@ export const script: Record<NodeId, Node> = {
   flagship: {
     says: pc
       ? [
-          `${pc.title} is the dealer app for Personal Collection. It's a team project at White Cloak, and I lead the Flutter side.`,
-          ...(pc.caseStudy?.results?.length ? [pc.caseStudy.results.map((r) => `${r.value} ${r.label[0].toLowerCase()}${r.label.slice(1)}`).join(' · ')] : []),
-          "Fun bits: CSV bulk imports on SQS + S3, schema-driven surveys, and QR check-in with geofencing so nobody checks in from home 😄",
+          `${pc.title} is the dealer app for Personal Collection, a team project at White Cloak. I led the Flutter app and built features end to end: surveys, events, bulk imports and push.`,
+          ...(pc.caseStudy?.results?.length
+            ? [pc.caseStudy.results.map((r) => `${r.value} ${r.label[0].toLowerCase()}${r.label.slice(1)}${r.basis === 'production' ? ' (production)' : ''}`).join(' · ')]
+            : []),
+          'Fun bits: schema-driven surveys, SQS with dead letter queues, and QR check-in with geofencing so nobody checks in from home 😄',
         ]
       : ['That one lives in the Projects section.'],
-    actions: [{ label: 'Open Projects', section: 'projects' }],
-    replies: [...(story ? [{ label: story.title + '?', next: 'story' as const }] : []), { label: 'Any side projects?', next: 'side' }, more],
+    actions: pc ? [{ label: 'Read the case study', project: pc.id }] : [{ label: 'Open Projects', section: 'projects' }],
+    replies: [{ label: 'Big data, how?', next: 'cloud' }, ...(story ? [{ label: story.title + '?', next: 'story' as const }] : []), more],
   },
   story: {
     says: story
@@ -158,6 +172,48 @@ export const script: Record<NodeId, Node> = {
     ],
     replies: [{ label: 'Thanks!', next: 'thanks' }, more],
   },
+  help: {
+    says: [
+      "Depends what you need. Here's what I've delivered before:",
+      '📱 Mobile apps and complete products: Flutter on the screen, NestJS and AWS behind it.',
+      '⚙️ Automating manual work: bulk imports, workflows and integrations.',
+      '🧱 Backends that scale: APIs, queues and cloud infrastructure.',
+      '🔧 Improving existing apps: performance, architecture and release pipelines.',
+      "I'm one engineer, not an agency, so I'm at my best owning a product area or joining your team.",
+    ],
+    actions: [{ label: 'What I can build', section: 'build' }],
+    replies: [
+      { label: 'Any proof?', next: 'flagship' },
+      { label: 'What makes you different?', next: 'different' },
+      { label: 'How do I reach you?', next: 'contact' },
+    ],
+  },
+  cloud: {
+    says: [
+      'Mostly serverless and queues on AWS: Lambda, EventBridge, SQS, SNS and S3, plus Terraform.',
+      ...(pc ? [`On ${pc.title} I built bulk imports on SQS with dead letter queues. They handled 20,000+ records in a load test without blocking the app.`] : []),
+      "That's a load test, not production traffic. Failed messages land in the dead letter queue to retry instead of vanishing.",
+    ],
+    actions: [{ label: 'Open the Arsenal', section: 'arsenal' }],
+    replies: [{ label: 'How can you help us?', next: 'help' }, { label: 'How do I reach you?', next: 'contact' }, more],
+  },
+  different: {
+    says: [
+      "Honest answer? I don't stop at the Flutter layer.",
+      "I've carried features from the Angular admin through NestJS and AWS into the app, and set up the CI/CD and tests that ship them.",
+      ...(story ? [`I also publish tools other devs use, like ${story.title} on pub.dev.`] : []),
+      "And I've stepped in as interim tech lead, so I know delivery isn't only code.",
+    ],
+    replies: [{ label: 'Show me your best work', next: 'projects' }, { label: 'Are you available?', next: 'availability' }, more],
+  },
+  availability: {
+    says: [
+      "Happy to talk about a role or a project. Email is the fastest way to reach me.",
+      "Send a bit of context and I'll get back to you.",
+    ],
+    actions: [emailAction, { label: 'Resume (PDF)', href: profile.resumeUrl }],
+    replies: [{ label: 'How can you help us?', next: 'help' }, more],
+  },
   phone: {
     says: [
       'Every good open world needs a phone 😎',
@@ -186,14 +242,18 @@ export const script: Record<NodeId, Node> = {
 const RULES: { words: string[]; next: NodeId }[] = [
   { words: ['cheat', 'konami', 'godmode', 'god mode'], next: 'cheat' },
   { words: ['thank', 'thanks', 'ty', 'cool', 'nice', 'awesome'], next: 'thanks' },
-  { words: ['hire', 'hiring', 'job', 'available', 'availability', 'email', 'contact', 'reach', 'call', 'linkedin', 'resume', 'cv', 'work with', 'freelance'], next: 'contact' },
-  { words: ['stack', 'skill', 'skills', 'tech', 'language', 'languages', 'flutter', 'dart', 'react', 'angular', 'nestjs', 'aws', 'typescript', 'backend', 'frontend'], next: 'stack' },
+  { words: ['hire', 'hiring', 'available', 'availability', 'open to', 'freelance', 'looking for work'], next: 'availability' },
+  { words: ['email', 'contact', 'reach', 'call', 'linkedin', 'resume', 'cv', 'work with'], next: 'contact' },
+  { words: ['different', 'why you', 'why him', 'why hire', 'stand out', 'unique', 'better than'], next: 'different' },
   { words: ['personal collection', 'dealer', 'white cloak'], next: 'flagship' },
+  { words: ['help', 'business', 'company', 'services', 'applications', 'can you build', 'can he build', 'build for'], next: 'help' },
+  { words: ['aws', 'cloud', 'data', 'large scale', 'scale', 'sqs', 'queue', 'lambda', 'infrastructure'], next: 'cloud' },
+  { words: ['stack', 'skill', 'skills', 'tech', 'language', 'languages', 'flutter', 'dart', 'react', 'angular', 'nestjs', 'typescript', 'backend', 'frontend'], next: 'stack' },
   { words: ['story', 'stories', 'package', 'pub.dev', 'open source'], next: 'story' },
   { words: ['side', 'brightrail', 'tool', 'tools', 'game', 'souls', 'experiment'], next: 'side' },
   { words: ['project', 'projects', 'portfolio', 'built', 'build', 'app', 'apps', 'best', 'github'], next: 'projects' },
   { words: ['school', 'study', 'studied', 'degree', 'university', 'teach', 'teaching', 'before', 'history', 'experience', 'career'], next: 'history' },
-  { words: ['what do you do', 'who are you', 'about', 'role', 'company', 'current'], next: 'work' },
+  { words: ['what do you do', 'who are you', 'about', 'role', 'current'], next: 'work' },
   { words: ['phone', 'radio', 'music', 'gta', 'ai', 'bot'], next: 'phone' },
   { words: ['hi', 'hello', 'hey', 'yo', 'sup', 'kumusta'], next: 'hello' },
 ];

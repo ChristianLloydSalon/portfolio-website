@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { CheckCircle2, CircleDot, Trophy } from 'lucide-react';
 import { missions } from '@/data/experience';
 import { SectionHeading } from '@/components/typography/SectionHeading';
+import { chapter } from '@/data/navigation';
 import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap, ScrollTrigger } from '@/animations/gsap';
@@ -52,20 +53,20 @@ export function Experience() {
     <section ref={ref} id="experience" className="experience section-pad container-x" aria-labelledby="experience-title">
       <SectionHeading
         id="experience-title"
-        chapter="Chapter 03"
+        chapter={chapter('experience')}
         kicker="Career timeline"
         title={
           <>
             Mission <span className="text-accent-ink">log</span>
           </>
         }
-        intro="Every role has been a mission: a brief, a team, a deadline and something real to ship. Newest first."
+        intro="Five years of production software, newest first: how the role grew, what I owned, and the decisions that came with it. Project results are in the case studies above."
       />
 
       <div className="experience__layout">
         <aside className="experience__hud" aria-hidden="true">
           <div className="experience__hud-inner card-glass">
-            <p className="eyebrow text-ink-2">Current mission</p>
+            <p className="eyebrow text-ink-2">Mission</p>
             <p className="display experience__counter">
               <span ref={counterRef}>{total}</span>
               <span className="experience__counter-total">/{total}</span>
@@ -90,7 +91,7 @@ export function Experience() {
                     <span>Mission {String(missions.length - i).padStart(2, '0')}</span>
                     <span className={`mission__status is-${m.status}`}>
                       {m.status === 'active' ? <CircleDot size={13} aria-hidden="true" /> : <CheckCircle2 size={13} aria-hidden="true" />}
-                      {m.status === 'active' ? 'In progress' : 'Complete'}
+                      {m.status === 'active' ? 'Current' : 'Complete'}
                     </span>
                   </p>
                   <p className="eyebrow text-ink-2 mission__period">{m.period}</p>
