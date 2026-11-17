@@ -2,6 +2,7 @@
 // file, inject JSON-LD, and write robots.txt + sitemap.xml for the configured site URL.
 // Firebase serves /about from about.html and /projects/x from projects/x.html (cleanUrls).
 // Runs after `vite build` (client) and `vite build --ssr src/entry-server.tsx --outDir .ssr`.
+import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve } from 'node:path';
@@ -15,6 +16,14 @@ const { render, pages, structuredData, SITE_URL } = await import(pathToFileURL(r
 const indexPath = resolve(dist, 'index.html');
 const template = await readFile(indexPath, 'utf8');
 if (!template.includes('<div id="root"></div>')) throw new Error('prerender: <div id="root"></div> not found in dist/index.html');
+
+// Share-image cache busting: link-preview services (Discord, Slack, LinkedIn…) cache the
+// image by URL, so a regenerated og-image.jpg would keep showing the old one. Version the
+// URL with the file's content hash: it changes only when the image does. Page URLs and
+// canonicals are never versioned.
+const ogImageUrl = `${SITE_URL}/og-image.jpg`;
+const ogHash = createHash('sha256').update(await readFile(resolve(dist, 'og-image.jpg'))).digest('hex').slice(0, 10);
+const versionOgImage = (html) => html.replaceAll(ogImageUrl, `${ogImageUrl}?v=${ogHash}`);
 
 // Escape "<" so the JSON can never close the script tag.
 const jsonLd = (data) => `    <script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>\n  </head>`;
@@ -60,6 +69,7 @@ for (const { path, meta } of all) {
     .replace('<div id="root"></div>', () => `<div id="root">${appHtml}</div>`);
   // Section pages are the same one-page site, so they keep the home page's canonical URL.
   if (meta) html = withMeta(html, meta);
+  html = versionOgImage(html);
   const file = path === '/' ? indexPath : resolve(dist, `${path.slice(1)}.html`);
   await mkdir(dirname(file), { recursive: true });
   await writeFile(file, html);
