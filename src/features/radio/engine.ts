@@ -584,6 +584,10 @@ let current: { playing: Playing; gain: GainNode } | null = null;
 
 function ensureContext() {
   if (!ctx) {
+    // iOS treats Web Audio as "ambient" by default, so the ringer's silent switch mutes it.
+    // Declaring a playback session (Safari 16.4+) makes the radio audible like any media player.
+    const audioSession = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
+    if (audioSession) audioSession.type = 'playback';
     ctx = new AudioContext();
     const comp = ctx.createDynamicsCompressor();
     output = ctx.createGain();
@@ -675,7 +679,8 @@ export function progress() {
 }
 
 /** Fills `out` with the current spectrum (0–255 per band). Returns false when nothing is playing. */
-export function levels(out: Uint8Array) {
+// Typed from the DOM signature so it compiles on TS 5.6 (non-generic Uint8Array) and 5.7+ (Uint8Array<ArrayBuffer>).
+export function levels(out: Parameters<AnalyserNode['getByteFrequencyData']>[0]) {
   if (!analyser || !current) return false;
   analyser.getByteFrequencyData(out);
   return true;

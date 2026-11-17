@@ -150,14 +150,16 @@ export function Experience() {
                 </div>
                 )}
 
-                <ul className="mission__trophies" data-reveal aria-label="Achievements">
-                  {m.achievements.map((a) => (
-                    <li key={a}>
-                      <Trophy size={16} aria-hidden="true" />
-                      {a}
-                    </li>
-                  ))}
-                </ul>
+                {m.achievements.length > 0 && (
+                  <ul className="mission__trophies" data-reveal aria-label="Achievements">
+                    {m.achievements.map((a) => (
+                      <li key={a}>
+                        <Trophy size={16} aria-hidden="true" />
+                        {a}
+                      </li>
+                    ))}
+                  </ul>
+                )}
 
                 <ul className="mission__stack" data-reveal aria-label="Technologies">
                   {m.stack.map((s) => (

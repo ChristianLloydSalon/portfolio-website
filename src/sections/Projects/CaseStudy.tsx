@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 import type { CaseStudy } from '@/types';
 import { asset } from '@/lib/assets';
 import { BASIS_LABEL } from './projectStatus';
@@ -175,5 +175,170 @@ export function CaseStudySections({ study }: { study: CaseStudy }) {
         </section>
       )}
     </div>
+  );
+}
+
+/**
+ * The engineering story: what I built and why, how the layers relate, the stack by layer,
+ * and the quality workflows. Each part renders only when it has content.
+ */
+export function CaseStudyEngineering({ study }: { study: CaseStudy }) {
+  const { contributions, diagram, approach, workflows } = study;
+  if (!contributions?.length && !diagram && !approach?.length && !workflows?.length) return null;
+  return (
+    <div className="cs cs--lead" data-ov-swap>
+      {contributions && (
+        <section className="cs-block" aria-labelledby="cs-built">
+          <div className="cs-block__head">
+            <h3 id="cs-built" className="eyebrow text-ink-2">
+              Challenges &amp; what I built
+            </h3>
+            <p className="cs-note">Each item is work I delivered personally, from the problem to why it matters.</p>
+          </div>
+          <ol className="cs-built">
+            {contributions.map((c, i) => (
+              <li key={c.title} className="cs-built__item">
+                <span className="cs-challenge__num">{String(i + 1).padStart(2, '0')}</span>
+                <h4 className="display cs-built__title">{c.title}</h4>
+                <ul className="cs-built__layers" aria-label="Layers involved">
+                  {c.layers.map((l) => (
+                    <li key={l}>{l}</li>
+                  ))}
+                </ul>
+                <dl className="cs-built__parts">
+                  <div>
+                    <dt className="cs-challenge__label">Challenge</dt>
+                    <dd>{c.challenge}</dd>
+                  </div>
+                  <div>
+                    <dt className="cs-challenge__label is-solution">What I built</dt>
+                    <dd>{c.body}</dd>
+                  </div>
+                  <div>
+                    <dt className="cs-challenge__label">Why it matters</dt>
+                    <dd>{c.value}</dd>
+                  </div>
+                </dl>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {diagram && (
+        <section className="cs-block" aria-labelledby="cs-diagram">
+          <h3 id="cs-diagram" className="eyebrow text-ink-2">
+            How the layers fit together
+          </h3>
+          <figure className="cs-diagram">
+            <ul className="cs-diagram__row is-clients" aria-label="Client applications">
+              {diagram.clients.map((n) => (
+                <li key={n.label} className="cs-diagram__node">
+                  <span className="cs-diagram__label">{n.label}</span>
+                  <span className="cs-diagram__detail">{n.detail}</span>
+                </li>
+              ))}
+            </ul>
+            <ArrowDown className="cs-diagram__arrow" size={20} aria-hidden="true" />
+            <div className="cs-diagram__node is-core">
+              <span className="cs-diagram__label">{diagram.core.label}</span>
+              <span className="cs-diagram__detail">{diagram.core.detail}</span>
+            </div>
+            <ArrowDown className="cs-diagram__arrow" size={20} aria-hidden="true" />
+            <ul className="cs-diagram__row is-services" aria-label={`Services used by ${diagram.core.label.toLowerCase()}`}>
+              {diagram.services.map((n) => (
+                <li key={n.label} className="cs-diagram__node">
+                  <span className="cs-diagram__label">{n.label}</span>
+                  <span className="cs-diagram__detail">{n.detail}</span>
+                </li>
+              ))}
+            </ul>
+            <figcaption className="cs-note">{diagram.caption}</figcaption>
+          </figure>
+        </section>
+      )}
+
+      {approach && (
+        <section className="cs-block" aria-labelledby="cs-approach">
+          <h3 id="cs-approach" className="eyebrow text-ink-2">
+            Engineering approach, layer by layer
+          </h3>
+          <dl className="cs-approach">
+            {approach.map((a) => (
+              <div key={a.layer} className="cs-approach__row">
+                <dt>
+                  <span className="cs-arch__title">{a.layer}</span>
+                  <ul className="cs-approach__tools">
+                    {a.tools.map((t) => (
+                      <li key={t} className="chip">
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                </dt>
+                <dd>{a.why}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
+      {workflows && (
+        <section className="cs-block" aria-labelledby="cs-workflows">
+          <h3 id="cs-workflows" className="eyebrow text-ink-2">
+            Quality workflows
+          </h3>
+          <div className="cs-workflows">
+            {workflows.map((w) => (
+              <article key={w.title} className="cs-workflow">
+                <header>
+                  <h4 className="display cs-built__title">{w.title}</h4>
+                  <span className="cs-workflow__tool">{w.tool}</span>
+                </header>
+                <ol className="cs-workflow__steps">
+                  {w.steps.map((s) => (
+                    <li key={s}>{s}</li>
+                  ))}
+                </ol>
+                {w.comparison && <WorkflowComparison comparison={w.comparison} />}
+                <p className="cs-note">{w.note}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+
+type Comparison = NonNullable<NonNullable<CaseStudy['workflows']>[number]['comparison']>;
+
+/** Before/after bars, scaled to the larger value. */
+function WorkflowComparison({ comparison }: { comparison: Comparison }) {
+  const { before, after, basis } = comparison;
+  const max = Math.max(before.hours, after.hours);
+  return (
+    <figure className="cs-compare">
+      <figcaption className="cs-challenge__label">Manual regression time per cycle</figcaption>
+      {[before, after].map((b, i) => (
+        <div key={b.label} className="cs-compare__row">
+          <span className="cs-compare__label">{b.label}</span>
+          <span className="cs-compare__track" aria-hidden="true">
+            <span className={`cs-compare__bar${i === 1 ? ' is-after' : ''}`} style={{ width: `${(b.hours / max) * 100}%` }} />
+          </span>
+          <span className="cs-compare__value">{b.value}</span>
+        </div>
+      ))}
+      <span className={`cs-basis is-${basis}`}>{BASIS_LABEL[basis]}</span>
+    </figure>
+  );
+}
+
+/** Discreet confidentiality note at the very end of the case study. */
+export function CaseStudyDisclaimer({ text }: { text: string }) {
+  return (
+    <p className="cs-disclaimer" data-ov-swap>
+      {text}
+    </p>
   );
 }

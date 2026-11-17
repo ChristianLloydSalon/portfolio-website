@@ -60,6 +60,8 @@ export interface Project {
    * as one engineer on the team. Drives the "Company project" badge and contributor wording.
    */
   employer?: string;
+  /** Optional: platforms the product runs on, shown in the project details. */
+  platforms?: string;
   /** Extra public links, e.g. app store pages. */
   links?: { label: string; href: string }[];
   /** Deeper write-up shown in the project presentation; every part is optional. */
@@ -101,6 +103,38 @@ export interface CaseStudy {
   architectureNote?: string;
   challenges?: { title: string; problem: string; solution: string }[];
   code?: { label: string; code: string }[];
+  /**
+   * Features and engineering work I personally delivered: the engineering challenge, what I
+   * built (`body`) and why it matters (`value`). `layers` names the layers the work touched.
+   */
+  contributions?: { title: string; layers: string[]; challenge: string; body: string; value: string }[];
+  /** Technologies grouped by layer, each tied to the problem it solved. */
+  approach?: { layer: string; tools: string[]; why: string }[];
+  /**
+   * Generalized layer diagram: clients on top, shared services in the middle, supporting
+   * services below. Generic labels only; it explains relationships, not real infrastructure.
+   */
+  diagram?: {
+    clients: { label: string; detail: string }[];
+    core: { label: string; detail: string };
+    services: { label: string; detail: string }[];
+    caption: string;
+  };
+  /** Step-by-step engineering workflows, e.g. automated testing and code review. */
+  workflows?: {
+    title: string;
+    tool: string;
+    steps: string[];
+    note: string;
+    /** Optional before/after measurement, in hours. */
+    comparison?: {
+      before: { label: string; value: string; hours: number };
+      after: { label: string; value: string; hours: number };
+      basis: Outcome['basis'];
+    };
+  }[];
+  /** Discreet confidentiality note at the end of the case study. */
+  disclaimer?: string;
 }
 
 export interface Mission {

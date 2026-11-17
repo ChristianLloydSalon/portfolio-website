@@ -102,6 +102,7 @@ export const skillCategories: SkillCategory[] = [
       { name: 'Playwright', mono: 'Pw', note: 'Web end-to-end tests', tier: 'production' },
       { name: 'Jest', mono: 'Je', note: 'Unit and integration tests', tier: 'production' },
       { name: 'SonarQube', mono: 'So', note: 'Code quality gates', tier: 'production' },
+      { name: 'Claude Code Review', mono: 'Cr', note: 'Automatic merge request reviews: best practices, architecture, security', tier: 'production' },
     ],
   },
   {

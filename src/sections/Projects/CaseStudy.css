@@ -204,3 +204,166 @@
 .cs-impact li { display: grid; align-content: start; gap: 0.5rem; padding-left: 1rem; border-left: 2px solid var(--accent); }
 .cs-impact__title { margin: 0; font-size: clamp(1.5rem, 2.2vw, 1.9rem); line-height: 0.98; }
 .cs-impact p { margin: 0; color: var(--text-2); line-height: 1.55; }
+
+/* ---------- Challenges & what I built ---------- */
+.cs-block__head { display: grid; gap: 0.4rem; }
+.cs-built {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cs-built__item {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.85rem;
+  padding: 1.5rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.cs-built__title { margin: 0; padding-right: 2rem; font-size: clamp(1.5rem, 2.2vw, 1.8rem); line-height: 1; }
+.cs-built__layers { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
+.cs-built__layers li {
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.cs-built__parts { display: grid; gap: 0.75rem; margin: 0; }
+.cs-built__parts dd { margin: 0; color: var(--text-2); line-height: 1.55; }
+
+/* ---------- Layer diagram: clients → backend → services ---------- */
+.cs-diagram {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(color-mix(in srgb, var(--line) 50%, transparent) 1px, transparent 1px) 0 0 / 100% 1.5rem,
+    color-mix(in srgb, var(--surface) 55%, transparent);
+}
+.cs-diagram__row {
+  display: grid;
+  width: 100%;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 640px) {
+  .cs-diagram__row.is-clients { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 40rem; }
+  .cs-diagram__row.is-services { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.cs-diagram__node {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  text-align: center;
+}
+.cs-diagram__node.is-core {
+  width: min(100%, 26rem);
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+.cs-diagram__label { font-weight: 700; }
+.cs-diagram__detail { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; color: var(--text-2); }
+.cs-diagram__arrow { color: var(--accent-ink); }
+.cs-diagram figcaption { justify-self: start; margin-top: 0.5rem; }
+
+/* ---------- Approach by layer ---------- */
+.cs-approach { display: grid; margin: 0; border-top: 1px solid var(--line); }
+.cs-approach__row {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+@media (min-width: 900px) {
+  .cs-approach__row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 2rem; align-items: center; }
+}
+.cs-approach dt { display: grid; gap: 0.5rem; }
+.cs-approach__tools { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.cs-approach dd { margin: 0; color: var(--text-2); line-height: 1.55; }
+
+/* ---------- Quality workflows ---------- */
+.cs-workflows { display: grid; gap: 1rem; }
+@media (min-width: 900px) { .cs-workflows { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cs-workflow {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: 1.5rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.cs-workflow header { display: grid; gap: 0.35rem; }
+.cs-workflow__tool { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-ink); }
+.cs-workflow__steps { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+.cs-workflow__steps li {
+  position: relative;
+  padding: 0 0 0.9rem 2.25rem;
+  counter-increment: step;
+  line-height: 1.45;
+}
+.cs-workflow__steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: -0.05rem;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-ink);
+}
+/* The line joining the steps. */
+.cs-workflow__steps li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  top: 1.5rem;
+  bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+.cs-workflow__steps li:last-child { padding-bottom: 0; }
+
+.cs-compare { display: grid; gap: 0.5rem; margin: 0; padding-top: 1rem; border-top: 1px solid var(--line); }
+.cs-compare__row { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr) 3.5rem; align-items: center; gap: 0.75rem; }
+.cs-compare__label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
+.cs-compare__track { height: 0.6rem; border-radius: 999px; background: color-mix(in srgb, var(--line) 70%, transparent); overflow: hidden; }
+.cs-compare__bar { display: block; height: 100%; border-radius: inherit; background: color-mix(in srgb, var(--text-2) 55%, transparent); }
+.cs-compare__bar.is-after { background: var(--accent); }
+.cs-compare__value { font-weight: 700; text-align: right; }
+
+/* ---------- Confidentiality note ---------- */
+.cs-disclaimer {
+  margin: 0 0 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-2);
+}

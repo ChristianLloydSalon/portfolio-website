@@ -2,7 +2,9 @@ import type { Mission } from '@/types';
 
 /**
  * Career timeline, newest first. Source: resume (Nov 2026). White Cloak: Aug 2021 to present.
- * Project-specific results (metrics, features) live in the Personal Collection case study, not here.
+ * This section covers responsibilities, ownership, leadership, collaboration and progression only.
+ * Project results, metrics, named project roles and store releases belong to the case studies
+ * (src/data/projects.ts) and the Impact section (src/data/business.ts). Don't repeat them here.
  */
 export const missions: Mission[] = [
   {
@@ -14,52 +16,47 @@ export const missions: Mission[] = [
     location: 'Pasig City, PH · Remote',
     status: 'active',
     summary:
-      'Five years and counting building production software for White Cloak\u2019s clients, growing from junior engineer to mobile lead. I shipped Flutter apps to three app stores, carried features across Angular, NestJS and AWS, and stepped into technical and frontend leadership when the team needed it.',
+      'Five years and counting building production software for White Cloak\u2019s clients. The role grew from shipping features as a junior engineer to owning them across mobile, web and backend, shaping technical design, and leading mobile and frontend work for the team.',
     responsibilities: [],
     contributions: [],
     groups: [
       {
-        title: 'Ownership & delivery',
+        title: 'Responsibilities',
         items: [
-          'Production Flutter apps for iOS, Android and Huawei, from first screen to store release',
-          'Full-stack features carried end to end across Flutter, Angular admin portals and NestJS services',
-          'Marketplace features on Splurge Art: real-time chat, live bidding, in-app purchases and subscriptions',
-          'Production support with Sentry, Dynatrace and AWS CloudWatch',
+          'Build and maintain production Flutter apps for client products',
+          'Carry features across the stack: Flutter clients, Angular admin portals and NestJS services',
+          'Support live apps: monitor, triage and fix issues with Sentry, Dynatrace and AWS CloudWatch',
         ],
       },
       {
-        title: 'Technical design & architecture',
+        title: 'Technical ownership',
         items: [
-          'Technical design and implementation plans for new features',
-          'Architecture decisions: Clean Architecture with BLoC/Cubit, Riverpod and Provider',
-          'Event-driven processing with AWS EventBridge, Lambda and SQS',
-          'A design system of 15+ reusable UI components, translated from Figma',
+          'Write technical designs and implementation plans for new features',
+          'Choose app architecture: Clean Architecture with BLoC/Cubit, Riverpod or Provider',
+          'Backend services and event-driven processing on AWS',
+          'A shared design system of reusable UI components, translated from Figma',
+          'Mobile release pipelines and the test strategy behind them',
+          'Profiling and rendering performance',
         ],
       },
       {
-        title: 'Delivery pipelines & quality',
+        title: 'Leadership',
         items: [
-          'Mobile CI/CD automating builds, tests, code signing and releases to three app stores',
-          'Automated end-to-end testing for critical user journeys',
-          'Profiling and rendering optimization for smoother apps',
-        ],
-      },
-      {
-        title: 'Leadership & collaboration',
-        items: [
-          'Mobile lead on the Personal Collection dealer app',
-          'Interim technical lead for six months after the team\u2019s tech lead left',
+          'Lead mobile development and set technical direction for the mobile team',
+          'Cover technical leadership during team transitions',
           'Frontend leadership responsibilities on the web side of the team',
-          'Mentoring and knowledge transfer, backed by architecture, API, workflow and CI/CD documentation',
+          'Mentor engineers and run knowledge transfer, backed by architecture, API, workflow and CI/CD documentation',
+        ],
+      },
+      {
+        title: 'Collaboration',
+        items: [
           'Agile delivery with product owners, client stakeholders, QA and engineering',
+          'Clarify requirements directly with clients before work starts',
         ],
       },
     ],
-    achievements: [
-      'Junior → Journeyman Software Engineer II',
-      'Mobile lead · Interim tech lead (6 months)',
-      'Shipped to Google Play, App Store and Huawei AppGallery',
-    ],
+    achievements: [],
     stack: ['Flutter', 'Dart', 'BLoC / Riverpod', 'Angular', 'NestJS', 'GraphQL', 'AWS', 'GitLab CI', 'Sentry', 'Dynatrace'],
   },
   {
