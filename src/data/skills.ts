@@ -60,8 +60,9 @@ export const skillCategories: SkillCategory[] = [
     skills: [
       { name: 'AWS Lambda & EventBridge', mono: 'La', note: 'Event-driven processing', tier: 'production' },
       { name: 'AWS SQS & Dead Letter Queues', mono: 'Sq', note: 'Bulk imports and notification processing', tier: 'production' },
-      { name: 'AWS SNS & S3', mono: 'S3', note: 'Notifications and storage', tier: 'production' },
-      { name: 'Terraform', mono: 'Tf', note: 'Infrastructure as code', tier: 'production' },
+      { name: 'AWS SNS', mono: 'SN', note: 'Event notifications and message publishing', tier: 'production' },
+      { name: 'AWS S3', mono: 'S3', note: 'Object storage and file management', tier: 'production' },
+      { name: 'Terraform', mono: 'Tf', note: 'Infrastructure as code', tier: 'working' },
       { name: 'Docker', mono: 'Dk', note: 'Reproducible environments', tier: 'working' },
     ],
   },
@@ -102,7 +103,7 @@ export const skillCategories: SkillCategory[] = [
       { name: 'Playwright', mono: 'Pw', note: 'Web end-to-end tests', tier: 'production' },
       { name: 'Jest', mono: 'Je', note: 'Unit and integration tests', tier: 'production' },
       { name: 'SonarQube', mono: 'So', note: 'Code quality gates', tier: 'production' },
-      { name: 'Claude Code Review', mono: 'Cr', note: 'Automated review of every merge request: best practices, architecture, security', tier: 'production' },
+      { name: 'Claude Code Review', mono: 'Cr', note: 'Automated merge request reviews using Claude, providing feedback on code quality, architectural conventions, and potential issues', tier: 'production' },
     ],
   },
   {
