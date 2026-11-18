@@ -51,6 +51,11 @@ export interface Project {
    * in-development: being built. experimental: a learning experiment. discontinued: shut down.
    */
   status: ProjectStatus;
+  /**
+   * Featured projects get a card in the Projects showcase. The rest still have their own
+   * case-study page, reached from the experiments collection below the showcase.
+   */
+  featured?: boolean;
   /** The problem the project addresses, in plain business terms. */
   problem: string;
   /** Engineering skills the project demonstrates. */
@@ -106,8 +111,9 @@ export interface CaseStudy {
   /**
    * Features and engineering work I personally delivered: the engineering challenge, what I
    * built (`body`) and why it matters (`value`). `layers` names the layers the work touched.
+   * `area` groups the detailed write-ups into expandable sections (e.g. "Backend workflows").
    */
-  contributions?: { title: string; layers: string[]; challenge: string; body: string; value: string }[];
+  contributions?: { title: string; area: string; layers: string[]; challenge: string; body: string; value: string }[];
   /** Technologies grouped by layer, each tied to the problem it solved. */
   approach?: { layer: string; tools: string[]; why: string }[];
   /**
@@ -123,6 +129,8 @@ export interface CaseStudy {
   /** Step-by-step engineering workflows, e.g. automated testing and code review. */
   workflows?: {
     title: string;
+    /** Shown inside the expandable section of the contributions with the same `area`. */
+    area?: string;
     tool: string;
     steps: string[];
     note: string;
@@ -152,6 +160,8 @@ export interface Mission {
   responsibilities: string[];
   contributions: string[];
   achievements: string[];
+  /** Awards from the employer, shown under the entry. Names and years exactly as awarded. */
+  awards?: { title: string; issuer: string; years: string }[];
   stack: string[];
 }
 
@@ -185,6 +195,8 @@ export interface InventoryItem {
   description: string;
   stack: string[];
   href?: string;
+  /** Opens this project's case study instead of an external link. */
+  projectId?: string;
   status: 'Published' | 'Live' | 'Active' | 'In Development' | 'Prototype' | 'Archived';
 }
 

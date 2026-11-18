@@ -148,6 +148,32 @@
 }
 .slot__tier.is-working { color: var(--text); }
 
+/* Secondary tools (working knowledge / familiar), collapsed under the main loadout. */
+.loadout__more { border-top: 1px dashed var(--line); padding-top: 0.75rem; }
+.loadout__more > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: border-color var(--dur-fast);
+}
+.loadout__more > summary::-webkit-details-marker { display: none; }
+.loadout__more > summary:hover { border-color: var(--accent); }
+.loadout__more > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.loadout__more-count { color: var(--accent-ink); }
+.loadout__more-icon { transition: transform var(--dur-med) var(--ease-out); }
+.loadout__more[open] .loadout__more-icon { transform: rotate(45deg); }
+.loadout__more .loadout__slots { margin-top: 0.75rem; }
 .loadout__tiers {
   display: flex;
   flex-wrap: wrap;

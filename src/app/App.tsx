@@ -10,12 +10,10 @@ import { About } from '@/sections/About/About';
 import { Impact } from '@/sections/Impact/Impact';
 import { Projects } from '@/sections/Projects/Projects';
 import { ProjectOverlay } from '@/sections/Projects/ProjectOverlay';
-import { Build } from '@/sections/Build/Build';
 import { Experience } from '@/sections/Experience/Experience';
 import { Arsenal } from '@/sections/Arsenal/Arsenal';
-import { OpenSource } from '@/sections/OpenSource/OpenSource';
 import { Contact } from '@/sections/Contact/Contact';
-import { navigation } from '@/data/navigation';
+import { LEGACY_SECTIONS, navigation } from '@/data/navigation';
 import { projects } from '@/data/projects';
 import { RadioHost } from '@/features/radio/RadioHost';
 import { PhoneHost } from '@/features/phone/PhoneHost';
@@ -70,8 +68,9 @@ export function App() {
   useEffect(() => {
     if (!introSettled) return;
     // Old #section links still work: rewrite them to the path form.
-    const legacy = location.hash.slice(1);
-    if (legacy && SECTION_IDS.includes(legacy)) history.replaceState(history.state, '', sectionPath(legacy) + location.search);
+    const hash = location.hash.slice(1);
+    const legacy = LEGACY_SECTIONS[hash] ? `/${hash}` : SECTION_IDS.includes(hash) ? sectionPath(hash) : null;
+    if (legacy) history.replaceState(history.state, '', legacy + location.search);
     const target = resolvePath(location.pathname);
     const finish = () => {
       urlSyncReady.current = true;
@@ -84,8 +83,10 @@ export function App() {
         finish();
       }, 100);
     } else if (target.kind === 'section' && target.id !== 'home') {
+      // A retired path (/build, /inventory) resolves to its new section: show that URL.
+      if (sectionPath(target.id) !== location.pathname) history.replaceState(history.state, '', sectionPath(target.id) + location.search);
       window.setTimeout(() => {
-        scrollToSection(target.id);
+        scrollToSection(target.anchor ?? target.id, target.id);
         finish();
       }, 100);
     } else {
@@ -133,10 +134,8 @@ export function App() {
             <About />
             <Impact />
             <Projects ready={routesReady || import.meta.env.SSR} />
-            <Build />
             <Experience />
             <Arsenal />
-            <OpenSource />
             <Contact />
           </>
         )}

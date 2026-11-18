@@ -16,30 +16,31 @@
 
 .impact__card {
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto auto auto 1fr;
   gap: 1rem;
   padding: 2rem clamp(1rem, 2.2vw, 1.75rem) 2.25rem;
   background: var(--bg);
   transition: background-color var(--dur-med);
 }
 .impact__card:hover { background: var(--surface); }
-/* Line the cards' rows up across the grid, so every "Proof" starts at the same height. */
+/* Line the cards' rows up across the grid, so every title starts at the same height. */
 @supports (grid-template-rows: subgrid) {
   .impact__card { grid-row: span 4; grid-template-rows: subgrid; row-gap: 1rem; }
 }
 .impact__head { display: flex; align-items: center; justify-content: space-between; }
 .impact__num { font-size: 0.66rem; color: var(--text-2); }
 .impact__icon { color: var(--accent-ink); }
-.impact__card-title { margin: 0; font-size: clamp(1.9rem, 2.6vw, 2.5rem); line-height: 0.98; }
+.impact__card-title { margin: 0; font-size: clamp(1.5rem, 2vw, 1.9rem); line-height: 1.02; }
 .impact__body { margin: 0; color: var(--text-2); line-height: 1.55; }
-.impact__proof {
+.impact__result {
+  display: grid;
+  gap: 0.35rem;
   margin: 0;
-  padding-top: 1rem;
-  border-top: 1px dashed var(--line);
-  font-size: 0.92rem;
-  line-height: 1.5;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--line);
 }
-.impact__proof-label { display: block; margin-bottom: 0.3rem; font-size: 0.62rem; font-weight: 700; color: var(--accent-ink); }
+.impact__value { font-size: clamp(2.4rem, 3.6vw, 3.2rem); line-height: 1; color: var(--accent-ink); }
+.impact__value-label { font-weight: 600; font-size: 0.95rem; }
 
 .impact__footer {
   display: flex;

@@ -14,13 +14,11 @@ import {
 } from 'lucide-react';
 import { INVENTORY_SLOTS, inventory } from '@/data/inventory';
 import type { InventoryItem, InventoryKind } from '@/types';
-import { SectionHeading } from '@/components/typography/SectionHeading';
-import { chapter } from '@/data/navigation';
-import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap } from '@/animations/gsap';
-import { revealOnScroll } from '@/animations/transitions';
-import './OpenSource.css';
+import { projectPath } from '@/app/routes';
+import { openProject } from './openProject';
+import './ProjectCollection.css';
 
 const KIND_ICON: Record<InventoryKind, LucideIcon> = {
   Package,
@@ -59,8 +57,14 @@ const TIER_META: Record<Tier, { label: string; icon: LucideIcon }> = {
 
 type Filter = 'All' | InventoryKind;
 
-export function OpenSource() {
-  const ref = useRef<HTMLElement>(null);
+/** Plain left clicks open the case study in-app; modified clicks follow the link. */
+const isPlainClick = (e: React.MouseEvent) => !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0);
+
+/**
+ * Secondary collection inside the Projects section: smaller tools, packages and
+ * experiments. Items with a case study open it; the rest link out.
+ */
+export function ProjectCollection() {
   const gridRef = useRef<HTMLUListElement>(null);
   const reduced = useReducedMotion();
   const [filter, setFilter] = useState<Filter>('All');
@@ -69,15 +73,6 @@ export function OpenSource() {
   const filters: Filter[] = ['All', ...kinds];
   const items = filter === 'All' ? inventory : inventory.filter((i) => i.kind === filter);
   const locked = filter === 'All' ? Math.max(0, INVENTORY_SLOTS - inventory.length) : 0;
-
-  useGsap(
-    () => {
-      if (reduced) return;
-      revealOnScroll(ref.current!);
-    },
-    ref,
-    [reduced],
-  );
 
   const first = useRef(true);
   useLayoutEffect(() => {
@@ -94,18 +89,16 @@ export function OpenSource() {
   }, [filter, reduced]);
 
   return (
-    <section ref={ref} id="inventory" className="inventory section-pad container-x" aria-labelledby="inventory-title">
-      <SectionHeading
-        id="inventory-title"
-        chapter={chapter('inventory')}
-        kicker="Open source & side quests"
-        title={
-          <>
-            The <span className="text-accent-ink">inventory</span>
-          </>
-        }
-        intro="Packages, tools, contributions and experiments collected along the way. Some are polished, some are prototypes, all of them taught me something."
-      />
+    <section id="more-projects" className="inventory container-x" aria-labelledby="more-projects-title">
+      <header className="inventory__head" data-reveal>
+        <p className="eyebrow text-ink-2">Side quests</p>
+        <h3 id="more-projects-title" className="display inventory__title">
+          Additional projects <span className="text-accent-ink">&amp; experiments</span>
+        </h3>
+        <p className="inventory__intro text-ink-2">
+          Smaller tools, packages and experiments. Some are published; some are still being built.
+        </p>
+      </header>
 
       <div className="inventory__bar" data-reveal>
         <div className="inventory__filters" role="group" aria-label="Filter items by type">
@@ -131,6 +124,7 @@ export function OpenSource() {
           const Icon = KIND_ICON[item.kind];
           const tier = STATUS_TIER[item.status];
           const { label: tierLabel, icon: TierIcon } = TIER_META[tier];
+          const linked = !!(item.href || item.projectId);
           const body = (
             <>
               <span className="tile__corners" aria-hidden="true" />
@@ -152,11 +146,12 @@ export function OpenSource() {
                   )}
                 </div>
               </div>
-              <h3 className="tile__name">
+              <h4 className="tile__name">
                 {item.name}
-                {item.href && <ArrowUpRight className="tile__link" size={18} aria-hidden="true" />}
-              </h3>
+                {linked && <ArrowUpRight className="tile__link" size={18} aria-hidden="true" />}
+              </h4>
               <p className="tile__desc">{item.description}</p>
+              {item.projectId && <p className="tile__cta eyebrow">View project page</p>}
               <ul className="tile__stack" aria-label="Built with">
                 {item.stack.map((s) => (
                   <li key={s} className="chip">
@@ -168,7 +163,20 @@ export function OpenSource() {
           );
           return (
             <li key={item.id} className={`tile tile--${tier}`} data-tile>
-              {item.href ? (
+              {item.projectId ? (
+                <a
+                  className="tile__inner"
+                  href={projectPath(item.projectId)}
+                  aria-haspopup="dialog"
+                  onClick={(e) => {
+                    if (!isPlainClick(e)) return;
+                    e.preventDefault();
+                    openProject(item.projectId!, e.currentTarget);
+                  }}
+                >
+                  {body}
+                </a>
+              ) : item.href ? (
                 <a className="tile__inner" href={item.href} target="_blank" rel="noreferrer">
                   {body}
                 </a>
@@ -179,7 +187,7 @@ export function OpenSource() {
           );
         })}
         {Array.from({ length: locked }, (_, i) => (
-          <li key={`locked-${i}`} className="tile tile--locked" data-tile>
+          <li key={`locked-${i}`} className="tile tile--locked" data-tile aria-hidden="true">
             <div className="tile__inner">
               <Lock size={22} aria-hidden="true" />
               <p className="eyebrow">Locked slot</p>

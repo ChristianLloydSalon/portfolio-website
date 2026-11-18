@@ -143,7 +143,7 @@ export const script: Record<NodeId, Node> = {
         ]
       : ['That one lives in the Projects section.'],
     actions: [
-      ...(story?.packageUrl ? [{ label: 'Open on pub.dev', href: story.packageUrl }] : inventory[0]?.href ? [{ label: 'Open on pub.dev', href: inventory[0].href }] : []),
+      ...(story?.packageUrl ? [{ label: 'Open on pub.dev', href: story.packageUrl }] : []),
       { label: 'Open Projects', section: 'projects' },
     ],
     replies: [{ label: 'Any side projects?', next: 'side' }, more],
@@ -154,7 +154,7 @@ export const script: Record<NodeId, Node> = {
       ...(tools.length ? [`I also publish small dev tools: ${tools.map((t) => t.name).join(' and ')}.`] : []),
       ...(building.length ? [`Cooking right now: ${building.join(' and ')} 🔧`] : []),
     ],
-    actions: [{ label: 'Open the Inventory', section: 'inventory' }],
+    actions: [{ label: 'See the experiments', section: 'more-projects' }],
     replies: [{ label: 'Your tech stack?', next: 'stack' }, { label: 'How do I reach you?', next: 'contact' }, more],
   },
   stack: {
@@ -177,11 +177,11 @@ export const script: Record<NodeId, Node> = {
       "Depends what you need. Here's what I've delivered before:",
       '📱 Mobile apps and complete products: Flutter on the screen, NestJS and AWS behind it.',
       '⚙️ Automating manual work: bulk imports, workflows and integrations.',
-      '🧱 Backends that scale: APIs, queues and cloud infrastructure.',
-      '🔧 Improving existing apps: performance, architecture and release pipelines.',
+      '🧱 Backend work: APIs, queues and AWS infrastructure.',
+      '🔧 Improving existing apps: architecture, release pipelines and automated tests.',
       "I'm one engineer, not an agency, so I'm at my best owning a product area or joining your team.",
     ],
-    actions: [{ label: 'What I can build', section: 'build' }],
+    actions: [{ label: 'See the projects', section: 'projects' }],
     replies: [
       { label: 'Any proof?', next: 'flagship' },
       { label: 'What makes you different?', next: 'different' },

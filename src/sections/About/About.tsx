@@ -12,47 +12,38 @@ import { splitWords } from '@/animations/effects';
 import './About.css';
 
 const STATEMENT =
-  'I build software end to end. Flutter on the screen, NestJS and AWS behind it, pipelines that ship it to every major app store, and the occasional game, just to prove it can be done.';
+  'I build software end to end: Flutter apps on the screen, NestJS services and AWS behind them, and the pipelines that release them to three app stores.';
 
 const principles = [
   {
     icon: Rocket,
-    title: 'Ship for production',
-    body: 'Prototypes are easy. I care about what happens after launch: CI/CD that ships safely, monitoring with Sentry and Dynatrace, and code the next engineer can change.',
+    title: 'Own it after launch',
+    body: 'Release pipelines, automated tests and production monitoring are part of the feature, not an afterthought.',
   },
   {
     icon: Layers,
-    title: 'Design the system',
-    body: 'Clean Architecture, predictable state with BLoC and Riverpod, and modular features. Architecture is how a codebase stays fast to work in for years.',
+    title: 'Keep it changeable',
+    body: 'Clear layers, predictable state and modular features, so a codebase stays easy to change as it grows.',
   },
   {
     icon: BookOpen,
     title: 'Leave a trail',
-    body: 'Two years of teaching taught me that knowledge only counts once it is shared. I document architecture, APIs and workflows so teams can move without me.',
+    body: 'I document architecture, APIs and workflows so the team never depends on one person. Two years of teaching made this a habit.',
   },
 ];
-
-const pad = (n: number) => String(n).padStart(2, '0');
 
 const fileRows: [string, string][] = [
   ['Name', profile.name],
   ['Class', profile.role],
   ['Base', profile.location],
   ['Guild', 'White Cloak Technologies · since 2021'],
-  ['Specialization', 'Flutter, full-stack & cloud'],
-  ['Main', 'Flutter · Dart · NestJS · AWS'],
+  ['Main', 'Flutter · Dart · Angular · NestJS · AWS'],
   ['Training', 'BS Computer Engineering · DOST Scholar'],
 ];
 
 export function About() {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  // Source: resume (Nov 2026).
-  const stats = [
-    { value: 5, suffix: '+', label: 'Years in production' },
-    { value: 3, suffix: '', label: 'App stores shipped to' },
-    { value: 15, suffix: 'K+', label: 'Production users & devices reached' },
-  ];
 
   useGsap(
     () => {
@@ -66,20 +57,6 @@ export function About() {
         stagger: 0.08,
         ease: 'none',
         scrollTrigger: { trigger: '[data-statement]', start: 'top 80%', end: 'bottom 45%', scrub: 0.5 },
-      });
-      root.querySelectorAll<HTMLElement>('[data-stat]').forEach((el) => {
-        const target = Number(el.dataset.stat);
-        const counter = { v: 0 };
-        el.textContent = pad(0);
-        gsap.to(counter, {
-          v: target,
-          duration: 1.6,
-          ease: 'power2.out',
-          onUpdate: () => {
-            el.textContent = pad(Math.round(counter.v));
-          },
-          scrollTrigger: { trigger: '[data-stats]', start: 'top 85%', once: true },
-        });
       });
     },
     ref,
@@ -129,25 +106,12 @@ export function About() {
           </div>
 
           <p className="about__bio" data-reveal>
-            I&rsquo;m {profile.firstName}, a software engineer based in {profile.location}. I build and ship
-            production software end to end: architecture, implementation, release and monitoring. In five years at
-            White Cloak Technologies I grew from junior engineer to mobile lead, carried features across Flutter,
-            Angular, NestJS and AWS, and stepped in as interim technical lead when the team needed one. Before
-            that, and alongside it, I taught software development at Bohol Island State University, where I earned
-            my Computer Engineering degree as a DOST scholar.
+            I&rsquo;m {profile.firstName}, based in {profile.location}. I joined White Cloak Technologies as a junior
+            engineer in 2021 and now lead the mobile side of client projects, taking features from technical design to
+            store release. I work best owning a product area end to end, or joining a team that needs one engineer
+            across mobile, web and backend.
           </p>
 
-          <ul className="about__stats" data-stats data-reveal>
-            {stats.map((s) => (
-              <li key={s.label}>
-                <span className="display about__stat-value">
-                  <span data-stat={s.value}>{pad(s.value)}</span>
-                  {s.suffix}
-                </span>
-                <span className="eyebrow">{s.label}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
 

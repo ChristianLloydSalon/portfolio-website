@@ -19,6 +19,7 @@ export function structuredData(projectId?: string) {
   const current = missions.find((m) => m.status === 'active' && !/BS |Bachelor/i.test(m.position));
   const school = missions.find((m) => /BS |Bachelor/i.test(m.position));
   const portrait = asset('portraits/portrait');
+  const awards = missions.flatMap((m) => (m.awards ?? []).map((a) => `${a.title}, ${a.issuer} (${a.years})`));
 
   const person = {
     '@type': 'Person',
@@ -34,6 +35,8 @@ export function structuredData(projectId?: string) {
     ...(current && { worksFor: { '@type': 'Organization', name: current.company } }),
     ...(school && { alumniOf: { '@type': 'CollegeOrUniversity', name: school.company.replace(/\s+[—–-]\s.*$/, '') } }),
     knowsAbout: skillCategories.flatMap((c) => c.skills.map((s) => s.name)),
+    // Employer awards, from the Experience section (names and years exactly as shown there).
+    ...(awards.length && { award: awards }),
     sameAs: profile.socials.filter((s) => /^https?:\/\//.test(s.href)).map((s) => s.href),
   };
 

@@ -5,14 +5,7 @@ import { projects } from '@/data/projects';
 import { copyEmail, mailtoUrl } from '@/lib/email';
 import { ProjectArt } from './ProjectArt';
 import { STATUS_LABEL } from './projectStatus';
-import {
-  CaseStudyBrief,
-  CaseStudyDecisions,
-  CaseStudyDisclaimer,
-  CaseStudyEngineering,
-  CaseStudySections,
-  CaseStudyResults,
-} from './CaseStudy';
+import { CaseStudyBrief, CaseStudyDetails, CaseStudyDisclaimer, CaseStudyHighlights, CaseStudyResults } from './CaseStudy';
 import { useTheme } from '@/features/theme/useTheme';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
@@ -283,9 +276,9 @@ export function ProjectOverlay({ index, origin, onClose, onStep, returnFocusRef,
             </div>
           </div>
 
-          {p.caseStudy && <CaseStudyEngineering study={p.caseStudy} />}
-          {p.caseStudy && <CaseStudyDecisions study={p.caseStudy} />}
-          {p.caseStudy && <CaseStudySections study={p.caseStudy} />}
+          {p.caseStudy && <CaseStudyHighlights study={p.caseStudy} />}
+          {/* Keyed by project so open sections close when moving to another project. */}
+          {p.caseStudy && <CaseStudyDetails key={p.id} study={p.caseStudy} />}
           {p.caseStudy?.disclaimer && <CaseStudyDisclaimer text={p.caseStudy.disclaimer} />}
 
           <nav className="project-overlay__pager" aria-label="Other projects">

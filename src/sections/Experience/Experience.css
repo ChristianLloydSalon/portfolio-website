@@ -110,6 +110,40 @@
   font-size: 0.92rem;
 }
 .mission__trophies svg { color: var(--accent-ink); flex: none; }
+/* Employer awards: a pair of trophy cards under the role, names and years as awarded. */
+.mission__awards { display: grid; gap: 1rem; margin-top: 2rem; }
+.mission__award-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mission__award {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.mission__award-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  color: var(--on-accent);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.mission__award-text { display: grid; gap: 0.2rem; min-width: 0; }
+.mission__award-title { font-weight: 700; font-size: 1.02rem; line-height: 1.25; }
+.mission__award-meta { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; color: var(--text-2); }
+.mission__award-years { color: var(--accent-ink); font-weight: 700; white-space: nowrap; }
 .mission__stack { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; margin: 1.25rem 0 0; padding: 0; }
 
 /* Official titles at the company, earliest to latest. */

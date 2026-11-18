@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { CheckCircle2, CircleDot, Trophy } from 'lucide-react';
+import { Award, CheckCircle2, CircleDot, Trophy } from 'lucide-react';
 import { missions } from '@/data/experience';
 import { SectionHeading } from '@/components/typography/SectionHeading';
 import { chapter } from '@/data/navigation';
@@ -60,7 +60,7 @@ export function Experience() {
             Mission <span className="text-accent-ink">log</span>
           </>
         }
-        intro="Five years of production software, newest first: how the role grew, what I owned, and the decisions that came with it. Project results are in the case studies above."
+        intro="Newest first: how the role grew, what I owned and led, and how the work was recognized. Project details are in the case studies above."
       />
 
       <div className="experience__layout">
@@ -129,7 +129,7 @@ export function Experience() {
                       </div>
                     ))}
                   </div>
-                ) : (
+                ) : m.responsibilities.length + m.contributions.length > 0 ? (
                 <div className="mission__grid" data-reveal>
                   <div>
                     <h4 className="eyebrow mission__sub">Responsibilities</h4>
@@ -148,6 +148,29 @@ export function Experience() {
                     </ul>
                   </div>
                 </div>
+                ) : null}
+
+                {m.awards && m.awards.length > 0 && (
+                  <section className="mission__awards" data-reveal aria-labelledby={`${m.id}-awards`}>
+                    <h4 id={`${m.id}-awards`} className="eyebrow mission__sub">
+                      Awards &amp; recognition
+                    </h4>
+                    <ul className="mission__award-list">
+                      {m.awards.map((a) => (
+                        <li key={a.title} className="mission__award">
+                          <span className="mission__award-icon" aria-hidden="true">
+                            <Award size={20} />
+                          </span>
+                          <span className="mission__award-text">
+                            <span className="mission__award-title">{a.title}</span>
+                            <span className="mission__award-meta">
+                              {a.issuer} · <span className="mission__award-years">{a.years}</span>
+                            </span>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
                 )}
 
                 {m.achievements.length > 0 && (

@@ -6,6 +6,7 @@ import { SectionHeading } from '@/components/typography/SectionHeading';
 import { ProjectArt } from './ProjectArt';
 import { STATUS_LABEL } from './projectStatus';
 import { ProjectOverlay } from './ProjectOverlay';
+import { ProjectCollection } from './ProjectCollection';
 import { onOpenProject } from './openProject';
 import { chapter } from '@/data/navigation';
 import { useTheme } from '@/features/theme/useTheme';
@@ -17,6 +18,9 @@ import { revealOnScroll } from '@/animations/transitions';
 import { scrollToSection } from '@/animations/scroll';
 import { PROJECT_ROUTE, isProjectPath, projectPath, resolvePath, sectionPath } from '@/app/routes';
 import './Projects.css';
+
+/** Showcase cards. Every project, featured or not, keeps its own /projects/:id page. */
+const featured = projects.filter((p) => p.featured);
 
 interface Props {
   /** False until deep links are handled; a /projects/:id URL opens the overlay only then. */
@@ -127,9 +131,9 @@ export function Projects({ ready }: Props) {
           onUpdate: (self) => {
             // Direct DOM writes: no React re-render per scroll frame.
             if (barRef.current) barRef.current.style.transform = `scaleX(${self.progress})`;
-            const i = Math.min(projects.length - 1, Math.floor(self.progress * projects.length));
-            if (hudIndexRef.current) hudIndexRef.current.textContent = projects[i].index;
-            if (hudNameRef.current) hudNameRef.current.textContent = projects[i].codename;
+            const i = Math.min(featured.length - 1, Math.floor(self.progress * featured.length));
+            if (hudIndexRef.current) hudIndexRef.current.textContent = featured[i].index;
+            if (hudNameRef.current) hudNameRef.current.textContent = featured[i].codename;
           },
         },
       });
@@ -170,13 +174,13 @@ export function Projects({ ready }: Props) {
               projects
             </>
           }
-          intro="Each one starts with the problem it solves. Company products show what I personally owned within the team; every project is labelled with where it stands, from production to experiment."
+          intro="What each project is, what I was responsible for and what it shipped. Company projects separate my own work from the team's."
         />
       </div>
 
       <div className={`projects__pin ${horizontal ? 'is-horizontal' : ''}`} data-pin>
         <ol className="projects__track" data-track>
-          {projects.map((p, i) => (
+          {featured.map((p) => (
             <li key={p.id} className="project-card" data-card>
               <a
                 href={projectPath(p.id)}
@@ -185,7 +189,7 @@ export function Projects({ ready }: Props) {
                   // Modified clicks (new tab/window) go to the page's own URL.
                   if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
                   e.preventDefault();
-                  open(i, e.currentTarget);
+                  open(projects.indexOf(p), e.currentTarget);
                 }}
                 aria-haspopup="dialog"
               >
@@ -235,16 +239,16 @@ export function Projects({ ready }: Props) {
           <li className="project-card project-card--end" aria-label="More work">
             <div className="project-card__end">
               <p className="eyebrow text-ink-2">More in the vault</p>
-              <p className="display project-card__end-title">Side quests &amp; open source</p>
+              <p className="display project-card__end-title">Additional projects &amp; experiments</p>
               <a
-                href={sectionPath('inventory')}
+                href={sectionPath('projects')}
                 className="btn btn-primary self-start"
                 onClick={(e) => {
                   e.preventDefault();
-                  scrollToSection('inventory');
+                  scrollToSection('more-projects', 'projects');
                 }}
               >
-                Open inventory <ArrowRight size={16} aria-hidden="true" />
+                See the collection <ArrowRight size={16} aria-hidden="true" />
               </a>
             </div>
           </li>
@@ -253,17 +257,19 @@ export function Projects({ ready }: Props) {
         {horizontal && (
           <div className="projects__hud container-x" aria-hidden="true">
             <span className="eyebrow">
-              <span ref={hudIndexRef}>{projects[0].index}</span> / {String(projects.length).padStart(2, '0')}
+              <span ref={hudIndexRef}>{featured[0].index}</span> / {String(featured.length).padStart(2, '0')}
             </span>
             <span className="projects__bar">
               <span ref={barRef} style={{ transform: 'scaleX(0)' }} />
             </span>
             <span className="eyebrow" ref={hudNameRef}>
-              {projects[0].codename}
+              {featured[0].codename}
             </span>
           </div>
         )}
       </div>
+
+      <ProjectCollection />
 
       <ProjectOverlay
         index={openIndex}

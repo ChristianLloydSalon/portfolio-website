@@ -6,6 +6,8 @@ import type { Project } from '@/types';
  * Add `github` / `demo` URLs to show the link buttons, and `year` to show a year.
  *
  * Order: flagships first (Personal Collection, Story Framework), then own work, company work.
+ * `featured` projects get a showcase card; the in-development and experimental ones are
+ * listed in the experiments collection (src/data/inventory.ts) and keep their own pages.
  * Splurge Art and Personal Collection: company projects at White Cloak (resume, the public
  * Personal Collection page and Play Store listing, and details confirmed by me, Nov 2026).
  * Story Framework, Brightrail: from their GitHub READMEs and live sites (Nov 2026).
@@ -22,10 +24,11 @@ export const projects: Project[] = [
     codename: 'The Network',
     category: 'Retail & Dealer Platform',
     status: 'production',
+    featured: true,
     summary:
-      'A cross-platform retail and dealer platform, live on the App Store, Google Play and Huawei AppGallery. I led its Flutter app and owned features end to end across the admin portal, backend and AWS.',
+      'A retail and dealer platform on the App Store, Google Play and Huawei AppGallery. I led its Flutter app and owned features end to end across the admin portal, backend and AWS.',
     problem:
-      'Dealer operations at scale (bulk data updates, surveys, event attendance and notifications) had to run reliably from one admin portal, without manual workarounds and without slowing the app down.',
+      'Admins needed to run bulk data updates, surveys, event attendance and notifications for the dealer network from one portal, without manual workarounds and without slowing the app down.',
     description:
       'A cross-platform retail and dealer platform supported by mobile apps, an administrative portal, backend services and cloud infrastructure. Dealers and employees use the app for their credit, invoices, transactions, events, surveys and promotions; admins run it all from the web portal. The product is built by a team at White Cloak Technologies. I led mobile development, owned several features end to end across the Angular portal, NestJS backend and AWS, and served as interim technical lead for six months when the team’s tech lead left. The work described here is mine; the product as a whole is the team’s.',
     platforms: 'iOS · Android · Huawei · Web admin',
@@ -69,9 +72,9 @@ export const projects: Project[] = [
       context:
         'Personal Collection works through a network of dealers. Dealers and employees need one app for their account activity, events, surveys and promotions on iOS, Android and Huawei phones, and the business needs an admin portal to configure content, run events and reach the people using the app.',
       problem:
-        'Admins update large batches of records at once, publish surveys that change often, need to know who actually attended incentive-linked events, and must reach every device, including Huawei phones without Google services. Doing that by hand, or synchronously inside a single request, would not hold up.',
+        'Admins update large batches of records at once, publish surveys that change often, need to know who actually attended incentive-linked events, and must reach every device, including Huawei phones without Google services. Doing that by hand, or inside a single synchronous request, isn’t practical at that volume.',
       solution:
-        'A Flutter app and an Angular admin portal on shared backend services. Admins configure surveys and events once and every client follows. Heavy work runs on queues, off the request path, and automated pipelines, tests and code review keep releases to three stores predictable.',
+        'A Flutter app and an Angular admin portal on shared backend services. Admins configure surveys and events once and every client follows. Heavy work runs on queues off the request path, and release pipelines, end-to-end tests and automated code review cover delivery to three stores.',
       results: [
         { value: '15,000+', label: 'Users and devices reached by push notifications', basis: 'production' },
         { value: '600+', label: 'Attendees checked in at incentive events', basis: 'production' },
@@ -81,6 +84,7 @@ export const projects: Project[] = [
       contributions: [
         {
           title: 'Survey Management',
+          area: 'Full-stack features',
           layers: ['Admin portal', 'Backend', 'Mobile app'],
           challenge:
             'Surveys change often and span three codebases. A new question set shouldn’t need new app code, and the portal, backend and app have to agree on what a survey is.',
@@ -89,6 +93,7 @@ export const projects: Project[] = [
         },
         {
           title: 'Event Management',
+          area: 'Full-stack features',
           layers: ['Admin portal', 'Backend'],
           challenge: 'Admins needed one place to set up and run events, and that event data had to feed attendance check-in in the app.',
           body: 'Built Event Management across the Angular admin portal and the backend services.',
@@ -96,6 +101,7 @@ export const projects: Project[] = [
         },
         {
           title: 'Asynchronous processing',
+          area: 'Backend workflows',
           layers: ['Backend', 'Cloud'],
           challenge: 'Bulk imports of thousands of records and mass notifications are too heavy to run inside a single request.',
           body: 'Implemented backend workflows on AWS SQS for bulk imports and notification processing, with dead letter queues for messages that fail.',
@@ -103,6 +109,7 @@ export const projects: Project[] = [
         },
         {
           title: 'QR attendance',
+          area: 'Mobile engineering',
           layers: ['Mobile app'],
           challenge: 'A QR code on its own can be shared, so a scan alone doesn’t prove someone was at the venue, and attendance is tied to incentives.',
           body: 'Built QR-based check-in with geofencing validation, so the attendee’s location is checked at the moment they scan.',
@@ -110,6 +117,7 @@ export const projects: Project[] = [
         },
         {
           title: 'Push notifications',
+          area: 'Mobile engineering',
           layers: ['Mobile app', 'Backend'],
           challenge: 'Huawei phones without Google services can’t receive Firebase Cloud Messaging, but every app user still needs the message.',
           body: 'Implemented Firebase Cloud Messaging and Huawei Push Kit side by side, covering Android, iOS and Huawei devices.',
@@ -117,13 +125,15 @@ export const projects: Project[] = [
         },
         {
           title: 'Mobile CI/CD',
+          area: 'CI/CD',
           layers: ['Delivery'],
           challenge: 'Building, signing and submitting to three app stores by hand is slow and easy to get wrong.',
-          body: 'Engineered the mobile delivery pipelines on GitLab CI, Codemagic and Fastlane, automating builds, code signing and store releases.',
+          body: 'Set up the mobile delivery pipelines on GitLab CI, Codemagic and Fastlane, automating builds, code signing and store releases.',
           value: 'Every release is built the same way, so releases are repeatable and engineering time goes to features rather than release chores.',
         },
         {
           title: 'Automated regression testing',
+          area: 'Testing & automation',
           layers: ['Quality'],
           challenge: 'Manual regression testing took 5–6 hours per release cycle.',
           body: 'Introduced Maestro end-to-end tests for the app’s critical user journeys.',
@@ -131,6 +141,7 @@ export const projects: Project[] = [
         },
         {
           title: 'Automated code review',
+          area: 'Testing & automation',
           layers: ['Quality', 'Workflow'],
           challenge: 'Every merge request needs checking for best practices, consistency with the project’s architecture and security. Doing all of that by hand depends entirely on reviewer time and attention.',
           body: 'Set up Claude Code Review on the team’s merge requests. Every new merge request, and every new push to one, is reviewed automatically against best practices, the project’s architecture and security.',
@@ -162,6 +173,7 @@ export const projects: Project[] = [
       workflows: [
         {
           title: 'Automated regression testing',
+          area: 'Testing & automation',
           tool: 'Maestro',
           steps: [
             'A build is ready for the release cycle',
@@ -178,6 +190,7 @@ export const projects: Project[] = [
         },
         {
           title: 'Automated code review',
+          area: 'Testing & automation',
           tool: 'Claude Code Review',
           steps: [
             'A developer opens a merge request',
@@ -192,24 +205,24 @@ export const projects: Project[] = [
       ],
       impact: [
         {
-          title: 'Reliable communication',
-          body: 'Cross-platform push infrastructure supports 15,000+ production users and devices, so one message reaches dealers on Android, iOS and Huawei.',
+          title: 'Every device reachable',
+          body: 'One announcement reaches Android, iOS and Huawei users, including Huawei phones without Google services.',
         },
         {
-          title: 'Scalable processing',
-          body: 'Asynchronous workflows handled 20,000+ records in load testing, so large imports can run without blocking the app or the portal. That figure is from a load test, not production traffic.',
+          title: 'Imports that don’t block the app',
+          body: 'Large imports run in the background, so admins and app users aren’t left waiting, and failed messages are kept for retry. Verified in a load test, not production traffic.',
         },
         {
-          title: 'Attendance validation',
-          body: 'Geofenced QR check-in supported events with 600+ attendees, so incentives follow real attendance.',
+          title: 'Attendance that matches who was there',
+          body: 'Incentives tied to events follow verified, on-site check-ins rather than shared QR codes.',
         },
         {
-          title: 'Operational efficiency',
-          body: 'Maestro tests cut manual regression testing from about 5–6 hours to about 2 hours per release cycle, roughly 60% less.',
+          title: 'Less manual regression',
+          body: 'QA spends about 2 hours on manual regression per release cycle instead of 5–6, leaving time for the checks automation can’t do.',
         },
         {
-          title: 'Consistent code quality',
-          body: 'Every merge request, and every push to one, is reviewed automatically for best practices, architecture and security, so issues surface before merge and standards stay consistent across contributors. This is a qualitative improvement; it hasn’t been measured.',
+          title: 'Automated merge request review',
+          body: 'Every merge request, and every push to one, is checked for best practices, architecture and security before merge. A qualitative change; it hasn’t been measured.',
         },
       ],
       disclaimer:
@@ -225,12 +238,13 @@ export const projects: Project[] = [
     codename: 'Stories, Your Way',
     category: 'Open-source Flutter Package',
     status: 'published',
+    featured: true,
     problem:
       'Stories are a familiar engagement feature, but a viewer, an editor, interactive stickers, media playback and export add up to a lot of work for every team that wants them.',
     demonstrates: [
       'API design for other developers',
       'Package architecture: a headless engine under swappable UI',
-      'Complex gesture, media and editing UI in Flutter',
+      'Gesture, media and editing UI in Flutter',
       'Publishing, versioning and documentation on pub.dev',
     ],
     summary: 'Instagram-style stories for Flutter: a customizable viewer, a full editor, interactive stickers, video and audio, and export.',
@@ -300,6 +314,7 @@ export const projects: Project[] = [
     codename: 'Stay on the Rails',
     category: 'Workflow Automation Platform',
     status: 'published',
+    featured: true,
     problem:
       'When a step fails halfway through an automation, re-running it can resend emails or duplicate rows, and someone has to dig through logs to work out what went wrong.',
     demonstrates: [
@@ -310,7 +325,7 @@ export const projects: Project[] = [
     ],
     summary: 'Visual workflow automation with durable execution: draw a workflow, connect your services, and recover safely when an API fails.',
     description:
-      'Brightrail is a workflow automation platform in the same category as n8n and Zapier, built for small technical teams who need automations they can trust in production. Workflows are drawn on a visual canvas and run on a durable engine that survives restarts, retries failures safely with idempotency keys and records every step. When a run fails, an AI assistant explains why and suggests a fix, and a person approves it before anything happens.',
+      'Brightrail is a workflow automation platform in the same category as n8n and Zapier, aimed at small technical teams. Workflows are drawn on a visual canvas and run on a durable engine that survives restarts, retries failures safely with idempotency keys and records every step. When a run fails, an AI assistant explains why and suggests a fix, and a person approves it before anything happens.',
     stack: ['Next.js', 'React', 'TypeScript', 'Supabase', 'PostgreSQL', 'Inngest', 'Gemini', 'Vercel'],
     features: [
       'Visual builder with 9 step types: branches, fan-out and joins, nested loops, formulas, durable delays and error handlers',
@@ -381,6 +396,7 @@ export const projects: Project[] = [
     role: 'Contributor: mobile & web features',
     employer: 'White Cloak Technologies',
     status: 'discontinued',
+    featured: true,
     motif: 'market',
     palette: { sunrise: ['#e9825a', '#f6edbb', '#2d4a7a'], dusk: ['#e58db9', '#a78bfa', '#10182b'] },
   },

@@ -1,95 +1,48 @@
+import type { Outcome } from '@/types';
+
 /**
- * Business-facing content: the outcomes my work supports (Impact section) and the kinds of
- * software I can build (Build section). Each outcome links to evidence elsewhere on the site.
- * Keep it realistic: I'm an individual engineer, not an agency. No guarantees, no financial claims.
+ * Impact section: measured results from my own work, each linked to the case study that
+ * explains it. Only numbers confirmed by me (Nov 2026); `basis` says where each was measured.
+ * Keep it to what I did and what it changed. No financial or business claims without data.
  */
 
-export interface BusinessOutcome {
+export interface ImpactItem {
   id: string;
   title: string;
+  /** The work itself, in one sentence. */
   body: string;
-  /** Concrete evidence from my work, with where it was measured. */
-  proof: string;
+  result: Pick<Outcome, 'value' | 'label' | 'basis'>;
   /** Project id whose case study backs this up. */
   projectId: string;
 }
 
-export const outcomes: BusinessOutcome[] = [
+export const outcomes: ImpactItem[] = [
   {
-    id: 'launch',
-    title: 'Launch products faster',
-    body: 'Cross-platform apps and complete products, from the first screen to the backend behind it, so one codebase reaches iOS, Android and Huawei.',
-    proof: 'Personal Collection ships from one Flutter codebase to three app stores.',
+    id: 'push',
+    title: 'Push notifications on every device',
+    body: 'Implemented Firebase Cloud Messaging and Huawei Push Kit side by side, so announcements also reach Huawei phones without Google services.',
+    result: { value: '15,000+', label: 'Users and devices reached', basis: 'production' },
     projectId: 'personal-collection',
   },
   {
-    id: 'overhead',
-    title: 'Reduce operational overhead',
-    body: 'Replace repetitive manual work with automated workflows, integrations and reliable data processing.',
-    proof: 'Maestro tests cut manual regression testing from 5–6 hours to about 2 per release cycle.',
+    id: 'attendance',
+    title: 'Verified event attendance',
+    body: 'Built QR check-in with geofencing validation, so a scan only counts when the attendee is at the venue.',
+    result: { value: '600+', label: 'Attendees checked in', basis: 'production' },
     projectId: 'personal-collection',
   },
   {
-    id: 'scale',
-    title: 'Scale without breaking',
-    body: 'Maintainable backends and infrastructure that keep up as users, transactions and workloads grow.',
-    proof: 'Queue-based bulk imports handled 20,000+ records in load testing without blocking the app.',
+    id: 'bulk',
+    title: 'Bulk imports off the request path',
+    body: 'Implemented bulk import and notification processing on AWS SQS, with dead letter queues for failed messages.',
+    result: { value: '20,000+', label: 'Records processed', basis: 'load-test' },
     projectId: 'personal-collection',
   },
   {
-    id: 'decide',
-    title: 'Make better business decisions',
-    body: 'Turn requirements into usable features and structured data, so the business can see what is actually happening.',
-    proof: 'Geofenced QR check-in verified 600+ attendees, so incentives follow real attendance.',
+    id: 'regression',
+    title: 'Shorter regression cycles',
+    body: 'Introduced Maestro end-to-end tests for the app’s critical user journeys.',
+    result: { value: '5–6h → ~2h', label: 'Manual regression per release cycle', basis: 'internal' },
     projectId: 'personal-collection',
-  },
-];
-
-export interface Capability {
-  id: string;
-  title: string;
-  body: string;
-  items: string[];
-  /** Where I've done this kind of work, by project id. */
-  evidence: { label: string; projectId?: string; section?: string }[];
-}
-
-export const capabilities: Capability[] = [
-  {
-    id: 'products',
-    title: 'Digital products',
-    body: 'Apps your customers or your team use every day.',
-    items: ['Cross-platform mobile apps', 'MVP development', 'Customer-facing applications', 'Internal business applications'],
-    evidence: [
-      { label: 'Personal Collection', projectId: 'personal-collection' },
-      { label: 'Splurge Art', projectId: 'splurge-art' },
-    ],
-  },
-  {
-    id: 'automation',
-    title: 'Business process automation',
-    body: 'Less copy-paste, fewer spreadsheets passed around.',
-    items: ['Workflow automation', 'Administrative systems', 'Third-party integrations', 'Data processing'],
-    evidence: [
-      { label: 'Brightrail', projectId: 'brightrail' },
-      { label: 'Bulk imports at Personal Collection', projectId: 'personal-collection' },
-    ],
-  },
-  {
-    id: 'modernization',
-    title: 'Software modernization',
-    body: 'Make the software you already have faster and easier to change.',
-    items: ['Improving existing applications', 'Performance optimization', 'Legacy modernization', 'Architecture improvements'],
-    evidence: [{ label: 'Experience at White Cloak', section: 'experience' }],
-  },
-  {
-    id: 'backend',
-    title: 'Backend & cloud systems',
-    body: 'The services, queues and infrastructure behind the screen.',
-    items: ['REST APIs', 'Backend services', 'Cloud infrastructure', 'Asynchronous processing', 'System integrations'],
-    evidence: [
-      { label: 'AWS SQS workflows', projectId: 'personal-collection' },
-      { label: 'Cloud skills', section: 'arsenal' },
-    ],
   },
 ];

@@ -2,7 +2,8 @@ import type { Mission } from '@/types';
 
 /**
  * Career timeline, newest first. Source: resume (Nov 2026). White Cloak: Aug 2021 to present.
- * This section covers responsibilities, ownership, leadership, collaboration and progression only.
+ * This section covers progression, ownership, leadership and awards only.
+ * Awards: confirmed by me (Nov 2026). Keep the names and years exactly as awarded.
  * Project results, metrics, named project roles and store releases belong to the case studies
  * (src/data/projects.ts) and the Impact section (src/data/business.ts). Don't repeat them here.
  */
@@ -21,42 +22,30 @@ export const missions: Mission[] = [
     contributions: [],
     groups: [
       {
-        title: 'Responsibilities',
+        title: 'Key contributions',
         items: [
-          'Build and maintain production Flutter apps for client products',
-          'Carry features across the stack: Flutter clients, Angular admin portals and NestJS services',
-          'Support live apps: monitor, triage and fix issues with Sentry, Dynatrace and AWS CloudWatch',
-        ],
-      },
-      {
-        title: 'Technical ownership',
-        items: [
-          'Write technical designs and implementation plans for new features',
-          'Choose app architecture: Clean Architecture with BLoC/Cubit, Riverpod or Provider',
-          'Backend services and event-driven processing on AWS',
-          'A shared design system of reusable UI components, translated from Figma',
-          'Mobile release pipelines and the test strategy behind them',
-          'Profiling and rendering performance',
+          'Lead Flutter development for client apps on iOS, Android and Huawei, and set technical direction for the mobile team',
+          'Own features end to end across Flutter clients, Angular admin portals and NestJS services, from technical design and implementation plan to release',
+          'Built event-driven backend processing on AWS, and the mobile release pipelines, automated tests and automated code review behind each release',
+          'Built a shared design system of 15+ reusable Flutter UI components, translated from Figma',
+          'Support live apps: monitor, triage and fix production issues with Sentry, Dynatrace and AWS CloudWatch',
         ],
       },
       {
         title: 'Leadership',
         items: [
-          'Lead mobile development and set technical direction for the mobile team',
-          'Cover technical leadership during team transitions',
+          'Interim technical lead for six months after the team’s tech lead left',
           'Frontend leadership responsibilities on the web side of the team',
           'Mentor engineers and run knowledge transfer, backed by architecture, API, workflow and CI/CD documentation',
-        ],
-      },
-      {
-        title: 'Collaboration',
-        items: [
-          'Agile delivery with product owners, client stakeholders, QA and engineering',
-          'Clarify requirements directly with clients before work starts',
+          'Clarify requirements directly with client stakeholders, and work with product owners and QA in Agile delivery',
         ],
       },
     ],
     achievements: [],
+    awards: [
+      { title: 'Excellence Award', issuer: 'White Cloak Technologies, Inc.', years: '2023 and 2024' },
+      { title: 'Most Valuable Developer', issuer: 'White Cloak Technologies, Inc.', years: '2021–2024' },
+    ],
     stack: ['Flutter', 'Dart', 'BLoC / Riverpod', 'Angular', 'NestJS', 'GraphQL', 'AWS', 'GitLab CI', 'Sentry', 'Dynatrace'],
   },
   {
@@ -66,10 +55,19 @@ export const missions: Mission[] = [
     period: 'Feb 2021 – Jan 2023',
     location: 'Tagbilaran City, Bohol',
     status: 'complete',
-    summary: 'Taught software development to the next generation of developers at my alma mater, alongside my engineering work.',
-    responsibilities: ['Teach software development courses', 'Guide students through hands-on coding work'],
-    contributions: ['Created lectures, coding exercises and practical course materials'],
-    achievements: ['Two years teaching while shipping production software'],
+    summary: 'Taught software development part-time at my alma mater, alongside my engineering work.',
+    responsibilities: [],
+    contributions: [],
+    groups: [
+      {
+        title: 'Responsibilities',
+        items: [
+          'Taught software development courses and guided students through hands-on coding work',
+          'Created lectures, coding exercises and practical course materials',
+        ],
+      },
+    ],
+    achievements: [],
     stack: ['Software Development', 'Teaching', 'Course Design'],
   },
   {
@@ -79,9 +77,9 @@ export const missions: Mission[] = [
     period: 'Graduated 2020',
     location: 'Tagbilaran City, Bohol',
     status: 'complete',
-    summary: 'The origin story: a Computer Engineering degree completed as a DOST scholar.',
-    responsibilities: ['Computer engineering fundamentals: hardware, software and systems'],
-    contributions: ['Foundation for a career in software engineering'],
+    summary: 'Computer engineering fundamentals across hardware, software and systems, completed as a DOST scholar.',
+    responsibilities: [],
+    contributions: [],
     achievements: ['DOST Scholar'],
     stack: ['Computer Engineering'],
   },

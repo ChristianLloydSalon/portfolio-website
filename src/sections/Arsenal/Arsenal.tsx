@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
-import { Boxes, Cloud, Database, FlaskConical, LayoutTemplate, Server, Smartphone, Workflow, Wrench, type LucideIcon } from 'lucide-react';
+import { Boxes, Cloud, Database, FlaskConical, LayoutTemplate, Plus, Server, Smartphone, Workflow, Wrench, type LucideIcon } from 'lucide-react';
 import { skillCategories } from '@/data/skills';
-import type { SkillIcon, SkillTier } from '@/types';
+import type { Skill, SkillIcon, SkillTier } from '@/types';
 import { SectionHeading } from '@/components/typography/SectionHeading';
 import { chapter } from '@/data/navigation';
 import { useGsap } from '@/hooks/useGsap';
@@ -143,7 +143,7 @@ export function Arsenal() {
             Technical <span className="text-accent-ink">arsenal</span>
           </>
         }
-        intro="The tools behind the work above, grouped by discipline. Pick one from the wheel. Levels are honest: production experience means shipped and supported, not just tried."
+        intro="Grouped by discipline; pick one from the wheel. Each tool is labelled by how I've used it: production experience means it's in software that shipped to real users, not a claim of expertise."
       />
 
       <div className="arsenal__layout">
@@ -234,29 +234,54 @@ export function Arsenal() {
                   ))}
                 </ul>
                 <ul className="loadout__slots">
-                  {[...c.skills].sort((x, y) => TIER[y.tier].rank - TIER[x.tier].rank).map((s) => (
-                    <li key={s.name} className="slot" data-slot>
-                      <span className="slot__mono display" aria-hidden="true">
-                        {s.mono}
-                      </span>
-                      <span className="slot__text">
-                        <span className="slot__name">{s.name}</span>
-                        <span className="slot__note">{s.note}</span>
-                      </span>
-                      <span className={`slot__tier is-${s.tier}`}>
-                        <TierPips tier={s.tier} />
-                        <span className="slot__tier-label" aria-hidden="true">{TIER[s.tier].short}</span>
-                        <span className="sr-only">{TIER[s.tier].label}</span>
-                      </span>
-                    </li>
+                  {c.skills.filter((s) => s.tier === 'production').map((s) => (
+                    <SkillSlot key={s.name} skill={s} />
                   ))}
                 </ul>
+                {c.skills.some((s) => s.tier !== 'production') && (
+                  <details className="loadout__more" data-slot>
+                    <summary>
+                      <span>More tools</span>
+                      <span className="loadout__more-count">
+                        {String(c.skills.filter((s) => s.tier !== 'production').length).padStart(2, '0')}
+                      </span>
+                      <Plus className="loadout__more-icon" size={16} aria-hidden="true" />
+                    </summary>
+                    <ul className="loadout__slots">
+                      {[...c.skills]
+                        .filter((s) => s.tier !== 'production')
+                        .sort((x, y) => TIER[y.tier].rank - TIER[x.tier].rank)
+                        .map((s) => (
+                          <SkillSlot key={s.name} skill={s} />
+                        ))}
+                    </ul>
+                  </details>
+                )}
               </div>
             );
           })}
         </div>
       </div>
     </section>
+  );
+}
+
+function SkillSlot({ skill: s }: { skill: Skill }) {
+  return (
+    <li className="slot" data-slot>
+      <span className="slot__mono display" aria-hidden="true">
+        {s.mono}
+      </span>
+      <span className="slot__text">
+        <span className="slot__name">{s.name}</span>
+        {s.note && <span className="slot__note">{s.note}</span>}
+      </span>
+      <span className={`slot__tier is-${s.tier}`}>
+        <TierPips tier={s.tier} />
+        <span className="slot__tier-label" aria-hidden="true">{TIER[s.tier].short}</span>
+        <span className="sr-only">{TIER[s.tier].label}</span>
+      </span>
+    </li>
   );
 }
 

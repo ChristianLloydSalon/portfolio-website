@@ -1,6 +1,6 @@
 /**
- * Lets any section open a project's case study ("View case study" links in Impact and
- * Build). The Projects section listens and opens its presentation overlay.
+ * Lets any section open a project's case study ("View case study" in Impact, project
+ * tiles in the experiments collection). The Projects section listens and opens its overlay.
  */
 const EVENT = 'cs:open-project';
 

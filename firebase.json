@@ -8,6 +8,10 @@
     ],
     "cleanUrls": true,
     "trailingSlash": false,
+    "redirects": [
+      { "source": "/build", "destination": "/about", "type": 301 },
+      { "source": "/inventory", "destination": "/projects", "type": 301 }
+    ],
     "headers": [
       {
         "source": "/assets/**",

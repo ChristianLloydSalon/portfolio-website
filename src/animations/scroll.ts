@@ -1,7 +1,7 @@
 import Lenis from 'lenis';
 import { gsap, ScrollTrigger } from './gsap';
 import { prefersReducedMotion } from '@/hooks/useReducedMotion';
-import { isProjectPath, sectionPath } from '@/app/routes';
+import { isProjectPath, resolvePath, sectionPath } from '@/app/routes';
 
 let lenis: Lenis | null = null;
 let tick: ((time: number) => void) | null = null;
@@ -100,16 +100,21 @@ function setProgrammatic(on: boolean, maxMs = 0) {
   if (on && maxMs) programmaticTimer = window.setTimeout(() => (programmatic = false), maxMs);
 }
 
-/** Smoothly scrolls to a section id and moves focus there for keyboard and screen-reader users. */
-export function scrollToSection(id: string) {
+/**
+ * Smoothly scrolls to a section id and moves focus there for keyboard and screen-reader users.
+ * `id` can also be an anchor inside a section (e.g. "more-projects"); the address bar then
+ * shows the enclosing section, or `urlId` when given.
+ */
+export function scrollToSection(id: string, urlId?: string) {
   const el = document.getElementById(id);
   if (!el) return;
+  const urlSection = urlId ?? (resolvePath(sectionPath(id)).kind === 'section' ? id : el.parentElement?.closest('section[id]')?.id ?? id);
   const focus = () => {
     if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
     el.focus({ preventScroll: true });
   };
   const top = sectionTop(el, id);
-  syncUrlToSection(id);
+  syncUrlToSection(urlSection);
   if (lenis) {
     const duration = id === 'home' ? 1.8 : 1.4;
     setProgrammatic(true, duration * 1000 + 600);

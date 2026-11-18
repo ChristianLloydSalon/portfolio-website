@@ -83,9 +83,8 @@ export function Contact() {
           </span>
         </h2>
         <p className="contact__lede" data-reveal>
-          Whether you&rsquo;re building a new product, improving an existing platform, or looking for an engineer
-          who can take ownership of complex technical work, I&rsquo;d be happy to talk. Email is the fastest way to
-          reach me.
+          Happy to talk about a role or a project, whether it&rsquo;s a new product or an existing app that needs an
+          engineer across mobile, web and backend. Email is the fastest way to reach me.
         </p>
 
         <div className="contact__email" data-reveal>
