@@ -7,7 +7,7 @@ export const profile: Profile = {
   lastName: 'Salon',
   role: 'Senior Flutter & Full-Stack Engineer',
   pitch:
-    'Five years building production software at White Cloak Technologies. I lead Flutter development for apps on iOS, Android and Huawei, and own features across the Angular admin portals, NestJS services and AWS behind them.',
+    'Five years building production software. I lead Flutter development for apps on iOS, Android and Huawei, and own features across the Angular admin portals, NestJS services and AWS behind them.',
   tagline: ['5+ years in production', 'Live on 3 app stores', 'Mobile, web & backend'],
   location: 'Bohol, PH',
   email: 'christianlloyd.b.salon@gmail.com',
