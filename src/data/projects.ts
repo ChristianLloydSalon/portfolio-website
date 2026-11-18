@@ -262,6 +262,7 @@ export const projects: Project[] = [
     role: 'Author & maintainer',
     github: 'https://github.com/ChristianLloydSalon/story_framework',
     packageUrl: 'https://pub.dev/packages/story_framework',
+    demo: 'https://story-framework.web.app',
     caseStudy: {
       context:
         'Stories show up in social, retail and community apps alike. A Flutter team that wants them usually starts from a blank screen.',
