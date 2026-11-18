@@ -46,7 +46,7 @@ export const inventory: InventoryItem[] = [
     id: 'portfolio-site',
     name: 'This Portfolio',
     kind: 'Side Project',
-    status: 'Active',
+    status: 'Live',
     description: 'This site: React and GSAP, two themes, a scroll-driven story, and pages prerendered at build time for search engines.',
     stack: ['React', 'TypeScript', 'GSAP'],
     href: 'https://github.com/ChristianLloydSalon/portfolio-website',
