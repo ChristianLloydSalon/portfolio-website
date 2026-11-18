@@ -18,13 +18,23 @@
 
 /* Sunrise's sky is pale, so white text needs a deeper wash: navy, like early-morning blue. */
 [data-theme='sunrise'] .contact__shade {
-  background: linear-gradient(
-    180deg,
-    var(--bg) 0%,
-    color-mix(in srgb, var(--text) 66%, transparent) 7%,
-    color-mix(in srgb, var(--text) 62%, transparent) 50%,
-    color-mix(in srgb, var(--text) 85%, transparent) 100%
-  );
+  background:
+    linear-gradient(
+      180deg,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 92%, transparent) 4%,
+      color-mix(in srgb, var(--bg) 74%, transparent) 9%,
+      color-mix(in srgb, var(--bg) 50%, transparent) 15%,
+      color-mix(in srgb, var(--bg) 27%, transparent) 21%,
+      color-mix(in srgb, var(--bg) 10%, transparent) 27%,
+      transparent 33%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--text) 58%, transparent) 0%,
+      color-mix(in srgb, var(--text) 64%, transparent) 50%,
+      color-mix(in srgb, var(--text) 85%, transparent) 100%
+    );
 }
 
 .contact__content {
