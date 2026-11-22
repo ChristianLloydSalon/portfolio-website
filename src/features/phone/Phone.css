@@ -229,7 +229,7 @@
   font-family: var(--font-display);
   font-size: 5rem;
   line-height: 1;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -249,7 +249,7 @@
 }
 .phone-widget__art { width: 2.6rem; height: 2.6rem; flex: none; border-radius: 0.6rem; }
 .phone-widget__text { display: grid; flex: 1; min-width: 0; }
-.phone-widget__eyebrow { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ph-hot-2); }
+.phone-widget__eyebrow { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ph-hot-2); }
 .phone-widget__title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .phone-apps {
@@ -303,7 +303,7 @@
   background: #ff3b4e;
   color: #fff;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 600;
   box-shadow: 0 0 0 2px var(--ph-bg);
 }
 .phone-app__name { font-size: 0.75rem; font-weight: 600; text-shadow: 0 1px 6px #0009; }
@@ -330,7 +330,7 @@
   padding: 0.1rem 0.5rem 0.5rem;
   border-bottom: 1px solid var(--ph-line);
 }
-.phone-bar__title { flex: 1; min-width: 0; font-weight: 700; font-size: 1rem; text-align: center; }
+.phone-bar__title { flex: 1; min-width: 0; font-weight: 600; font-size: 1rem; text-align: center; }
 .phone-appview__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 
 .phone-contact { display: inline-flex; align-items: center; gap: 0.55rem; text-align: left; }
@@ -560,13 +560,13 @@
 }
 
 .player__meta { display: grid; gap: 0.2rem; min-width: 0; }
-.player__eyebrow { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ph-text-2); }
+.player__eyebrow { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ph-text-2); }
 .player__art.is-on ~ .player__meta .player__eyebrow { color: var(--ph-hot-2); }
 .player__title {
   font-family: var(--font-display);
   font-size: 1.7rem;
   line-height: 1.05;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -617,7 +617,7 @@
 .player__play:active { transform: scale(0.95); }
 
 .player__list { display: grid; gap: 0.3rem; }
-.player__list-head { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ph-text-2); }
+.player__list-head { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ph-text-2); }
 .player__list ol { display: grid; gap: 0.1rem; margin: 0; padding: 0; list-style: none; }
 .player__item {
   display: flex;
@@ -698,7 +698,7 @@
   color: var(--ph-text-2);
   font-size: 0.78rem;
 }
-.browser__heading { margin: 0 0 0.5rem 0.4rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ph-text-2); }
+.browser__heading { margin: 0 0 0.5rem 0.4rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ph-text-2); }
 .browser__link { width: 100%; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; }
 .browser__link:hover { background: var(--ph-surface-2); }
 .browser__link:hover .contacts__value { text-decoration: none; }

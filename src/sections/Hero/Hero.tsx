@@ -209,20 +209,22 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
             >
               Let&rsquo;s talk <MessageSquare size={16} aria-hidden="true" />
             </MagneticButton>
-            <a className="hero__resume eyebrow" href={profile.resumeUrl} target="_blank" rel="noreferrer">
-              <FileText size={14} aria-hidden="true" /> Resume (PDF)
-            </a>
           </div>
         </div>
       </div>
 
       <div className="hero__footer container-x" data-hero-in>
-        <p className="hero__location eyebrow">
-          <MapPin size={14} aria-hidden="true" /> {profile.location}
-          <span className="hero__coords" aria-hidden="true">
-            9.85°N 124.14°E
-          </span>
-        </p>
+        <div className="hero__meta">
+          <p className="hero__location eyebrow">
+            <MapPin size={14} aria-hidden="true" /> {profile.location}
+            <span className="hero__coords" aria-hidden="true">
+              9.85°N 124.14°E
+            </span>
+          </p>
+          <a className="hero__resume eyebrow" href={profile.resumeUrl} target="_blank" rel="noreferrer">
+            <FileText size={14} aria-hidden="true" /> Resume (PDF)
+          </a>
+        </div>
         <a
           href={sectionPath('about')}
           className="hero__scroll eyebrow"
@@ -253,7 +255,7 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
               <span data-card-line>Five years shipping</span>
             </p>
             <p className="display hero__card-line is-accent">
-              <span data-card-line>production software.</span>
+              <span data-card-line>production software</span>
             </p>
             <p className="eyebrow hero__card-stack" data-card-stack>
               {CARD_STACK.join('  ·  ')}

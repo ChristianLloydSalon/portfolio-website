@@ -36,7 +36,7 @@
 }
 /* Cool the warm-lit artwork at dusk so it sits in the night scene. */
 [data-theme='dusk'] .scene__character {
-  filter: brightness(0.86) saturate(0.88) contrast(1.04) drop-shadow(0 0 40px color-mix(in srgb, var(--accent) 35%, transparent));
+  filter: brightness(0.86) saturate(0.88) contrast(1.04) drop-shadow(0 0 40px color-mix(in srgb, var(--sun-2) 35%, transparent)); /* moonlight rim */
 }
 @media (max-width: 1023px) {
   .scene__character { right: 50%; transform: translateX(50%); height: 74%; }

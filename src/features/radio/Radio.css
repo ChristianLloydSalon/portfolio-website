@@ -65,7 +65,7 @@
 .radio-badge__freq {
   font-family: var(--font-display);
   font-size: clamp(1.15rem, 4.4vw, 1.6rem);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 .radio-slot.is-focus .radio-badge {
   color: var(--logo-ink);
@@ -91,11 +91,11 @@
 .radio-hub__vibe {
   font-family: var(--font-mono);
   font-size: 0.6rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-2);
 }
-.radio-hub__eyebrow { color: var(--accent-ink); font-weight: 700; min-height: 1em; }
+.radio-hub__eyebrow { color: var(--accent-ink); font-weight: 600; min-height: 1em; }
 .radio-hub__freq {
   font-family: var(--font-display);
   font-size: clamp(2rem, 9vw, 3.2rem);
@@ -105,12 +105,12 @@
 .radio-hub__name {
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   max-width: 11em;
 }
-.radio-hub__vibe { max-width: 14em; letter-spacing: 0.14em; }
+.radio-hub__vibe { max-width: 14em; letter-spacing: 0.12em; }
 
 .radio-overlay__hint {
   position: absolute;
@@ -121,7 +121,7 @@
   text-align: center;
   font-family: var(--font-mono);
   font-size: 0.64rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-2);
 }
@@ -168,11 +168,11 @@
 .radio-toast__eyebrow {
   font-family: var(--font-mono);
   font-size: 0.6rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-2);
 }
-.radio-toast__eyebrow { color: var(--accent-ink); font-weight: 700; }
+.radio-toast__eyebrow { color: var(--accent-ink); font-weight: 600; }
 .radio-toast__track {
   font-size: 0.82rem;
   color: var(--text-2);
@@ -183,7 +183,7 @@
 .radio-toast__name {
   font-family: var(--font-display);
   font-size: 1.2rem;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   line-height: 1.05;
   white-space: nowrap;
   overflow: hidden;

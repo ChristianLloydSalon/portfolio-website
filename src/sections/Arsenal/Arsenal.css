@@ -47,7 +47,6 @@
 .wheel__slice.is-active .wheel__seg {
   fill: var(--accent);
   stroke: transparent;
-  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 55%, transparent));
 }
 
 /* Unselected slices still answer the pointer (mainly for touch, where hover doesn't select). */
@@ -105,12 +104,12 @@
   height: 3.5rem;
   border-radius: 0.75rem;
   font-size: 1.5rem;
-  color: #fff;
-  background: linear-gradient(140deg, var(--accent-2), var(--accent) 55%, var(--accent-3));
+  color: var(--on-accent);
+  background: var(--accent);
   text-transform: none;
 }
 .slot__text { display: grid; gap: 0.15rem; }
-.slot__name { font-weight: 700; font-size: 1.05rem; }
+.slot__name { font-weight: 600; font-size: 1.05rem; }
 .slot__note { color: var(--text-2); font-size: 0.9rem; line-height: 1.4; }
 /* ---------- Skill tiers ---------- */
 .tier-pips { display: inline-flex; gap: 3px; }
@@ -137,8 +136,8 @@
 .slot__tier-label {
   font-family: var(--font-mono);
   font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 .slot__tier.is-production {
@@ -162,8 +161,8 @@
   list-style: none;
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   transition: border-color var(--dur-fast);
 }
@@ -185,7 +184,7 @@
   color: var(--text-2);
 }
 .loadout__tiers li { display: inline-flex; align-items: center; gap: 0.5rem; }
-.loadout__tiers strong { color: var(--text); font-weight: 700; }
+.loadout__tiers strong { color: var(--text); font-weight: 600; }
 
 @media (max-width: 479px) {
   .slot { grid-template-columns: 3rem 1fr; }

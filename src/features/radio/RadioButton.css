@@ -12,8 +12,8 @@
   backdrop-filter: blur(8px);
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
+  font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
   transition: border-color var(--dur-med), box-shadow var(--dur-med);

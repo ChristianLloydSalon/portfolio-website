@@ -68,8 +68,8 @@
   backdrop-filter: blur(8px);
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
+  font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 .menu-btn__label { min-width: 3.6em; text-align: left; }
@@ -199,7 +199,7 @@
 .section-indicator__label {
   font-family: var(--font-mono);
   font-size: 0.66rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   opacity: 0;
   transform: translateX(0.5rem);

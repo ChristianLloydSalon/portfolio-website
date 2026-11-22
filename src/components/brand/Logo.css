@@ -22,9 +22,9 @@
 .logo__mark { height: 2.25rem; }
 .logo__name {
   font-family: var(--font-mono);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.74rem;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
 }

@@ -7,8 +7,8 @@ import {
   Hammer,
   Lock,
   LockOpen,
+  Gamepad2,
   Package,
-  Sparkles,
   Wrench,
   type LucideIcon,
 } from 'lucide-react';
@@ -25,7 +25,7 @@ const KIND_ICON: Record<InventoryKind, LucideIcon> = {
   Contribution: GitPullRequest,
   Tool: Wrench,
   Experiment: FlaskConical,
-  'Side Project': Sparkles,
+  'Side Project': Gamepad2,
 };
 
 const KIND_TONE: Record<InventoryKind, string> = {
@@ -129,22 +129,15 @@ export function ProjectCollection() {
             <>
               <span className="tile__corners" aria-hidden="true" />
               <div className="tile__top">
-                <span className={`tile__kind ${KIND_TONE[item.kind]}`}>
-                  <Icon size={14} aria-hidden="true" /> {item.kind}
-                </span>
+                <span className={`tile__kind ${KIND_TONE[item.kind]}`}>{item.kind}</span>
               </div>
               <div className="tile__meta">
                 <div className="tile__icon" aria-hidden="true">
                   <Icon size={34} strokeWidth={1.5} />
                 </div>
-                <div className="tile__state">
-                  <span className="tile__tier">
-                    <TierIcon size={13} aria-hidden="true" /> {tierLabel}
-                  </span>
-                  {item.status.toLowerCase() !== tierLabel.toLowerCase() && (
-                    <span className="tile__status eyebrow">{item.status}</span>
-                  )}
-                </div>
+                <span className="tile__tier" title={tierLabel}>
+                  <TierIcon size={14} aria-hidden="true" /> {item.status}
+                </span>
               </div>
               <h4 className="tile__name">
                 {item.name}

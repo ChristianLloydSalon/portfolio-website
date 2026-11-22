@@ -137,7 +137,7 @@ function Motif({ motif, a, b, c }: { motif: Project['motif']; a: string; b: stri
               </g>
             ))}
             <rect x="18" y="346" width="164" height="44" rx="22" fill="#fff" />
-            <text x="100" y="374" textAnchor="middle" fill={c} fontFamily="JetBrains Mono, monospace" fontSize="13" fontWeight="700">CHECKOUT</text>
+            <text x="100" y="374" textAnchor="middle" fill={c} fontFamily="JetBrains Mono, monospace" fontSize="13" fontWeight="600">CHECKOUT</text>
           </g>
           <g transform="translate(70 110) rotate(-8)">
             <rect width="190" height="140" rx="18" fill="#fff" fillOpacity="0.16" stroke="#fff" strokeOpacity="0.5" />

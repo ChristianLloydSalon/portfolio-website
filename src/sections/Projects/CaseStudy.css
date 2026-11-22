@@ -37,7 +37,7 @@
   box-shadow: var(--shadow);
 }
 .cs-media__frame img { width: 100%; height: 100%; object-fit: cover; }
-.cs-media figcaption { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em; color: var(--text-2); text-align: center; }
+.cs-media figcaption { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.04em; color: var(--text-2); text-align: center; }
 
 /* ---------- Architecture: left-to-right tiers ---------- */
 .cs-arch {
@@ -60,7 +60,7 @@
   border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
-.cs-arch__title { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-ink); }
+.cs-arch__title { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-ink); }
 .cs-arch__tier ul { display: grid; gap: 0.4rem; list-style: none; margin: 0; padding: 0; }
 .cs-arch__tier li li {
   padding: 0.45rem 0.65rem;
@@ -109,7 +109,7 @@
   margin-bottom: 0.2rem;
   font-family: var(--font-mono);
   font-size: 0.66rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text);
@@ -143,7 +143,7 @@
   border: 1px solid var(--line);
   font-family: var(--font-mono);
   font-size: 0.62rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-2);
@@ -166,7 +166,7 @@
 @media (min-width: 900px) { .cs-brief ol { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); } }
 .cs-brief__part { display: grid; align-content: start; gap: 0.6rem; padding: 1.5rem 1.25rem; background: var(--bg); }
 .cs-brief__part p { margin: 0; line-height: 1.6; }
-.cs-brief__label { margin: 0; font-size: 0.66rem; font-weight: 700; color: var(--text-2); }
+.cs-brief__label { margin: 0; font-size: 0.66rem; font-weight: 600; color: var(--text-2); }
 .cs-brief__part.is-problem .cs-brief__label { color: var(--text); }
 .cs-brief__part.is-solution .cs-brief__label { color: var(--accent-ink); }
 
@@ -190,7 +190,7 @@
   border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
-.cs-decisions__title { margin: 0; padding-right: 2rem; font-size: 1.05rem; font-weight: 700; }
+.cs-decisions__title { margin: 0; padding-right: 2rem; font-size: 1.05rem; font-weight: 600; }
 .cs-decisions p { margin: 0; color: var(--text-2); line-height: 1.55; }
 
 .cs-impact {
@@ -233,8 +233,8 @@
   background: color-mix(in srgb, var(--accent) 16%, transparent);
   font-family: var(--font-mono);
   font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text);
 }
@@ -316,7 +316,7 @@
   border-color: color-mix(in srgb, var(--accent) 60%, transparent);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent);
 }
-.cs-diagram__label { font-weight: 700; }
+.cs-diagram__label { font-weight: 600; }
 .cs-diagram__detail { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; color: var(--text-2); }
 .cs-diagram__arrow { color: var(--accent-ink); }
 .cs-diagram figcaption { justify-self: start; margin-top: 0.5rem; }
@@ -349,7 +349,7 @@
   background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
 .cs-workflow header { display: grid; gap: 0.35rem; }
-.cs-workflow__tool { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-ink); }
+.cs-workflow__tool { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-ink); }
 .cs-workflow__steps { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: step; }
 .cs-workflow__steps li {
   position: relative;
@@ -371,7 +371,7 @@
   background: var(--bg);
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--accent-ink);
 }
 /* The line joining the steps. */
@@ -388,11 +388,11 @@
 
 .cs-compare { display: grid; gap: 0.5rem; margin: 0; padding-top: 1rem; border-top: 1px solid var(--line); }
 .cs-compare__row { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr) 3.5rem; align-items: center; gap: 0.75rem; }
-.cs-compare__label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
+.cs-compare__label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-2); }
 .cs-compare__track { height: 0.6rem; border-radius: 999px; background: color-mix(in srgb, var(--line) 70%, transparent); overflow: hidden; }
 .cs-compare__bar { display: block; height: 100%; border-radius: inherit; background: color-mix(in srgb, var(--text-2) 55%, transparent); }
 .cs-compare__bar.is-after { background: var(--accent); }
-.cs-compare__value { font-weight: 700; text-align: right; }
+.cs-compare__value { font-weight: 600; text-align: right; }
 
 /* ---------- Confidentiality note ---------- */
 .cs-disclaimer {

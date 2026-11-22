@@ -143,7 +143,6 @@ export function App() {
 
       <RadioHost />
       <PhoneHost enabled={introSettled} />
-      <div className="grain" aria-hidden="true" />
     </ThemeProvider>
   );
 }

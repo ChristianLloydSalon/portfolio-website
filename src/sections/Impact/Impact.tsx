@@ -34,7 +34,7 @@ export function Impact() {
         kicker="Measured results"
         title={
           <>
-            What the work <span className="text-accent-ink">changed.</span>
+            What the work <span className="text-accent-ink">changed</span>
           </>
         }
         intro="Results from features I built on Personal Collection, a White Cloak client app. Each number is labelled with where it was measured."
