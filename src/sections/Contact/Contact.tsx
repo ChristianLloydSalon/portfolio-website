@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ArrowUp, ArrowUpRight, Check, Copy, FileText, Github, Linkedin, Mail, type LucideIcon } from 'lucide-react';
+import { ArrowUp, ArrowUpRight, Check, Copy, Github, Linkedin, Mail, type LucideIcon } from 'lucide-react';
 import { Scene } from '@/components/scene/Scene';
 import { Logo } from '@/components/brand/Logo';
 import { MagneticButton } from '@/components/buttons/MagneticButton';
@@ -19,7 +19,6 @@ const ICON: Record<SocialLink['kind'], LucideIcon> = {
   github: Github,
   linkedin: Linkedin,
   email: Mail,
-  resume: FileText,
   website: ArrowUpRight,
   x: ArrowUpRight,
 };
@@ -107,10 +106,9 @@ export function Contact() {
         <ul className="contact__links" data-reveal>
           {profile.socials.map((s) => {
             const Icon = ICON[s.kind];
-            const external = s.kind !== 'resume';
             return (
               <li key={s.kind}>
-                <a className="contact__link" href={s.href} target="_blank" rel={external ? 'noreferrer' : undefined}>
+                <a className="contact__link" href={s.href} target="_blank" rel="noreferrer">
                   <Icon size={22} aria-hidden="true" />
                   <span className="contact__link-text">
                     <span className="contact__link-label">{s.label}</span>

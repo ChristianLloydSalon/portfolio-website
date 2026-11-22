@@ -168,7 +168,6 @@ export const script: Record<NodeId, Node> = {
       emailAction,
       ...(linkedin ? [{ label: linkedin.label, href: linkedin.href }] : []),
       ...(github ? [{ label: github.label, href: github.href }] : []),
-      { label: 'Resume (PDF)', href: profile.resumeUrl },
     ],
     replies: [{ label: 'Thanks!', next: 'thanks' }, more],
   },
@@ -211,7 +210,7 @@ export const script: Record<NodeId, Node> = {
       "Happy to talk about a role or a project. Email is the fastest way to reach me.",
       "Send a bit of context and I'll get back to you.",
     ],
-    actions: [emailAction, { label: 'Resume (PDF)', href: profile.resumeUrl }],
+    actions: [emailAction],
     replies: [{ label: 'How can you help us?', next: 'help' }, more],
   },
   phone: {

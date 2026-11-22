@@ -1,5 +1,5 @@
 import { Fragment, useRef } from 'react';
-import { ArrowDown, FileText, MapPin, MessageSquare } from 'lucide-react';
+import { ArrowDown, MapPin, MessageSquare } from 'lucide-react';
 import { Scene } from '@/components/scene/Scene';
 import { LogoMark, SHINE_TRAVEL } from '@/components/brand/Logo';
 import { MagneticButton } from '@/components/buttons/MagneticButton';
@@ -214,17 +214,12 @@ export function Hero({ ready, logoHandoff = false }: HeroProps) {
       </div>
 
       <div className="hero__footer container-x" data-hero-in>
-        <div className="hero__meta">
-          <p className="hero__location eyebrow">
-            <MapPin size={14} aria-hidden="true" /> {profile.location}
-            <span className="hero__coords" aria-hidden="true">
-              9.85°N 124.14°E
-            </span>
-          </p>
-          <a className="hero__resume eyebrow" href={profile.resumeUrl} target="_blank" rel="noreferrer">
-            <FileText size={14} aria-hidden="true" /> Resume (PDF)
-          </a>
-        </div>
+        <p className="hero__location eyebrow">
+          <MapPin size={14} aria-hidden="true" /> {profile.location}
+          <span className="hero__coords" aria-hidden="true">
+            9.85°N 124.14°E
+          </span>
+        </p>
         <a
           href={sectionPath('about')}
           className="hero__scroll eyebrow"

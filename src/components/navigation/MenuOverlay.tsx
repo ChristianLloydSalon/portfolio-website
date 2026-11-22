@@ -102,7 +102,7 @@ export function MenuOverlay({ open, active, onClose, returnFocusRef }: Props) {
             <ul className="mt-3 space-y-2">
               {profile.socials.map((s) => (
                 <li key={s.kind}>
-                  <a className="menu-social" href={s.href} target={s.kind === 'resume' ? undefined : '_blank'} rel="noreferrer">
+                  <a className="menu-social" href={s.href} target="_blank" rel="noreferrer">
                     {s.label} <ArrowUpRight size={16} aria-hidden="true" />
                   </a>
                 </li>

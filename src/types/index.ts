@@ -6,7 +6,7 @@ export interface Link {
 }
 
 export interface SocialLink extends Link {
-  kind: 'github' | 'linkedin' | 'email' | 'resume' | 'website' | 'x';
+  kind: 'github' | 'linkedin' | 'email' | 'website' | 'x';
   handle: string;
 }
 
@@ -20,7 +20,6 @@ export interface Profile {
   tagline: string[];
   location: string;
   email: string;
-  resumeUrl: string;
   socials: SocialLink[];
 }
 

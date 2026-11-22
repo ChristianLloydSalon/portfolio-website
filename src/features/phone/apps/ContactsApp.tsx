@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Check, Copy, FileText, Github, Linkedin, Mail, MessageCircle, type LucideIcon } from 'lucide-react';
+import { Check, Copy, ExternalLink, Github, Linkedin, Mail, MessageCircle, type LucideIcon } from 'lucide-react';
 import { profile } from '@/data/profile';
 import type { SocialLink } from '@/types';
 import { phoneStore } from '../phoneStore';
 
 /** One contact card: Christian, with every way to get in touch. */
 
-const ICONS: Partial<Record<SocialLink['kind'], LucideIcon>> = { linkedin: Linkedin, github: Github, resume: FileText };
+const ICONS: Partial<Record<SocialLink['kind'], LucideIcon>> = { linkedin: Linkedin, github: Github };
 
 export function ContactsApp() {
   const [copied, setCopied] = useState(false);
@@ -56,7 +56,7 @@ export function ContactsApp() {
           </button>
         </li>
         {profile.socials.map((s) => {
-          const Icon = ICONS[s.kind] ?? FileText;
+          const Icon = ICONS[s.kind] ?? ExternalLink;
           const external = s.href.startsWith('http');
           return (
             <li key={s.kind} className="contacts__row">

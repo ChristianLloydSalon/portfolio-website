@@ -11,7 +11,6 @@ export const profile: Profile = {
   tagline: ['5+ years in production', 'Live on 3 app stores', 'Mobile, web & backend'],
   location: 'Bohol, PH',
   email: 'christianlloyd.b.salon@gmail.com',
-  resumeUrl: '/resume.pdf',
   socials: [
     {
       kind: 'linkedin',
@@ -25,6 +24,5 @@ export const profile: Profile = {
       handle: '@ChristianLloydSalon',
       href: 'https://github.com/ChristianLloydSalon',
     },
-    { kind: 'resume', label: 'Resume', handle: 'PDF download', href: '/resume.pdf' },
   ],
 };

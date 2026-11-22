@@ -20,7 +20,6 @@ Content comes from the resume (Nov 2026). Remaining gaps:
 | Repository / demo links for the other projects | `src/data/projects.ts` (`github`, `demo`, `packageUrl`) |
 | AI Requirements Analyst and the souls-like demo are marked in development; update their features and links (and remove `status`) when they ship | `src/data/projects.ts` |
 | Repository links for the additional projects & experiments | `src/data/inventory.ts` |
-| Resume PDF | `public/resume.pdf` (replace when the resume changes) |
 
 All content lives in `src/data/`. Sections render whatever is there, so adding a project, mission or skill is a data edit only.
 

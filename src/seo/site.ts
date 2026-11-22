@@ -9,7 +9,7 @@ export const site = {
   name: 'Christian Lloyd Salon',
   title: 'Christian Lloyd Salon | Senior Flutter & Full-Stack Engineer',
   description:
-    'Senior Flutter & Full-Stack Engineer with 5+ years shipping production mobile apps, NestJS backends and AWS systems. Case studies, experience and resume.',
+    'Senior Flutter & Full-Stack Engineer with 5+ years shipping production mobile apps, NestJS backends and AWS systems. Case studies and experience.',
   image: `${SITE_URL}/og-image.jpg`,
   imageAlt: 'Christian Lloyd Salon, Senior Flutter & Full-Stack Engineer: portfolio cover art',
   locale: 'en_US',

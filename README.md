@@ -16,7 +16,6 @@ Most of my work is on mobile, but I also work on the web dashboards and backend 
 - **Experience**: where I've worked and what I did there
 - **Skills**: the tools and languages I use day to day
 - **Open source**: packages and tools I've published, like `story_framework` on pub.dev
-- **Resume**: a downloadable PDF
 - **Contact**: how to reach me
 
 ## About the site itself

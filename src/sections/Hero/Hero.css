@@ -76,28 +76,9 @@
 }
 .hero__tagline li + li::before { content: '/'; margin: 0 0.9em; opacity: 0.6; }
 .hero__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 0.75rem; }
-/* Footer meta row: where I am, and the resume as a quiet link beside it. */
-.hero__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 2rem; }
-.hero__resume {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  font-size: 0.7rem;
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 0.4em;
-  text-decoration-thickness: 1px;
-  text-shadow: 0 1px 2px #0009, 0 2px 14px #0007;
-  transition: text-decoration-thickness var(--dur-fast);
-}
-.hero__resume:hover { text-decoration-thickness: 2px; }
-[data-theme='sunrise'] .hero__resume { text-shadow: 0 0 2px #ffffffe6, 0 0 12px #ffffffcc; }
-/* Phones: the pitch carries the message; the track record is in About's stats just below,
-   and the resume stays one tap away in the menu and the contact section. */
+/* Phones: the pitch carries the message; the track record is in About's stats just below. */
 @media (max-width: 639px) {
-  .hero__tagline,
-  .hero__resume { display: none; }
+  .hero__tagline { display: none; }
 }
 .hero .btn-primary { background: #fff; color: #1b1226; }
 .hero .btn-ghost { color: #fff; }
