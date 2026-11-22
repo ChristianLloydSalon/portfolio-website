@@ -31,7 +31,7 @@
 .hero__lockup { align-self: center; display: grid; justify-items: center; margin-top: -4vh; }
 /* CS mark: sized by height (and width on narrow screens); a neutral shadow lifts it off busy art. */
 .hero__mark {
-  height: min(36vh, 20rem, 60vw);
+  height: min(26vh, 14rem, 44vw);
   filter: drop-shadow(0 16px 40px #00000040) drop-shadow(0 4px 10px #0006);
 }
 
@@ -115,7 +115,8 @@
 }
 .hero__location { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; }
 .hero__coords { opacity: 0.6; margin-left: 0.75rem; }
-@media (max-width: 639px) { .hero__coords { display: none; } }
+/* Phones: the coords and the scroll cue would crowd the actions; swiping needs no cue. */
+@media (max-width: 639px) { .hero__coords, .hero__footer .hero__scroll { display: none; } }
 .hero__scroll {
   display: grid;
   justify-items: center;
@@ -207,7 +208,7 @@
 @media (max-width: 767px) {
   .hero__content { padding-bottom: 5.5rem; }
   .hero__lockup { align-self: start; margin-top: 6vh; }
-  .hero__mark { height: min(24vh, 44vw); }
+  .hero__mark { height: min(17vh, 32vw); }
   .hero__actions .btn { min-height: 3rem; padding: 0 1.2rem; font-size: 0.72rem; }
   .hero__copy { gap: 0.65rem; }
 }

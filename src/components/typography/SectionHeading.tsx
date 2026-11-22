@@ -8,7 +8,7 @@ interface Props {
   intro?: ReactNode;
   align?: 'left' | 'center';
   className?: string;
-  /** Replaces the default title size, for long statement-style titles. */
+  /** Replaces the default title size (the lead section uses a larger one). */
   titleClassName?: string;
 }
 
@@ -22,7 +22,7 @@ export function SectionHeading({ id, chapter, kicker, title, intro, align = 'lef
         <span aria-hidden="true" className="inline-block h-px w-10 bg-current opacity-50" />
         <span>{kicker}</span>
       </p>
-      <h2 id={id} className={`display mt-5 ${titleClassName ?? 'text-[clamp(3.4rem,11vw,10rem)]'}`} data-reveal>
+      <h2 id={id} className={`display mt-5 ${titleClassName ?? 'text-[clamp(3rem,7.4vw,7rem)]'}`} data-reveal>
         {title}
       </h2>
       {intro && (

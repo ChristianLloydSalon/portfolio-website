@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import { BookOpen, Layers, Rocket } from 'lucide-react';
 import { SectionHeading } from '@/components/typography/SectionHeading';
 import { PortraitCard } from './PortraitCard';
 import { profile } from '@/data/profile';
@@ -16,17 +15,14 @@ const STATEMENT =
 
 const principles = [
   {
-    icon: Rocket,
     title: 'Own it after launch',
     body: 'Release pipelines, automated tests and production monitoring are part of the feature, not an afterthought.',
   },
   {
-    icon: Layers,
     title: 'Keep it changeable',
     body: 'Clear layers, predictable state and modular features, so a codebase stays easy to change as it grows.',
   },
   {
-    icon: BookOpen,
     title: 'Leave a trail',
     body: 'I document architecture, APIs and workflows so the team never depends on one person. Two years of teaching made this a habit.',
   },
@@ -122,8 +118,7 @@ export function About() {
         <ol className="about__principle-list">
           {principles.map((p, i) => (
             <li key={p.title} className="about__principle" data-reveal>
-              <span className="about__principle-num display">{String(i + 1).padStart(2, '0')}</span>
-              <p.icon className="about__principle-icon" size={28} aria-hidden="true" />
+              <span className="about__principle-num eyebrow" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
               <h4 className="display about__principle-title">{p.title}</h4>
               <p className="text-ink-2">{p.body}</p>
             </li>

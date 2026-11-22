@@ -166,6 +166,7 @@ export function Projects({ ready }: Props) {
       <div className="container-x section-pad pb-0!">
         <SectionHeading
           id="projects-title"
+          titleClassName="text-[clamp(3.4rem,11vw,10rem)]"
           chapter={chapter('projects')}
           kicker="Case studies"
           title={

@@ -106,13 +106,6 @@
   transition: background-color var(--dur-med);
 }
 .about__principle:hover { background: var(--surface); }
-.about__principle-num {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.5rem;
-  font-size: 4.5rem;
-  opacity: 0.12;
-}
-.about__principle-icon { color: var(--accent-ink); }
+.about__principle-num { color: var(--accent-ink); }
 .about__principle-title { font-size: clamp(1.8rem, 2.6vw, 2.4rem); }
 .about__principle p { margin: 0; }
