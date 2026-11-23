@@ -1,7 +1,7 @@
 import type { Mission } from '@/types';
 
 /**
- * Career timeline, newest first. Source: resume (Nov 2026). White Cloak: Aug 2021 to present.
+ * Career timeline, newest first. Source: resume (Nov 2026). White Cloak: Aug 2021 to Sept 2026.
  * This section covers progression, ownership, leadership and awards only.
  * Awards: confirmed by me (Nov 2026). Keep the names and years exactly as awarded.
  * Project results, metrics, named project roles and store releases belong to the case studies
@@ -12,32 +12,33 @@ export const missions: Mission[] = [
     id: 'white-cloak',
     company: 'White Cloak Technologies, Inc.',
     position: 'Journeyman Software Engineer II',
-    progression: ['Junior Software Engineer', 'Journeyman Software Engineer II'],
-    period: 'Aug 2021 – Present',
+    progression: ['Software Engineer', 'Journeyman Software Engineer II'],
+    period: 'Aug 2021 – Sept 2026',
     location: 'Pasig City, PH · Remote',
-    status: 'active',
+    status: 'complete',
     summary:
-      'Five years and counting building production software for White Cloak\u2019s clients. The role grew from shipping features as a junior engineer to owning them across mobile, web and backend, shaping technical design, and leading mobile and frontend work for the team.',
+      'Five years building production software for White Cloak\u2019s clients. The role grew from shipping features as a junior engineer to owning them across mobile, web and backend, shaping technical design, and leading mobile and frontend work for the team.',
     responsibilities: [],
     contributions: [],
     groups: [
       {
         title: 'Key contributions',
         items: [
-          'Lead Flutter development for client apps on iOS, Android and Huawei, and set technical direction for the mobile team',
-          'Own features end to end across Flutter clients, Angular admin portals and NestJS services, from technical design and implementation plan to release',
+          'Led Flutter development for client apps on iOS, Android and Huawei, and set technical direction for the mobile team',
+          'Owned features end to end across Flutter clients, Angular admin portals and NestJS services, from technical design and implementation plan to release',
           'Built event-driven backend processing on AWS, and the mobile release pipelines, automated tests and automated code review behind each release',
           'Built a shared design system of 15+ reusable Flutter UI components, translated from Figma',
-          'Support live apps: monitor, triage and fix production issues with Sentry, Dynatrace and AWS CloudWatch',
+          'Supported live apps: monitored, triaged and fixed production issues with Sentry, Dynatrace and AWS CloudWatch',
         ],
       },
       {
         title: 'Leadership',
         items: [
+          'Mobile Team Lead for a team of 3 engineers and 1 UI/UX designer, running sprints, code reviews and store releases',
           'Interim technical lead for six months after the team’s tech lead left',
           'Frontend leadership responsibilities on the web side of the team',
-          'Mentor engineers and run knowledge transfer, backed by architecture, API, workflow and CI/CD documentation',
-          'Clarify requirements directly with client stakeholders, and work with product owners and QA in Agile delivery',
+          'Mentored engineers and ran knowledge transfer, backed by architecture, API, workflow and CI/CD documentation',
+          'Clarified requirements directly with client stakeholders, and worked with product owners and QA in Agile delivery',
         ],
       },
     ],

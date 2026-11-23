@@ -7,10 +7,10 @@ export const SITE_URL = (import.meta.env.VITE_SITE_URL ?? 'https://christianlloy
 export const site = {
   url: `${SITE_URL}/`,
   name: 'Christian Lloyd Salon',
-  title: 'Christian Lloyd Salon | Senior Flutter & Full-Stack Engineer',
+  title: 'Christian Lloyd Salon | Flutter & Full-Stack Engineer',
   description:
-    'Senior Flutter & Full-Stack Engineer with 5+ years shipping production mobile apps, NestJS backends and AWS systems. Case studies and experience.',
+    'Flutter & Full-Stack Engineer with 5+ years shipping production mobile apps, NestJS backends and AWS systems. Case studies and experience.',
   image: `${SITE_URL}/og-image.jpg`,
-  imageAlt: 'Christian Lloyd Salon, Senior Flutter & Full-Stack Engineer: portfolio cover art',
+  imageAlt: 'Christian Lloyd Salon, Flutter & Full-Stack Engineer: portfolio cover art',
   locale: 'en_US',
 };

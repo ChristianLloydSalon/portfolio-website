@@ -94,7 +94,7 @@ export const script: Record<NodeId, Node> = {
   },
   work: {
     says: [
-      `I'm a ${profile.role}. I've been at ${company} since ${job.period.split(' –')[0]}, where I'm a ${job.position}.`,
+      `I'm a ${profile.role}. I spent five years at ${company} (${job.period}), most recently as a ${job.position}.`,
       'Production Flutter apps for iOS, Android and Huawei, plus the Angular admin tools, NestJS services and AWS behind them.',
       ...(pc ? [`On ${pc.title} I was the mobile lead, and its interim tech lead for six months.`] : []),
     ],

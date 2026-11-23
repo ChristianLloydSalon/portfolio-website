@@ -32,7 +32,7 @@ const fileRows: [string, string][] = [
   ['Name', profile.name],
   ['Class', profile.role],
   ['Base', profile.location],
-  ['Guild', 'White Cloak Technologies · since 2021'],
+  ['Guild', 'White Cloak Technologies · 2021–2026'],
   ['Main', 'Flutter · Dart · Angular · NestJS · AWS'],
   ['Training', 'BS Computer Engineering · DOST Scholar'],
 ];
@@ -103,7 +103,7 @@ export function About() {
 
           <p className="about__bio" data-reveal>
             I&rsquo;m {profile.firstName}, based in {profile.location}. I joined White Cloak Technologies as a junior
-            engineer in 2021 and now lead the mobile side of client projects, taking features from technical design to
+            engineer in 2021 and grew into leading the mobile side of client projects, taking features from technical design to
             store release. I work best owning a product area end to end, or joining a team that needs one engineer
             across mobile, web and backend.
           </p>
